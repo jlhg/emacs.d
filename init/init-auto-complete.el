@@ -1,0 +1,36 @@
+(add-to-list 'load-path "~/.emacs.d/package/auto-complete-1.4")
+(add-to-list 'load-path "~/.emacs.d/package/popup-0.5")
+
+(require 'auto-complete)
+(require 'auto-complete-config)
+(ac-config-default)
+(setq-default ac-sources
+              '(ac-source-filename
+                ac-source-abbrev
+                ac-source-dictionary
+                ac-source-words-in-same-mode-buffers))
+(setq ac-auto-start nil)
+(ac-set-trigger-key "TAB")
+(global-auto-complete-mode t)
+(define-key ac-completing-map (kbd "<up>") nil)
+(define-key ac-completing-map (kbd "<down>") nil)
+(define-key ac-completing-map (kbd "RET") nil)
+(define-key ac-completing-map (kbd "<return>") nil)
+
+;; ac/yas color
+(defface ac-yasnippet-candidate-face
+  '((t (:background "sandybrown" :foreground "black")))
+  "Face for yasnippet candidate.")
+
+(defface ac-yasnippet-selection-face
+  '((t (:background "coral3" :foreground "white")))
+  "Face for the yasnippet selected candidate.")
+
+(defvar ac-source-yasnippet
+  '((candidates . ac-yasnippet-candidate)
+    (action . yas/expand)
+    (candidate-face . ac-yasnippet-candidate-face)
+    (selection-face . ac-yasnippet-selection-face))
+  "Source for Yasnippet.")
+
+(provide 'init-auto-complete)

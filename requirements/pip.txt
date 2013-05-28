@@ -1,0 +1,6 @@
+ropemacs
+elpy
+rope
+pyflakes
+pep8
+pylint

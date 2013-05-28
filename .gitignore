@@ -1,0 +1,14 @@
+/backup/
+/auto-save-list/
+/server/
+/url/
+/abbrev_defs
+/ac-comphist.dat
+/trash/
+/.mc-lists.el
+.ropeproject
+*.py[co]
+*.elc
+*~
+*.bak
+/snippets/
