@@ -21,7 +21,7 @@ $ ln -s ~/.emacs.d/init.el ~/
 Install pre-required packages:
 
 ```bash
-$ pip install -r ~/.emacs.d/requirements/python-package.txt --user
+$ pip install -r ~/.emacs.d/requirements/python-package.txt
 $ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
 $ cp ~/.emacs.d/requirements/python-check.sh /path/to/executable/path
 ```
