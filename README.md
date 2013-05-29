@@ -32,6 +32,7 @@ Download and install the newest version of Pymacs:
 $ wget https://github.com/pinard/Pymacs/archive/master.zip
 $ unzip master.zip
 $ cd Pymacs-master/
+$ make
 $ python setup.py install --user
 ```
 
