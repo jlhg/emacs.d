@@ -145,5 +145,9 @@
     (comment-dwim arg)))
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 
+;; electric pair mode
+(when (fboundp 'electric-pair-mode)
+  (electric-pair-mode))
+
 
 (provide 'init-global)

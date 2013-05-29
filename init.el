@@ -86,13 +86,6 @@
 ;; http://cvs.savannah.gnu.org/viewvc/*checkout*/emacs/emacs/lisp/ido.el?revision=1.31.2.70
 (require 'init-ido-mode)
 
-
-;; auto pair
-(require 'init-auto-pair)
-
-;; auto mark
-(require 'init-auto-mark)
-
 ;; visible mark
 ;; http://retroj.net/visible-mark
 (require 'init-visible-mark)
