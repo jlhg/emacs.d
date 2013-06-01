@@ -33,7 +33,7 @@ $ wget https://github.com/pinard/Pymacs/archive/master.zip
 $ unzip master.zip
 $ cd Pymacs-master/
 $ make
-$ python setup.py install --user
+$ pip install ./
 ```
 
 For using GitHub flavored markdown, go to https://github.com/Gagle/Node-GFM
