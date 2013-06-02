@@ -44,6 +44,13 @@ Compile all lisp files:
 $ emacs --batch --eval '(byte-recompile-directory "~/.emacs.d")'
 ```
 
+Emacs will save backup files to `~/.emacs.d/backup`. For security, you need to
+change the permission of this folder.
+
+```bash
+$ chmod go-rwx ~/.emacs.d/backup
+```
+
 ## Global Keymaps
 
 * `M-;`: comment or uncomment
