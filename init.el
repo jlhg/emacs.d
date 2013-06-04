@@ -113,3 +113,6 @@
 ;; require MozRepl for firefox: https://github.com/bard/mozrepl/wiki
 ;; after installing MozRepl: FireFox -> Tools -> MozRepl -> Start
 (require 'init-zotero-minor-mode)
+
+;; c-mode
+(require 'init-c-mode)
