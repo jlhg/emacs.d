@@ -2,43 +2,46 @@
 
 import json
 import unittest
-import StringIO
-
 import sys
 
 from elpy import rpc
+from elpy.tests.compat import StringIO
 
 
 class TestFault(unittest.TestCase):
     def test_should_have_code_and_data(self):
         fault = rpc.Fault("Hello", code=250, data="Fnord")
-        self.assertEqual(fault.message, "Hello")
+        self.assertEqual(str(fault), "Hello")
         self.assertEqual(fault.code, 250)
         self.assertEqual(fault.data, "Fnord")
 
     def test_should_have_defaults_for_code_and_data(self):
         fault = rpc.Fault("Hello")
-        self.assertEqual(fault.message, "Hello")
+        self.assertEqual(str(fault), "Hello")
         self.assertEqual(fault.code, 500)
         self.assertIsNone(fault.data)
 
 
 class TestJSONRPCServer(unittest.TestCase):
     def setUp(self):
-        self.stdin = StringIO.StringIO()
-        self.stdout = StringIO.StringIO()
+        self.stdin = StringIO()
+        self.stdout = StringIO()
         self.rpc = rpc.JSONRPCServer(self.stdin, self.stdout)
 
     def write(self, s):
-        self.stdin.truncate(0)
-        self.stdout.truncate(0)
+        self.stdin.seek(0)
+        self.stdin.truncate()
+        self.stdout.seek(0)
+        self.stdout.truncate()
         self.stdin.write(s)
         self.stdin.seek(0)
 
     def read(self):
         value = self.stdout.getvalue()
-        self.stdin.truncate(0)
-        self.stdout.truncate(0)
+        self.stdin.seek(0)
+        self.stdin.truncate()
+        self.stdout.seek(0)
+        self.stdout.truncate()
         return value
 
 
@@ -80,8 +83,8 @@ class TestWriteJson(TestJSONRPCServer):
                    ]
         for obj in objlist:
             self.rpc.write_json(**obj)
-            self.assertEqual(self.read(),
-                             json.dumps(obj) + "\n")
+            self.assertEqual(json.loads(self.read()),
+                             obj)
 
 
 class TestHandleRequest(TestJSONRPCServer):
@@ -143,6 +146,17 @@ class TestHandleRequest(TestJSONRPCServer):
                          dict(id=23,
                               error="An error was raised"))
         self.assertIsNotNone(self.rpc.last_traceback)
+
+    def test_should_call_handle_for_unknown_method(self):
+        def test_handle(method_name, args):
+            return "It works"
+        self.write(json.dumps(dict(method="doesnotexist",
+                                   id=23)))
+        self.rpc.handle = test_handle
+        self.rpc.handle_request()
+        self.assertEqual(json.loads(self.read()),
+                         dict(id=23,
+                              result="It works"))
 
 
 class TestServeForever(TestJSONRPCServer):

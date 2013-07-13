@@ -4,6 +4,8 @@ Elpy is an Emacs package to bring powerful Python editing to Emacs. It
 combines a number of other packages, both written in Emacs Lisp as
 well as Python.
 
+[![Build Status](https://secure.travis-ci.org/jorgenschaefer/elpy.png)](http://travis-ci.org/jorgenschaefer/elpy)
+
 ## Documentation
 
 You can find the documentation [on the wiki][wiki].
@@ -33,7 +35,9 @@ Evaluate this in your `*scratch*` buffer:
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 ```
 
-Then run `M-x package-install RET elpy RET`.
+Then run `M-x package-refresh-contents` to load the contents of the
+new repository, and `M-x package-install RET elpy RET` to install
+elpy.
 
 Finally, add the following to your `.emacs`:
 

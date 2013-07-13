@@ -17,14 +17,16 @@ try:
           author_email="forcer@forcix.cx",
           url="https://github.com/jorgenschaefer/elpy",
           license="GPL",
-          packages=["elpy", "elpy.backends"],
+          packages=["elpy", "elpy.backends", "elpy.utils"],
           data_files=[('elpy', ["LICENSE"])],
           classifiers=[
               "Development Status :: 5 - Production/Stable",
               ("License :: OSI Approved :: "
                "GNU General Public License v3 or later (GPLv3+)"),
               "Topic :: Text Editors :: Emacs",
-          ])
+          ],
+          requires=["flake8"]
+    )
 finally:
     os.unlink("README.txt")
     try:

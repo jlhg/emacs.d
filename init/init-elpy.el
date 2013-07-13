@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.emacs.d/package/elpy-0.8")
+(add-to-list 'load-path "~/.emacs.d/package/elpy-1.0")
 (add-to-list 'load-path "~/.emacs.d/package/auto-complete-1.4")
 (add-to-list 'load-path "~/.emacs.d/package/fuzzy-0.1")
 (add-to-list 'load-path "~/.emacs.d/package/yasnippet-0.8.0")
@@ -12,6 +12,8 @@
 (elpy-enable)
 ;; (elpy-use-ipython)
 ;; (elpy-clean-modeline)
+
+(setq python-check-command "flake8 --ignore=E501")
 
 (defvar flymake-no-changes-timeout 60
     "Time to wait after last change before starting compilation.

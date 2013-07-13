@@ -5,13 +5,14 @@ This backend uses the Rope library:
 http://rope.sourceforge.net/
 
 """
-
 import os
 import re
 import time
+from functools import wraps
 
 from elpy import rpc
 from elpy.backends.nativebackend import NativeBackend
+import elpy.utils.pydocutils
 
 VALIDATE_EVERY_SECONDS = 5
 MAXFIXES = 5
@@ -50,6 +51,7 @@ class RopeBackend(NativeBackend):
             from rope.base.exceptions import BadIdentifierError
             from rope.base.exceptions import ModuleSyntaxError
             from rope.contrib import findit
+            patch_codeassist(codeassist)
             return {'codeassist': codeassist,
                     'projectlib': project,
                     'libutils': libutils,
@@ -119,13 +121,17 @@ class RopeBackend(NativeBackend):
                                                     resource,
                                                     maxfixes=MAXFIXES)
         except self.ModuleSyntaxError as e:
-            linenos = re.findall("^  \\* line ([0-9]*):", e.message,
+            linenos = re.findall("^  \\* line ([0-9]*):", str(e),
                                  re.MULTILINE)
-            linedesc = ", ".join(str(x) for x in linenos)
+            linenos = [int(x) for x in linenos]
+            linedesc = ", ".join(str(x) for x in sorted(set(linenos)))
             raise rpc.Fault(code=101,
-                            message=("Too many syntax errors in file {} "
-                                     "(lines {})"
-                                     .format(e.filename, linedesc)))
+                            message=("Too many syntax errors in file {0} "
+                                     "(line{1} {2})"
+                                     .format(e.filename,
+                                             "s" if ("," in linedesc)
+                                             else "",
+                                             linedesc)))
         starting_offset = self.codeassist.starting_offset(source, offset)
         prefixlen = offset - starting_offset
         return [[proposal.name[prefixlen:], proposal.get_doc()]
@@ -145,10 +151,7 @@ class RopeBackend(NativeBackend):
             return (location.resource.real_path, location.offset)
 
     def rpc_get_calltip(self, project_root, filename, source, offset):
-        # Rewind offset to the last ( before offset
-        open_paren = source.rfind("(", 0, offset)
-        if open_paren > -1:
-            offset = open_paren
+        offset = find_called_name_offset(source, offset)
         project = self.get_project(project_root)
         resource = self.get_resource(project, filename)
         try:
@@ -175,3 +178,68 @@ class RopeBackend(NativeBackend):
                                                        source, offset)
         else:
             return docstring
+
+
+def find_called_name_offset(source, orig_offset):
+    """Return the offset of a calling function.
+
+    This only approximates movement.
+
+    """
+    offset = min(orig_offset, len(source) - 1)
+    paren_count = 0
+    while True:
+        if offset <= 1:
+            return orig_offset
+        elif source[offset] == '(':
+            if paren_count == 0:
+                return offset - 1
+            else:
+                paren_count -= 1
+        elif source[offset] == ')':
+            paren_count += 1
+        offset -= 1
+
+
+##################################################################
+# Monkey patching a method in rope because it doesn't complete import
+# statements.
+
+def patch_codeassist(codeassist):
+    if getattr(codeassist._PythonCodeAssist._code_completions,
+               'patched_by_elpy', False):
+        return
+
+    def wrapper(fun):
+        @wraps(fun)
+        def inner(self):
+            proposals = get_import_completions(self)
+            if proposals:
+                return proposals
+            else:
+                return fun(self)
+        inner.patched_by_elpy = True
+        return inner
+
+    codeassist._PythonCodeAssist._code_completions = \
+        wrapper(codeassist._PythonCodeAssist._code_completions)
+
+
+def get_import_completions(self):
+    if not self.word_finder.is_import_statement(self.offset):
+        return []
+    modulename = self.word_finder.get_primary_at(self.offset)
+    # Rope can handle modules in packages
+    if "." in modulename:
+        return []
+    return dict((name, FakeProposal(name))
+                for name in elpy.utils.pydocutils.get_modules()
+                if name.startswith(modulename))
+
+
+class FakeProposal(object):
+    def __init__(self, name):
+        self.name = name
+
+    def get_doc(self):
+        return None

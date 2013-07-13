@@ -5,8 +5,8 @@ handles backend selection and passes methods on to the selected
 backend.
 
 """
-
-from elpy.rpc import JSONRPCServer
+from elpy.utils.pydocutils import get_pydoc_completions
+from elpy.rpc import JSONRPCServer, Fault
 
 from elpy.backends.nativebackend import NativeBackend
 from elpy.backends.ropebackend import RopeBackend
@@ -40,6 +40,15 @@ class ElpyRPCServer(JSONRPCServer):
                 self.backend = backend
                 break
 
+    def handle(self, method_name, args):
+        """Call the RPC method method_name with the specified args.
+
+        """
+        method = getattr(self.backend, "rpc_" + method_name, None)
+        if method is None:
+            raise Fault("Unknown method {0}".format(method_name))
+        return method(*args)
+
     def rpc_echo(self, *args):
         """Return the arguments.
 
@@ -63,11 +72,11 @@ class ElpyRPCServer(JSONRPCServer):
 
         backend_cls = BACKEND_MAP.get(backend_name)
         if backend_cls is None:
-            raise ValueError("Unknown backend {}"
+            raise ValueError("Unknown backend {0}"
                              .format(backend_name))
         backend = backend_cls()
         if backend is None:
-            raise ValueError("Backend {} could not find the "
+            raise ValueError("Backend {0} could not find the "
                              "required Python library"
                              .format(backend_name))
         self.backend = backend
@@ -90,58 +99,43 @@ class ElpyRPCServer(JSONRPCServer):
                 result.append(backend.name)
         return result
 
-    def rpc_before_save(self, project_root, filename):
-        """Bookkeeping method.
+    def rpc_get_pydoc_completions(self, name=None):
+        """Return a list of possible strings to pass to pydoc.
 
-        Needs to be called before a file is saved.
-
-        """
-        return self.backend.rpc_before_save(
-            project_root, filename)
-
-    def rpc_after_save(self, project_root, filename):
-        """Bookkeeping method.
-
-        Needs to be called after a file is saved.
+        If name is given, the strings are under name. If not, top
+        level modules are returned.
 
         """
-        return self.backend.rpc_after_save(
-            project_root, filename)
+        return get_pydoc_completions(name)
 
-    def rpc_get_completions(self, project_root, filename, source, offset):
-        """Complete symbol at offset in source.
+    def rpc_get_refactor_options(self, project_root, filename,
+                                 start, end=None):
+        """Return a list of possible refactoring options.
 
-        Returns a list of tuples of the full symbol including
-        completion and a possible docstring, or None.
-
-        """
-        return self.backend.rpc_get_completions(
-            project_root, filename, source, offset)
-
-    def rpc_get_definition(self, project_root, filename, source, offset):
-        """Return the location where the symbol at offset is defined.
-
-        The location is either a tuple of (filename, offset), or None
-        if no location could be found.
+        This list will be filtered depending on whether it's
+        applicable at the point START and possibly the region between
+        START and END.
 
         """
-        return self.backend.rpc_get_definition(
-            project_root, filename, source, offset)
+        try:
+            from elpy import refactor
+        except:
+            raise ImportError("Rope not installed, refactorings unavailable")
+        ref = refactor.Refactor(project_root, filename)
+        return ref.get_refactor_options(start, end)
 
-    def rpc_get_calltip(self, project_root, filename, source, offset):
-        """Return the calltip for the symbol at offset.
+    def rpc_refactor(self, project_root, filename, method, args):
+        """Return a list of changes from the refactoring action.
 
-        This is a string. If no calltip is found, return None.
-
-        """
-        return self.backend.rpc_get_calltip(
-            project_root, filename, source, offset)
-
-    def rpc_get_docstring(self, project_root, filename, source, offset):
-        """Return the calltip for the symbol at offset.
-
-        This is a string. If no calltip is found, return None.
+        A change is a dictionary describing the change. See
+        elpy.refactor.translate_changes for a description.
 
         """
-        return self.backend.rpc_get_docstring(
-            project_root, filename, source, offset)
+        try:
+            from elpy import refactor
+        except:
+            raise ImportError("Rope not installed, refactorings unavailable")
+        if args is None:
+            args = ()
+        ref = refactor.Refactor(project_root, filename)
+        return ref.get_changes(method, *args)

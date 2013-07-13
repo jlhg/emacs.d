@@ -1,10 +1,10 @@
 """Tests for elpy.backends.ropebackend."""
 
-import __builtin__
 import mock
 import re
 
 from elpy import rpc
+from elpy.tests import compat
 from elpy.tests.support import BackendTestCase, source_and_offset
 from elpy.backends import ropebackend
 
@@ -31,7 +31,7 @@ class TestInit(RopeBackendTestCase):
     def test_should_return_object_if_rope_available(self):
         self.assertIsNotNone(ropebackend.RopeBackend())
 
-    @mock.patch.object(__builtin__, '__import__')
+    @mock.patch.object(compat.builtins, '__import__')
     def test_should_return_none_if_no_rope(self, import_):
         import_.side_effect = ImportError
         self.assertIsNone(ropebackend.RopeBackend())
@@ -69,8 +69,8 @@ class TestGetCompletions(RopeBackendTestCase):
                                                        offset)
         self.assertEqual(sorted(name for (name, doc) in completions),
                          sorted(["ool", "rocess", "ipe", "rocessError"]))
-        self.assertIsInstance(dict(completions)['ool'],
-                              unicode)
+        self.assertIn("Returns a process pool object",
+                      dict(completions)['ool'])
 
     def test_should_not_fail_on_inexisting_file(self):
         filename = self.project_root + "/doesnotexist.py"
@@ -119,6 +119,40 @@ class TestGetCompletions(RopeBackendTestCase):
                                 self.project_root, filename, source,
                                 offset)
 
+    def test_should_complete_top_level_modules_for_import(self):
+        source, offset = source_and_offset("import multi_|_")
+        filename = self.project_file("test.py", source)
+        completions = self.backend.rpc_get_completions(self.project_root,
+                                                       filename,
+                                                       source,
+                                                       offset)
+        if compat.PYTHON3:
+            expected = ["processing"]
+        else:
+            expected = ["file", "processing"]
+        self.assertEqual(sorted(name for (name, doc) in completions),
+                         sorted(expected))
+
+    def test_should_complete_packages_for_import(self):
+        source, offset = source_and_offset("import threading.current_t_|_")
+        filename = self.project_file("test.py", source)
+        completions = self.backend.rpc_get_completions(self.project_root,
+                                                       filename,
+                                                       source,
+                                                       offset)
+        self.assertEqual(sorted(name for (name, doc) in completions),
+                         sorted(["hread"]))
+
+    def test_should_not_complete_for_import(self):
+        source, offset = source_and_offset("import foo.Conf_|_")
+        filename = self.project_file("test.py", source)
+        completions = self.backend.rpc_get_completions(self.project_root,
+                                                       filename,
+                                                       source,
+                                                       offset)
+        self.assertNotEqual(sorted(name for (name, doc) in completions),
+                            sorted(["igParser"]))
+
 
 class TestGetDefinition(RopeBackendTestCase):
     def test_should_return_location_in_same_file(self):
@@ -132,6 +166,8 @@ class TestGetDefinition(RopeBackendTestCase):
             "\n"
             "def test_function(a, b):\n"
             "    return a + b\n")
+        if compat.PYTHON3:
+            source = source.replace("(a, b)", "(b, a)")
         filename = self.project_file("test.py", "")  # Unsaved
         definition = self.backend.rpc_get_definition(self.project_root,
                                                      filename,
@@ -200,9 +236,29 @@ class TestGetCalltip(RopeBackendTestCase):
                                                filename,
                                                source,
                                                offset)
-        self.assertEqual(calltip,
-                         "threading.Thread.__init__(group=None, target=None, "
-                         "name=None, args=(), kwargs=None, verbose=None)")
+        if compat.PYTHON3:
+            expected = ("threading.Thread.__init__(group=None, target=None, "
+                        "name=None, args=(), kwargs=None, daemon=None, *)")
+        else:
+            expected = ("threading.Thread.__init__(group=None, target=None, "
+                        "name=None, args=(), kwargs=None, verbose=None)")
+        self.assertEqual(calltip, expected)
+
+    def test_should_get_calltip_even_after_parens(self):
+        source, offset = source_and_offset(
+            "import threading\nthreading.Thread(foo()_|_")
+        filename = self.project_file("test.py", source)
+        calltip = self.backend.rpc_get_calltip(self.project_root,
+                                               filename,
+                                               source,
+                                               offset)
+        if compat.PYTHON3:
+            expected = ("threading.Thread.__init__(group=None, target=None, "
+                        "name=None, args=(), kwargs=None, daemon=None, *)")
+        else:
+            expected = ("threading.Thread.__init__(group=None, target=None, "
+                        "name=None, args=(), kwargs=None, verbose=None)")
+        self.assertEqual(calltip, expected)
 
     def test_should_return_none_for_bad_identifier(self):
         source, offset = source_and_offset(

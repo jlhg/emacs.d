@@ -4,7 +4,7 @@
 
 ;; Author: Jorgen Schaefer <forcer@forcix.cx>
 ;; URL: https://github.com/jorgenschaefer/elpy
-;; Version: 0.8
+;; Version: 1.0
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
@@ -36,72 +36,8 @@
 
 ;;; Code:
 
-;; Some global variables. Need to be set before the other modes are
-;; loaded, as some of them define some silly global keys without these
-;; set. We are using `defvar' to avoid overwriting a user's
-;; configuration, if any.
-
-(let* ((elpy-el (or load-file-name
-                    buffer-file-name))
-       (python-check (when elpy-el
-                       (concat (file-name-directory elpy-el)
-                               "python-check.sh"))))
-  (when (and python-check
-             (file-exists-p python-check))
-    (defvar python-check-command  python-check
-      "Command used to check a Python file.")))
-
-(defvar flymake-no-changes-timeout 60
-  "Time to wait after last change before starting compilation.
-
-The original value of 0.5 is too short for Python code, as that
-will result in the current line to be highlighted most of the
-time, and that's annoying. This value might be on the long side,
-but at least it does not, in general, interfere with normal
-interaction.
-
-Value set by elpy.")
-
-(defvar flymake-start-syntax-check-on-newline nil
-  "Start syntax check if newline char was added/removed from the buffer.
-
-This should be nil for Python, as most lines with a colon at the
-end will mean the next line is always highlighted as error, which
-is not helpful and mostly annoying.
-
-Value set by elpy.")
-
-(defvar ac-trigger-key "TAB"
-  "Non-nil means `auto-complete' will start by typing this key.
-If you specify this TAB, for example, `auto-complete' will start by typing TAB,
-and if there is no completions, an original command will be fallbacked.
-
-Value set by elpy.")
-
-(defvar ac-auto-show-menu 0.4
-  "Non-nil means completion menu will be automatically shown.
-
-Value set by elpy.")
-
-(defvar ac-quick-help-delay 0.5
-  "Delay to show quick help.
-
-This value should be greater than `ac-auto-show-menu' to show
-help for the first entry as well.
-
-Value set by elpy.")
-
-(defvar yas-trigger-key "C-c C-i"
-  "The key bound to `yas-expand' when `yas-minor-mode' is active.
-
-Value is a string that is converted to the internal Emacs key
-representation using `read-kbd-macro'.
-
-Value set by elpy.")
-
-;; Now, load the various modes we use.
-
 (require 'auto-complete-config)
+(require 'elpy-refactor)
 (require 'find-file-in-project)
 (require 'flymake)
 (require 'highlight-indentation)
@@ -109,6 +45,7 @@ Value set by elpy.")
 (require 'json)
 (require 'nose)
 (require 'python)
+(require 'thingatpt)
 (require 'virtualenv)
 (require 'yasnippet)
 
@@ -120,6 +57,11 @@ Value set by elpy.")
   "The Emacs Lisp Python Environment."
   :prefix "elpy-"
   :group 'languages)
+
+(defcustom elpy-rpc-python-command "python"
+  "The command to be used for the RPC backend."
+  :type 'string
+  :group 'elpy)
 
 (defcustom elpy-rpc-backend nil
   "Your preferred backend.
@@ -133,16 +75,6 @@ native - Do not use any backend, use native Python methods only."
                  (const "jedi")
                  (const "native")
                  (const nil))
-  :group 'elpy)
-
-(defcustom elpy-project-markers '(".git" ".svn" ".hg"
-                                  ".ropeproject" "setup.py")
-  "List of files and directories that mark a project.
-
-Elpy will search up the directory hierarchy for the first
-occurrence of such a file and assume this is the root of your
-project."
-  :type '(repeat string)
   :group 'elpy)
 
 (defcustom elpy-default-minor-modes '(eldoc-mode
@@ -178,6 +110,7 @@ project."
     (define-key map (kbd "C-c C-o") 'elpy-occur-definitions)
     (define-key map (kbd "C-c C-p") 'elpy-flymake-backward-error)
     (define-key map (kbd "C-c C-q") 'elpy-show-defun)
+    (define-key map (kbd "C-c C-r") 'elpy-refactor)
     (define-key map (kbd "C-c C-s") 'elpy-rgrep-symbol)
     (define-key map (kbd "C-c C-t") 'elpy-test)
     (define-key map (kbd "C-c C-v") 'elpy-check)
@@ -197,10 +130,19 @@ project."
   "Key map for the Emacs Lisp Python Environment.")
 
 ;;;###autoload
-(defun elpy-enable ()
-  "Enable Elpy in all future Python buffers."
+(defun elpy-enable (&optional skip-initialize-variables)
+  "Enable Elpy in all future Python buffers.
+
+When SKIP-INITIALIZE-VARIABLES is non-nil, this will NOT call
+`elpy-initialize-variables' to configure various modes in a way
+that the Elpy author considers sensible. If you'd rather
+configure those modes yourself, pass t here."
   (interactive)
-  (add-hook 'python-mode-hook 'elpy-mode))
+  (when (< emacs-major-version 24)
+    (error "Elpy requires Emacs 24 or newer"))
+  (add-hook 'python-mode-hook 'elpy-mode)
+  (when (not skip-initialize-variables)
+    (elpy-initialize-variables)))
 
 ;;;###autoload
 (defun elpy-disable ()
@@ -264,7 +206,8 @@ explain how to install the elpy module."
         (when (not (bolp))
           (insert "\n"))
         (insert "\n")
-        (when elpy-rpc-buffer
+        (when (and (boundp 'elpy-rpc-buffer)
+                   elpy-rpc-buffer)
           (let ((elpy-rpc-output (with-current-buffer elpy-rpc-buffer
                                    (buffer-string))))
             (when (not (equal elpy-rpc-output ""))
@@ -287,14 +230,21 @@ explain how to install the elpy module."
                 "You can try both and even switch at runtime using "
                 "M-x elpy-set-backend.\n")
         (insert "\n")
-        (elpy-installation-command "rope")
+        (insert "Elpy also uses the Rope module for refactoring options, "
+                "so you likely want to install it even if you use jedi "
+                "for completion.\n")
+        (insert "\n")
+        (if (string-match "Python 3" (shell-command-to-string
+                                      "python --version"))
+            (elpy-installation-command "rope_py3k")
+          (elpy-installation-command "rope"))
         (insert "\n")
         (elpy-installation-command "jedi")
         (insert "\n")
-        (insert "If you are using virtualenvs, you can use Elpy's "
-                "C-c C-e command to switch to a virtualenv of your "
-                "choice. Afterwards, running the command M-x "
-                "elpy-rpc-restart will use the packages in "
+        (insert "If you are using virtualenvs, you can use "
+                "M-x virtualenv-workon command to switch to a virtualenv "
+                "of your choice. Afterwards, running the command "
+                "M-x elpy-rpc-restart will use the packages in "
                 "that virtualenv.")
         (fill-region (point-min) (point-max))))))
 
@@ -323,6 +273,81 @@ explain how to install the elpy module."
                           'command command)
       (insert " " command "\n"))))
 
+(defun elpy-initialize-variables ()
+  "This sets some variables in other modes we like to set.
+
+If you want to configure your own keys, do so after this function
+is called (usually from `elpy-enable'), or override this function
+using (defalias 'elpy-initialize-variables 'identity)"
+  ;; Local variables in `python-mode'. This is not removed when Elpy
+  ;; is disabled, which can cause some confusion.
+  (add-hook 'python-mode-hook 'elpy-initialize-local-variables)
+
+  ;; Flymake support using flake8, including warning faces.
+  (when (executable-find "flake8")
+    (setq python-check-command "flake8"))
+
+  ;; `flymake-no-changes-timeout': The original value of 0.5 is too
+  ;; short for Python code, as that will result in the current line to
+  ;; be highlighted most of the time, and that's annoying. This value
+  ;; might be on the long side, but at least it does not, in general,
+  ;; interfere with normal interaction.
+  (setq flymake-no-changes-timeout 60)
+
+  ;; `flymake-start-syntax-check-on-newline': This should be nil for
+  ;; Python, as;; most lines with a colon at the end will mean the next
+  ;; line is always highlighted as error, which is not helpful and
+  ;; mostly annoying.
+  (setq flymake-start-syntax-check-on-newline nil)
+
+  ;; `ac-trigger-key': TAB is a great trigger key. We also need to
+  ;; tell auto-complete about the new trigger key. This is a bad
+  ;; interface to set the trigger key. Don't do this. Just let the
+  ;; user set the key in the keymap. Stop second-guessing the user, or
+  ;; Emacs.
+  (setq ac-trigger-key "TAB")
+  (when (fboundp 'ac-set-trigger-key)
+    (ac-set-trigger-key ac-trigger-key))
+
+  ;; `ac-auto-show-menu': Short timeout because the menu is great.
+  (setq ac-auto-show-menu 0.4)
+
+  ;; `ac-quick-help-delay': I'd like to show the menu right with the
+  ;; completions, but this value should be greater than
+  ;; `ac-auto-show-menu' to show help for the first entry as well.
+  (setq ac-quick-help-delay 0.5)
+
+  ;; Fix some key bindings in ac completions. Using RET when a
+  ;; completion is offered is not usually intended to complete (use
+  ;; TAB for that), but done while typing and the inputer is considere
+  ;; complete, with the intent to simply leave it as is and go to the
+  ;; next line. Much like space will not complete, but leave it as is
+  ;; and insert a space.
+  (define-key ac-completing-map (kbd "RET") nil)
+  (define-key ac-completing-map (kbd "<return>") nil)
+
+  ;; `yas-trigger-key': TAB, as is the default, conflicts with the
+  ;; autocompletion. We also need to tell yasnippet about the new
+  ;; binding. This is a bad interface to set the trigger key. Stop
+  ;; doing this.
+  (let ((old (when (boundp 'yas-trigger-key)
+               yas-trigger-key)))
+    (setq yas-trigger-key "C-c C-i")
+    (when (fboundp 'yas--trigger-key-reload)
+      (yas--trigger-key-reload old))))
+
+(defun elpy-initialize-local-variables ()
+  "Initialize local variables in python-mode.
+
+This should be run from `python-mode-hook'."
+  ;; Set `forward-sexp-function' to nil in python-mode. See
+  ;; http://debbugs.gnu.org/db/13/13642.html
+  (setq forward-sexp-function nil)
+  ;; Enable warning faces for flake8 output.
+  (when (string-match "flake8" python-check-command)
+    (set (make-local-variable 'flymake-warning-re) "^W[0-9]"))
+  )
+
 (defvar elpy-project-root 'not-initialized
   "The root of the project the current buffer is in.")
 (make-variable-buffer-local 'elpy-project-root)
@@ -339,16 +364,14 @@ You can set the variable `elpy-project-root' in, for example,
     (setq elpy-project-root
           (or (elpy-project-find-root)
               (read-directory-name "Project root: "
-                                   default-directory
-                                   nil t))))
+                                   default-directory)))
+    (when (and (not (file-directory-p elpy-project-root))
+               (y-or-n-p "Directory does not exist, create? "))
+      (make-directory elpy-project-root t)))
   elpy-project-root)
 
 (defun elpy-project-find-root ()
   "Find an appropriate project root for the current buffer.
-
-This is either the first directory up the root with a file
-matching any string in `elpy-project-markers', or the last
-directory to contain an __init__.el file.
 
 If no root directory is found, nil is returned."
   (or ;; (getenv "PROJECT_HOME")
@@ -416,9 +439,6 @@ current directory unless SKIP-CURRENT-DIRECTORY is non-nil."
       ;; Emacs 24 until 24.3
       (setq python-python-command "python")
     ;; Emacs 24.3 and onwards.
-
-    ;; This is from the python.el commentary.
-    ;; Settings for IPython 0.11:
     (setq python-shell-interpreter "python"
           python-shell-interpreter-args "-i"
           python-shell-prompt-regexp ">>> "
@@ -562,31 +582,28 @@ Also, switch to that buffer."
         (select-window window)
       (switch-to-buffer "*Occur*"))))
 
-(defun elpy-rgrep-symbol (symbol &optional only-definitions)
-  "Search for definitions of SYMBOL in the current project.
+(defun elpy-rgrep-symbol (symbol)
+  "Search for SYMBOL in the current project.
 
 SYMBOL defaults to the symbol at point, or the current region if
 active.
 
-If ONLY-DEFINITIONS is non-nil (in interactive use a prefix
-argument is given), search only for definitions of the symbol,
-not all occurrences."
+With a prefix argument, prompt for a string to search for."
   (interactive
    (list
-    (if (use-region-p)
-        (buffer-substring-no-properties (region-beginning)
-                                        (region-end))
+    (cond
+     (current-prefix-arg
+      (read-from-minibuffer "Search for symbol: "))
+     ((use-region-p)
+      (buffer-substring-no-properties (region-beginning)
+                                      (region-end)))
+     (t
       (or (thing-at-point 'symbol)
-          (read-from-minibuffer "Search for symbol: ")))
-    current-prefix-arg
-    ))
+          (read-from-minibuffer "Search for symbol: "))))))
   (grep-compute-defaults)
-  (let ((regexp (if only-definitions
-                    (format "^\\( *def\\| *class\\) \\b%s\\b"
-                            symbol)
-                  (format "\\b%s\\b" symbol))))
-    (message "%s" prefix-arg)
-    (rgrep regexp "*.py" (elpy-project-root)))
+  (rgrep (format "\\b%s\\b" symbol)
+         "*.py"
+         (elpy-project-root))
   (with-current-buffer next-error-last-buffer
     (let ((inhibit-read-only t))
       (save-excursion
@@ -612,47 +629,8 @@ With two prefix args, only the current module is run."
 ;;;;;;;;;;;;;;;;;
 ;;; Documentation
 
-(defun elpy-doc (&optional use-pydoc-p symbol)
-  "Show documentation on the thing at point.
-
-If USE-PYDOC is non-nil (interactively, when a prefix argument is
-given), use pydoc on the symbol SYMBOL (interactively, the symbol
-at point). The user is given the chance to edit the symbol before
-it is passed to pydoc."
-  (interactive
-   (list current-prefix-arg
-         (when current-prefix-arg
-           (read-from-minibuffer "Pydoc on: "
-                                 (with-syntax-table python-dotty-syntax-table
-                                   (let ((symbol (symbol-at-point)))
-                                     (if symbol
-                                         (symbol-name symbol)
-                                       "")))))))
-  (if use-pydoc-p
-      (with-help-window "*Pydoc*"
-        (shell-command (format "pydoc %s" (shell-quote-argument symbol))
-                       (get-buffer "*Pydoc*")))
-    (let ((doc (or (elpy-rpc-get-docstring)
-                   ;; This will get the right position for
-                   ;; multiprocessing.Queue(quxqux_|_)
-                   (ignore-errors
-                     (save-excursion
-                       (elpy-nav-backward-statement)
-                       (with-syntax-table python-dotty-syntax-table
-                         (forward-symbol 1)
-                         (backward-char 1))
-                       (elpy-rpc-get-docstring))))))
-      (if doc
-          (with-help-window "*Python Doc*"
-            (with-current-buffer "*Python Doc*"
-              (erase-buffer)
-              (insert doc)
-              (goto-char (point-min))
-              (while (re-search-forward "\\(.\\)\\1" nil t)
-                (replace-match (propertize (match-string 1)
-                                           'face 'bold)
-                               t t))))
-        (message "No documentation available.")))))
+(defvar elpy-doc-history nil
+  "History for the `elpy-doc' command.")
 
 (defun elpy-doc-websearch (what)
   "Search the Python web documentation for the string WHAT."
@@ -662,6 +640,192 @@ it is passed to pydoc."
   (browse-url
    (format "https://www.google.com/search?q=site:docs.python.org%%20%s"
            what)))
+
+(defun elpy-doc (&optional use-pydoc-p symbol)
+  "Show documentation on the thing at point.
+
+If USE-PYDOC is non-nil (interactively, when a prefix argument is
+given), use pydoc on the symbol SYMBOL (interactively, the symbol
+at point). With a single prefix argument, the user gets a
+completion interface for possible symbols. With two prefix
+arguments,  the interface simply asks for a string."
+  (interactive
+   (list current-prefix-arg
+         (let ((initial (with-syntax-table python-dotty-syntax-table
+                          (let ((symbol (symbol-at-point)))
+                            (if symbol
+                                (symbol-name symbol)
+                              nil)))))
+           (cond
+            ((and initial (not current-prefix-arg))
+             initial)
+            ((equal current-prefix-arg '(16))
+             ;; C-u C-u
+             (read-from-minibuffer "Pydoc: " initial nil nil
+                                   'elpy-doc-history))
+            (t
+             (elpy-ido-recursive-completing-read "Pydoc: "
+                                                 'elpy-pydoc-completions
+                                                 "."
+                                                 t
+                                                 initial
+                                                 'elpy-doc-history))))))
+  (let ((doc (if use-pydoc-p
+                 (elpy-rpc-get-pydoc-documentation symbol)
+               (or (elpy-rpc-get-docstring)
+                   ;; This will get the right position for
+                   ;; multiprocessing.Queue(quxqux_|_)
+                   (ignore-errors
+                     (save-excursion
+                       (elpy-nav-backward-statement)
+                       (with-syntax-table python-dotty-syntax-table
+                         (forward-symbol 1)
+                         (backward-char 1))
+                       (elpy-rpc-get-docstring)))))))
+    (if doc
+        (with-help-window "*Python Doc*"
+          (with-current-buffer "*Python Doc*"
+            (erase-buffer)
+            (insert doc)
+            (goto-char (point-min))
+            (while (re-search-forward "\\(.\\)\\1" nil t)
+              (replace-match (propertize (match-string 1)
+                                         'face 'bold)
+                             t t))))
+      (message "No documentation available."))))
+
+(defun elpy-pydoc-completions (rcr-prefix)
+  "Return a list of modules available in pydoc starting with RCR-PREFIX."
+  (sort (if (or (not rcr-prefix)
+                (equal rcr-prefix ""))
+            (elpy-rpc "get_pydoc_completions")
+          (elpy-rpc "get_pydoc_completions" rcr-prefix))
+        (lambda (a b)
+          (if (and (string-prefix-p "_" b)
+                   (not (string-prefix-p "_" a)))
+              t
+            (string< (downcase a)
+                     (downcase b))))))
+
+
+;;;;;;;;;;;;
+;;; elpy-ido
+
+;; This is a wrapper around ido-completing-read, which does not
+;; provide for recursive reads by default.
+
+(defvar elpy-ido-rcr-choice-function nil
+  "Internal variable for `elpy-ido-recursive-completing-read'.
+
+Don't touch. Won't help.")
+
+(defvar elpy-ido-rcr-selection nil
+  "Internal variable for `elpy-ido-recursive-completing-read'.
+
+Don't touch. Won't help.")
+
+(defvar elpy-ido-rcr-separator nil
+  "Internal variable for `elpy-ido-recursive-completing-read'.
+
+Don't touch. Won't help.")
+
+(defvar elpy-ido-rcr-choices nil
+  "Internal variable for `elpy-ido-recursive-completing-read'.
+
+Don't touch. Won't help.")
+
+(defun elpy-ido--rcr-selected ()
+  "Return the currently selected compound."
+  (mapconcat #'identity
+             (reverse elpy-ido-rcr-selection)
+             elpy-ido-rcr-separator))
+
+(defun elpy-ido--rcr-setup-keymap ()
+  "Set up the ido keymap for `elpy-ido-recursive-completing-read'."
+  (define-key ido-completion-map (read-kbd-macro elpy-ido-rcr-separator)
+    'elpy-ido-rcr-complete)
+  (define-key ido-completion-map (kbd "DEL") 'elpy-ido-rcr-backspace))
+
+(defun elpy-ido-rcr-complete ()
+  "Complete the current ido completion and attempt an extension."
+  (interactive)
+  (let* ((new (car ido-matches))
+         (full (concat (elpy-ido--rcr-selected)
+                       elpy-ido-rcr-separator
+                       new))
+         (choices (funcall elpy-ido-rcr-choice-function full)))
+    (when choices
+      (setq elpy-ido-rcr-choices choices
+            elpy-ido-rcr-selection (cons new elpy-ido-rcr-selection))
+      (throw 'continue t))))
+
+(defun elpy-ido-rcr-backspace (&optional n)
+  "Delete the last character in the minibuffer.
+
+If the minibuffer is empty, recurse to the last completion."
+  (interactive "p")
+  (if (= (minibuffer-prompt-end) (point))
+      (progn
+        (setq elpy-ido-rcr-selection (cdr elpy-ido-rcr-selection)
+              elpy-ido-rcr-choices (funcall elpy-ido-rcr-choice-function
+                                            (elpy-ido--rcr-selected)))
+        (throw 'continue t))
+    (delete-char (- n))))
+
+(defun elpy-ido-recursive-completing-read (prompt choice-function
+                                                  separator
+                                                  &optional
+                                                  require-match
+                                                  initial-input
+                                                  hist def)
+  "An alternative to `ido-completing-read' supporting recursive selection.
+
+The CHOICE-FUNCTION is called with a prefix string and should
+find all possible selections with this prefix. The user is then
+prompted with those options. When the user hits RET, the
+currently selected option is returned. When the user hits the
+SEPARATOR key, though, the currently selected option is appended,
+with the separator, to the selected prefix, and the user is
+prompted for further completions returned by CHOICE-FUNCTION.
+
+For REQUIRE-MATCH, INITIAL-INPUT, HIST and DEF, see
+`completing-read'."
+  (let ((ido-setup-hook (cons 'elpy-ido--rcr-setup-keymap
+                              ido-setup-hook))
+        (elpy-ido-rcr-choice-function choice-function)
+        (elpy-ido-rcr-separator separator)
+        elpy-ido-rcr-choices
+        elpy-ido-rcr-selection)
+    (when initial-input
+      (let ((parts (reverse (split-string initial-input
+                                          (regexp-quote separator)))))
+        (setq initial-input (car parts)
+              elpy-ido-rcr-selection (cdr parts))))
+    (setq elpy-ido-rcr-choices (funcall choice-function
+                                        (elpy-ido--rcr-selected)))
+    (catch 'return
+      (while t
+        (catch 'continue
+          (throw 'return
+                 (let ((completion (ido-completing-read
+                                    (concat prompt
+                                            (elpy-ido--rcr-selected)
+                                            (if elpy-ido-rcr-selection
+                                                elpy-ido-rcr-separator
+                                              ""))
+                                    elpy-ido-rcr-choices
+                                    nil require-match
+                                    initial-input hist def)))
+                   (concat
+                    (mapconcat (lambda (element)
+                                 (concat element elpy-ido-rcr-separator))
+                               (reverse elpy-ido-rcr-selection)
+                               "")
+                    completion))))
+        ;; after the first run, we don't want initial and default
+        ;; anymore.
+        (setq initial-input nil
+              def nil)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -701,7 +865,8 @@ See `elpy-rpc-call'.")
       (kill-buffer elpy-rpc-buffer))
     (condition-case err
         (setq elpy-rpc-buffer
-              (elpy-rpc-open "*elpy-rpc*" "python" "-m" "elpy"))
+              (elpy-rpc-open "*elpy-rpc*"
+                             elpy-rpc-python-command "-m" "elpy.__main__"))
       (error
        (elpy-installation-instructions
         (format "Could not start the Python subprocess: %s"
@@ -751,7 +916,8 @@ subsequent calls to `elpy-rpc-call'."
   (let* ((buffer (generate-new-buffer name))
          ;; Leaving process-connection-type non-nil can truncate
          ;; communication
-         (proc (let ((process-connection-type nil))
+         (proc (let ((process-connection-type nil)
+                     (default-directory "/"))
                  (apply #'start-process name buffer program program-args))))
     (set-process-query-on-exit-flag proc nil)
     (with-current-buffer buffer
@@ -818,23 +984,25 @@ Ths current buffer needs to be an elpy-rpc buffer."
 
 Returns a list of possible completions for the Python symbol at
 point."
-  (elpy-rpc "get_completions"
-            (expand-file-name (elpy-project-root))
-            buffer-file-name
-            (buffer-string)
-            (- (point)
-               (point-min))))
+  (when (elpy-project-root)
+    (elpy-rpc "get_completions"
+              (expand-file-name (elpy-project-root))
+              buffer-file-name
+              (buffer-string)
+              (- (point)
+                 (point-min)))))
 
 (defun elpy-rpc-get-calltip ()
   "Call the get_calltip API function.
 
 Returns a calltip string for the function call at point."
-  (elpy-rpc "get_calltip"
-            (expand-file-name (elpy-project-root))
-            buffer-file-name
-            (buffer-string)
-            (- (point)
-               (point-min))))
+  (when (elpy-project-root)
+    (elpy-rpc "get_calltip"
+              (expand-file-name (elpy-project-root))
+              buffer-file-name
+              (buffer-string)
+              (- (point)
+                 (point-min)))))
 
 (defun elpy-rpc-get-docstring ()
   "Call the get_docstring API function.
@@ -846,6 +1014,12 @@ Returns a possible multi-line docstring for the symbol at point."
             (buffer-string)
             (- (point)
                (point-min))))
+
+(defun elpy-rpc-get-pydoc-documentation (symbol)
+  "Get the Pydoc documentation for SYMBOL.
+
+Returns a possible multi-line docstring."
+    (elpy-rpc "get_pydoc_documentation" symbol))
 
 (defun elpy-rpc-get-definition ()
   "Call the find_definition API function.
@@ -949,14 +1123,11 @@ error if the backend is not supported."
                 '("\\.py\\'" elpy-flymake-python-init)))
 
 (defun elpy-flymake-python-init ()
-  ;; Make sure it's not a remote buffer or flymake would not work
+  ;; Make sure it's not a remote buffer as flymake would not work
   (when (not (file-remote-p buffer-file-name))
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list python-check-command (list local-file)))))
+                       'flymake-create-temp-inplace)))
+      (list python-check-command (list temp-file)))))
 
 (defun elpy-flymake-forward-error ()
   "Move forward to the next Flymake error and show a
@@ -1007,7 +1178,12 @@ description."
 
 This also initializes `elpy--ac-cache'."
   (setq elpy--ac-cache nil)
-  (dolist (completion (elpy-rpc-get-completions))
+  (dolist (completion (condition-case err
+                          (elpy-rpc-get-completions)
+                        (error
+                         (message "Getting completions: %s"
+                                  (cadr err))
+                         nil)))
     (let ((name (car completion))
           (doc (cadr completion)))
       (when (not (string-prefix-p "_" name))
@@ -1042,13 +1218,17 @@ This also initializes `elpy--ac-cache'."
   "Restart the elpy-rpc backend on virtualenv change."
   (let ((old-env virtualenv-workon-session))
     ad-do-it
-    (when (and (not (equal old-env virtualenv-workon-session))
+    (when (and virtualenv-workon-starts-python
+               elpy-rpc-buffer
+               (not (equal old-env virtualenv-workon-session))
                (y-or-n-p "Virtualenv changed, restart Elpy-RPC? "))
       (elpy-rpc-restart))))
 
 (defadvice virtualenv-deactivate (after ad-elpy-virtualenv-deactivate activate)
   "Restart the elpy-rpc backend on virtualenv change."
-  (when (y-or-n-p "Virtualenv deactivated, restart Elpy-RPC? ")
+  (when (and virtualenv-workon-starts-python
+             elpy-rpc-buffer
+             (y-or-n-p "Virtualenv deactivated, restart Elpy-RPC? "))
     (elpy-rpc-restart)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1059,9 +1239,12 @@ This also initializes `elpy--ac-cache'."
   (defalias 'python-shell-send-region 'python-send-region))
 (when (not (fboundp 'python-shell-send-buffer))
   (defalias 'python-shell-send-buffer 'python-send-buffer))
+(when (not (fboundp 'python-info-current-defun))
+  (defalias 'python-info-current-defun 'python-current-defun))
 (when (not (fboundp 'python-nav-end-of-statement))
   (defalias 'python-nav-end-of-statement 'python-end-of-statement))
 (when (not (fboundp 'python-nav-beginning-of-statement))
+  (require 'thingatpt)
   (defalias 'python-nav-beginning-of-statement 'beginning-of-sexp))
 (when (not (fboundp 'python-nav-forward-statement))
   (defalias 'python-nav-forward-statement 'forward-sexp))
