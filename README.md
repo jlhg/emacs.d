@@ -3,7 +3,7 @@
 This configuration is mainly for Python. Also supports Latex, shell script,
 markdown, org, jinja2, R and git.
 
-Supports auto-complete, flymake, syntex checker, etc.
+Supports auto-complete, flymake, syntax checker, etc.
 
 ## Requirements
 
@@ -23,7 +23,6 @@ Install pre-required packages:
 ```bash
 $ pip install -r ~/.emacs.d/requirements/python-package.txt
 $ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
-$ cp ~/.emacs.d/requirements/python-check.sh /path/to/executable/path
 ```
 
 Download and install the newest version of Pymacs:
