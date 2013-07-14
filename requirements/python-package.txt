@@ -1,4 +1,4 @@
-ropemacs
 elpy
-rope
+jedi
 flake8
+nose

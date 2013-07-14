@@ -14,6 +14,7 @@
 ;; (elpy-clean-modeline)
 
 (setq python-check-command "flake8-checker.sh")
+(setq elpy-rpc-backend "jedi")
 
 (defvar flymake-no-changes-timeout 60
     "Time to wait after last change before starting compilation.
@@ -34,48 +35,5 @@ end will mean the next line is always highlighted as error, which
 is not helpful and mostly annoying.
 
 Value set by elpy.")
-
-(defvar ropemacs-enable-autoimport t
-    "Specifies whether autoimport should be enabled.
-
-Value set by elpy.")
-
-(defvar ropemacs-guess-project t
-    "Try to guess the project when needed.
-
-If non-nil, ropemacs tries to guess and open the project that contains
-a file on which the rope command is performed when no project is
-already opened.
-
-Value set by elpy.")
-
-(defvar ropemacs-confirm-saving nil
-    "Shows whether to confirm saving modified buffers before refactorings.
-
-If non-nil, you have to confirm saving all modified
-python files before refactorings; otherwise they are
-saved automatically.
-
-Value set by elpy.")
-
-(defvar ropemacs-enable-shortcuts nil
-    "Shows whether to bind ropemacs shortcuts keys.
-
-Value set by elpy, as we set our own key bindings.")
-
-(defvar ropemacs-local-prefix nil
-    "The prefix for ropemacs refactorings.
-
-Use nil to prevent binding keys.
-
-Value set by elpy, as we set our own key bindings.")
-
-(defvar ropemacs-global-prefix nil
-    "The prefix for ropemacs project commands.
-
-Use nil to prevent binding keys.
-
-Value set by elpy, as we set our own key bindings.")
-
 
 (provide 'init-elpy)

@@ -52,18 +52,6 @@
 ;; flymake
 (require 'init-flymake)
 
-;; ropemacs - an emacs mode that uses rope_ library to provide features
-;; like python refactorings and code-assists.
-;; https://bitbucket.org/agr/ropemacs
-;; requirements:
-;; 1. ropemacs: $ pip intall ropemacs
-;; 2. pymacs:
-;;   please download package from git repo, don't use pip.
-;;   * git repo: https://github.com/pinard/Pymacs
-;;   * install python part: $ python setup.py install
-;;   * install emacs part: $ cp pymacs.el ~/.emacs.d/package/
-(require 'init-ropemacs)
-
 ;; Elpy - the Emacs Lisp Python Environment
 ;; https://github.com/jorgenschaefer/elpy
 (require 'init-elpy)

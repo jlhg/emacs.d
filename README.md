@@ -26,16 +26,6 @@ $ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get
 $ cp ~/.emacs.d/requirements/flake8-checker.sh /path/to/executable/path
 ```
 
-Download and install the newest version of Pymacs:
-
-```bash
-$ wget https://github.com/pinard/Pymacs/archive/master.zip
-$ unzip master.zip
-$ cd Pymacs-master/
-$ make
-$ pip install ./
-```
-
 For using GitHub flavored markdown, go to https://github.com/Gagle/Node-GFM
 
 Compile all lisp files:
