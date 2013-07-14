@@ -13,8 +13,6 @@
 ;; (elpy-use-ipython)
 ;; (elpy-clean-modeline)
 
-(setq python-check-command "flake8 --ignore=E501")
-
 (defvar flymake-no-changes-timeout 60
     "Time to wait after last change before starting compilation.
 
