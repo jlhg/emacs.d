@@ -1,4 +1,4 @@
 elpy
-jedi
+jedi==0.5b4
 flake8
 nose
