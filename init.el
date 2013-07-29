@@ -104,3 +104,6 @@
 
 ;; c-mode
 (require 'init-c-mode)
+
+;; cheetah-mode
+(require 'init-cheetah-mode)
