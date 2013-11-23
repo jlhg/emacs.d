@@ -107,3 +107,6 @@
 
 ;; cheetah-mode
 (require 'init-cheetah-mode)
+
+;; erc
+(require 'init-erc)

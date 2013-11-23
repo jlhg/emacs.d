@@ -149,7 +149,4 @@
 (when (fboundp 'electric-pair-mode)
   (electric-pair-mode))
 
-;; erc: hide join part messages
-(setq erc-hide-list '("JOIN" "PART" "QUIT"))
-
 (provide 'init-global)
