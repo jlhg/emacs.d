@@ -10,7 +10,7 @@
 ;; customized faces for python mode
 (font-lock-add-keywords 'python-mode
                         '(;;("\\<\\(object\\|str\\|else\\|except\\|finally\\|try\\|\\)\\>" 0 'py-builtins-face)  ; adds object and str and fixes it so that keywords that often appear with : are assigned as builtin-face
-                          ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-defaults) ; FIXME: negative or positive prefixes do not highlight to this regexp but does to one below
+                          ;; ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-defaults) ; FIXME: negative or positive prefixes do not highlight to this regexp but does to one below
                           ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'font-lock-type-face)))
 
 ;; starting message
@@ -149,5 +149,7 @@
 (when (fboundp 'electric-pair-mode)
   (electric-pair-mode))
 
+;; erc: hide join part messages
+(setq eroc-hide-list '("JOIN" "PART" "QUIT"))
 
 (provide 'init-global)
