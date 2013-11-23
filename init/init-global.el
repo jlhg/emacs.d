@@ -150,6 +150,6 @@
   (electric-pair-mode))
 
 ;; erc: hide join part messages
-(setq eroc-hide-list '("JOIN" "PART" "QUIT"))
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 (provide 'init-global)
