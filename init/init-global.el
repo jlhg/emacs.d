@@ -78,6 +78,7 @@
 
 ;; display line number
 (global-linum-mode t)
+(setq linum-format "%3d ")
 
 ;; word wrap
 (setq-default truncate-lines t)
