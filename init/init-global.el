@@ -150,4 +150,19 @@
 (when (fboundp 'electric-pair-mode)
   (electric-pair-mode))
 
+;; numbered window shortcuts
+;; use M-1 through M-0 to navigate
+(require 'window-numbering)
+(window-numbering-mode t)
+
+;; Smex is a M-x enhancement for Emacs. Built on top of Ido,
+;; it provides a convenient interface to your recently and most
+;; frequently used commands. And to all the other commands, too.
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
 (provide 'init-global)
