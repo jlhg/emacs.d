@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.emacs.d/package/yasnippet-0.8.0")
+(add-to-list 'load-path "~/.emacs.d/package/yasnippet")
 
 ;; yas/trigger-key "C-c C-i"
 (require 'yasnippet)

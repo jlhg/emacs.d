@@ -1,5 +1,5 @@
-(add-to-list 'load-path "~/.emacs.d/package/auto-complete-1.4")
-(add-to-list 'load-path "~/.emacs.d/package/popup-0.5")
+(add-to-list 'load-path "~/.emacs.d/package/auto-complete")
+(add-to-list 'load-path "~/.emacs.d/package/popup-el")
 
 (require 'auto-complete)
 (require 'auto-complete-config)
