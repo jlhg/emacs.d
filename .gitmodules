@@ -1,0 +1,6 @@
+[submodule "snippets"]
+        path = package/yasnippet/snippets
+        url = https://github.com/AndreaCrotti/yasnippet-snippets.git
+[submodule "yasmate"]
+        path = package/yasnippet/yasmate
+        url = https://github.com/capitaomorte/yasmate.git
