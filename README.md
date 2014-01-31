@@ -20,7 +20,6 @@ $ git clone --recursive https://github.com/jlhg/emacs.d ~/.emacs.d
 After the cloning, create a symbolic link to `~/init.el`:
 
 ```bash
-$ mv emacs.d ~/.emacs.d
 $ ln -s ~/.emacs.d/init.el ~/
 ```
 
