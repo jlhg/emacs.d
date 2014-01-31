@@ -1,6 +1,6 @@
 # Emacs configuration
 
-This configuration is mainly for Python. Also supports Latex, shell script,
+This configuration is mainly for Python development. Also supports LaTeX, shell script,
 markdown, org, jinja2, R and git.
 
 Supports auto-complete, flymake, syntax checker, etc.
@@ -11,7 +11,13 @@ emacs >= 24.3
 
 ## Setting up
 
-After download, move emacs.d to your home directory, and create link to `init.el`:
+Clone this repository to your `$HOME/.emacs.d` directory:
+
+```bash
+$ git clone --recursive https://github.com/jlhg/emacs.d ~/.emacs.d
+```
+
+After the cloning, create a symbolic link to `~/init.el`:
 
 ```bash
 $ mv emacs.d ~/.emacs.d
@@ -25,8 +31,6 @@ $ pip install -r ~/.emacs.d/requirements/python-package.txt
 $ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
 $ cp ~/.emacs.d/requirements/flake8-checker.sh /path/to/executable/path
 ```
-
-For using GitHub flavored markdown, go to https://github.com/Gagle/Node-GFM
 
 Compile all lisp files:
 

@@ -7,7 +7,7 @@
            (lambda ()
              (auto-fill-mode t)
              (setq fill-column 80)
-             (setq markdown-command "gfm")
+             (setq markdown-command "markdown")
              (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
                (auto-complete-mode t))))
 
