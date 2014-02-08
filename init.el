@@ -9,6 +9,9 @@
 (require 'init-sh-mode)
 (require 'init-python-mode)
 (require 'init-css-mode)
+(require 'init-java-mode)
+(require 'init-c-mode)
+(require 'init-cheetah-mode)
 
 ;; auto complete
 (require 'init-auto-complete)
@@ -101,12 +104,6 @@
 ;; require MozRepl for firefox: https://github.com/bard/mozrepl/wiki
 ;; after installing MozRepl: FireFox -> Tools -> MozRepl -> Start
 (require 'init-zotero-minor-mode)
-
-;; c-mode
-(require 'init-c-mode)
-
-;; cheetah-mode
-(require 'init-cheetah-mode)
 
 ;; erc
 (require 'init-erc)
