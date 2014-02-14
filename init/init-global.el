@@ -165,4 +165,9 @@
 ;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
+;; GUI settings
+(tool-bar-mode -1)
+(blink-cursor-mode nil)
+(setq default-frame-alist '((font . "Inconsolata-g")))
+
 (provide 'init-global)
