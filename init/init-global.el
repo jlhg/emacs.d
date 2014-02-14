@@ -168,6 +168,5 @@
 ;; GUI settings
 (tool-bar-mode -1)
 (blink-cursor-mode nil)
-(setq default-frame-alist '((font . "Inconsolata-g")))
 
 (provide 'init-global)
