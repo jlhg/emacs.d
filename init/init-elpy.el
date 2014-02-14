@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.emacs.d/package/elpy-1.0")
+(add-to-list 'load-path "~/.emacs.d/package/elpy-1.3.0")
 (add-to-list 'load-path "~/.emacs.d/package/auto-complete-1.4")
 (add-to-list 'load-path "~/.emacs.d/package/fuzzy-0.1")
 (add-to-list 'load-path "~/.emacs.d/package/yasnippet-0.8.0")
