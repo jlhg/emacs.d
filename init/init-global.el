@@ -166,7 +166,14 @@
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; GUI settings
+(menu-bar-mode -1)
 (tool-bar-mode -1)
-(blink-cursor-mode nil)
+(blink-cursor-mode 0)
+(set-default-font "Inconsolata-g 11")
+
+;; Launch emacsclient maximized from the commandline
+;; 1. $ emacsclient -nc -F "((fullscreen . maximized))"
+;; 2. $ emacsclient -nc -F "((fullscreen . fullboth))"
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (provide 'init-global)
