@@ -170,10 +170,15 @@
 (tool-bar-mode -1)
 (blink-cursor-mode 0)
 (add-to-list 'default-frame-alist '(font . "Inconsolata-g-11"))
-
 ;; Launch emacsclient maximized from the commandline
 ;; 1. $ emacsclient -nc -F "((fullscreen . maximized))"
 ;; 2. $ emacsclient -nc -F "((fullscreen . fullboth))"
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Set the frame title in the titlebar
+(setq frame-title-format (list "Emacs - " (getenv "USERNAME") "@" system-name ": "
+                               '(buffer-file-name
+                                 "%f"
+                                 (dired-directory dired-directory "%b"))))
+
 
 (provide 'init-global)
