@@ -1301,7 +1301,7 @@ For the format of LINE-ERR-INFO, see `flymake-ler-make-ler'."
 
 (defun flymake-display-warning (warning)
   "Display a warning to user."
-  (message-box warning))
+  (message warning))
 
 (defcustom flymake-gui-warnings-enabled t
   "Enables/disables GUI warnings."
