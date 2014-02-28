@@ -74,10 +74,25 @@ change the permission of this folder.
 $ chmod 700 ~/.emacs.d/backup
 ```
 
-## Global Keymaps
+## Keymaps
 
-* `M-;`: comment or uncomment
-* `C-_`: undo
-* `M-_`: redo
-* `M-up` and `M-down`: transpose lines
-* `C-j`: insert a new line and jump to it
+### Global
+
+* `M-;`: comment-dwim-line
+* `C-_`: undo-tree-undo
+* `M-_`: undo-tree-redo
+* `M-up`: move-line-up
+* `M-down`: move-line-down
+* `C-j`: end-of-line-and-indent-new-line
+* `TAB` or `C-i`: yas-expand
+* `M-#`: query-replace-regexp
+
+### SLIME
+
+* `M-x slime`: Start SLIME
+* `M- M-x slime RET <lisp>`: Start SLIME with specified lisp program
+* `, q`: Quit SLIME
+
+### python-mode
+
+* `C-c C-r`: elpy-refactor
