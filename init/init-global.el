@@ -67,8 +67,12 @@
 (find-file "~/.")
 
 ;; backup
-(setq backup-directory-alist
-      '(("." . "~/.emacs.d/backup")))
+(setq
+ backup-directory-alist
+ '(("." . "~/.emacs.d/backup"))
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2)
 
 ;; default indentation
 (setq-default indent-tabs-mode nil)
