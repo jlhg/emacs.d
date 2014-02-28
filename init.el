@@ -6,12 +6,6 @@
 (add-to-list 'load-path "~/.emacs.d/package")
 
 (require 'init-global)
-(require 'init-sh-mode)
-(require 'init-python-mode)
-(require 'init-css-mode)
-(require 'init-java-mode)
-(require 'init-c-mode)
-(require 'init-cheetah-mode)
 
 ;; auto complete
 (require 'init-auto-complete)
@@ -107,3 +101,11 @@
 
 ;; erc
 (require 'init-erc)
+
+;; languages
+(require 'init-sh-mode)
+(require 'init-python-mode)
+(require 'init-css-mode)
+(require 'init-java-mode)
+(require 'init-c-mode)
+(require 'init-cheetah-mode)

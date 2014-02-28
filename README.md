@@ -26,9 +26,23 @@ $ ln -s ~/.emacs.d/init.el ~/
 Install pre-required packages:
 
 ```bash
+## In Python 2.7 environment
 $ pip install -r ~/.emacs.d/requirements/python-package.txt
-$ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
+
+## In Python 3 environment
+$ pip install -r ~/.emacs.d/requirements/python3-pacakge.txt
+
 $ cp ~/.emacs.d/requirements/flake8-checker.sh /path/to/executable/path
+$ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
+```
+
+Create tags for Auto Java Complete in java-mode (optional)
+
+```bash
+$ cd ~/.emacs.d/requirements
+$ javac Tags.java
+$ java -cp .:/path/to/your/jars_and_classesfiles/:/path/to/jre/lib/rt.jar Tags
+## It will generate a file ~/.java_base.tag in your home directory
 ```
 
 Compile all lisp files:
@@ -43,6 +57,8 @@ change the permission of this folder.
 ```bash
 $ chmod go-rwx ~/.emacs.d/backup
 ```
+
+
 
 ## Global Keymaps
 

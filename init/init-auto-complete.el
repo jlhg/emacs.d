@@ -10,6 +10,7 @@
                 ac-source-dictionary
                 ac-source-words-in-same-mode-buffers))
 (setq ac-auto-start nil)
+(setq ac-ignore-case nil)
 (ac-set-trigger-key "TAB")
 (global-auto-complete-mode t)
 (define-key ac-completing-map (kbd "<up>") nil)
