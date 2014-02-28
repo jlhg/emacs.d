@@ -2,29 +2,29 @@
 
 ## Features
 
-* Python
-* Java
-* LaTeX
-* Shell script
+* Python (Elpy)
+* Java (Auto Java Complete)
+* LaTeX (AUCTeX)
+* Lisp (SLIME)
 * Markdown
-* Org
+* Org mode
 * Jinja2
-* R
-* Git
-* Auto complete
-* Flymake
-* Syntax checker
+* R (ESS)
+* Git (Magit)
+* Auto complete (Auto Complete and YASnippet)
+* On-the-fly syntax checks (FlyMake)
 
 ## Requirements
 
 * emacs >= 24.3
-* r (for ess)
 * xclip
-* texlive (for auctex)
-* git (for magit)
 * ack
+* r (ESS)
+* texlive (AUCTeX)
+* git (Magit)
+* clisp (SLIME)
 * Python libraries listed in `requirements/python-package.txt` (Python 2)
-and `requirements/python3-package.txt` (Python 3) (for python-mode)
+and `requirements/python3-package.txt` (Python 3) (Elpy)
 
 ## Setting up
 
@@ -40,7 +40,7 @@ After the cloning, create a symbolic link to `~/init.el`:
 $ ln -s ~/.emacs.d/init.el ~/
 ```
 
-Install the required Python libraries:
+Install the Python libraries required for Elpy:
 
 ```bash
 ## In Python 2.7 environment

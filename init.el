@@ -106,6 +106,11 @@
 ;; https://github.com/leoliu/ack-el
 (require 'ack)
 
+;; slime
+;; http://www.common-lisp.net/project/slime/
+;; https://github.com/slime/slime
+(require 'init-slime)
+
 ;; languages
 (require 'init-sh-mode)
 (require 'init-python-mode)
