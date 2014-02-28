@@ -89,10 +89,27 @@ $ chmod 700 ~/.emacs.d/backup
 
 ### SLIME
 
-* `M-x slime`: Start SLIME
-* `M- M-x slime RET <lisp>`: Start SLIME with specified lisp program
+* `M-x slime`: Start SLIME REPL
+* `M- M-x slime RET <lisp>`: Start SLIME REPL with specified lisp program
+
+*SLIME REPL*
+
 * `, q`: Quit SLIME
 
-### python-mode
+[more](http://common-lisp.net/project/slime/doc/html/REPL.html#REPL)
+
+*lisp-mode*
+
+* `C-c C-k`: slime-compile-and-load-file
+* `C-c C-c`: slime-compile-defun
+* `C-up`: slime-repl-forward-input
+* `C-down`: slime-repl-backward-input
+
+
+### Python
+
+*python-mode*
 
 * `C-c C-r`: elpy-refactor
+
+[more](https://github.com/jorgenschaefer/elpy/wiki/Keybindings)
