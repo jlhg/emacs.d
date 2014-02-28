@@ -71,7 +71,7 @@
  backup-directory-alist
  '(("." . "~/.emacs.d/backup"))
  delete-old-versions t
- kept-new-versions 6
+ kept-new-versions 5
  kept-old-versions 2)
 
 ;; default indentation

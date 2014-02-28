@@ -55,7 +55,7 @@ Emacs will save backup files to `~/.emacs.d/backup`. For security, you need to
 change the permission of this folder.
 
 ```bash
-$ chmod go-rwx ~/.emacs.d/backup
+$ chmod 700 ~/.emacs.d/backup
 ```
 
 
