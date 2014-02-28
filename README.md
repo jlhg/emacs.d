@@ -1,13 +1,30 @@
 # Emacs configuration
 
-This configuration is mainly for Python development. Also supports LaTeX, shell script,
-markdown, org, jinja2, R and git.
+## Features
 
-Supports auto-complete, flymake, syntax checker, etc.
+* Python
+* Java
+* LaTeX
+* Shell script
+* Markdown
+* Org
+* Jinja2
+* R
+* Git
+* Auto complete
+* Flymake
+* Syntax checker
 
 ## Requirements
 
-emacs >= 24.3
+* emacs >= 24.3
+* r (for ess)
+* xclip
+* texlive (for auctex)
+* git (for magit)
+* ack
+* Python libraries listed in `requirements/python-package.txt` (Python 2)
+and `requirements/python3-package.txt` (Python 3) (for python-mode)
 
 ## Setting up
 
@@ -23,7 +40,7 @@ After the cloning, create a symbolic link to `~/init.el`:
 $ ln -s ~/.emacs.d/init.el ~/
 ```
 
-Install pre-required packages:
+Install the required Python libraries:
 
 ```bash
 ## In Python 2.7 environment
@@ -33,7 +50,6 @@ $ pip install -r ~/.emacs.d/requirements/python-package.txt
 $ pip install -r ~/.emacs.d/requirements/python3-pacakge.txt
 
 $ cp ~/.emacs.d/requirements/flake8-checker.sh /path/to/executable/path
-$ sudo dpkg --set-selections < ~/.emacs.d/requirements/package.txt; sudo apt-get dselect-upgrade
 ```
 
 Create tags for Auto Java Complete in java-mode (optional)
@@ -57,8 +73,6 @@ change the permission of this folder.
 ```bash
 $ chmod 700 ~/.emacs.d/backup
 ```
-
-
 
 ## Global Keymaps
 

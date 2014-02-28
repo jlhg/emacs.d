@@ -1,4 +1,0 @@
-r-base install
-xclip install
-texlive-full install
-git install

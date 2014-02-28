@@ -102,6 +102,10 @@
 ;; erc
 (require 'init-erc)
 
+;; ack
+;; https://github.com/leoliu/ack-el
+(require 'ack)
+
 ;; languages
 (require 'init-sh-mode)
 (require 'init-python-mode)
