@@ -111,6 +111,10 @@
 ;; https://github.com/slime/slime
 (require 'init-slime)
 
+;; python-django
+;; https://github.com/fgallina/python-django.el
+(require 'init-python-django)
+
 ;; languages
 (require 'init-sh-mode)
 (require 'init-python-mode)
