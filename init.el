@@ -115,6 +115,10 @@
 ;; https://github.com/fgallina/python-django.el
 (require 'init-python-django)
 
+;; inf-mongo
+;; https://github.com/tobiassvn/inf-mongo
+(require 'init-inf-mongo)
+
 ;; languages
 (require 'init-sh-mode)
 (require 'init-python-mode)
