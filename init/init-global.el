@@ -170,11 +170,11 @@
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; GUI settings
-(if (boundp 'menu-bar-mode)
+(if (fboundp 'menu-bar-mode)
         (menu-bar-mode -1))
-(if (boundp 'tool-bar-mode)
+(if (fboundp 'tool-bar-mode)
          (tool-bar-mode -1))
-(if (boundp 'blink-cursor-mode)
+(if (fboundp 'blink-cursor-mode)
         (blink-cursor-mode 0))
 
 (add-to-list 'default-frame-alist '(font . "Inconsolata-g-11"))
