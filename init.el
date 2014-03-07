@@ -119,6 +119,8 @@
 ;; https://github.com/tobiassvn/inf-mongo
 (require 'init-inf-mongo)
 
+(require 'init-makefile-mode)
+
 ;; languages
 (require 'init-sh-mode)
 (require 'init-python-mode)

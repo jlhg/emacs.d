@@ -40,6 +40,13 @@ After the cloning, create a symbolic link to `~/init.el`:
 $ ln -s ~/.emacs.d/init.el ~/
 ```
 
+Compilation:
+
+```bash
+$ cd ~/.emacs.d/
+$ make
+```
+
 Install the Python libraries required for Elpy:
 
 ```bash
@@ -59,19 +66,6 @@ $ cd ~/.emacs.d/requirements
 $ javac Tags.java
 $ java -cp .:/path/to/your/jars_and_classesfiles/:/path/to/jre/lib/rt.jar Tags
 ## It will generate a file ~/.java_base.tag in your home directory
-```
-
-Compile all lisp files:
-
-```bash
-$ emacs --batch --eval '(byte-recompile-directory "~/.emacs.d")'
-```
-
-Emacs will save backup files to `~/.emacs.d/backup`. For security, you need to
-change the permission of this folder.
-
-```bash
-$ chmod 700 ~/.emacs.d/backup
 ```
 
 ## Keymaps

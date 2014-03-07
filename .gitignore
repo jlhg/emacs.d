@@ -17,3 +17,8 @@ package/**/.cvs*
 *.bak
 *.class
 \#*\#
+package/magit/dir
+package/magit/magit-autoloads.el
+package/magit/magit-version.el
+package/magit/magit.info
+backup/
