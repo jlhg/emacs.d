@@ -99,6 +99,9 @@
 ;; Better buffer list.
 (global-set-key [(control x) (control b)] 'ibuffer)
 
+;; Dired-mode
+(setq dired-listing-switches "-alh")
+
 ;; Shells
 (global-set-key [f12]
 		'(lambda ()

@@ -1,6 +1,6 @@
 .PHONY: all
 all:
-		emacs --batch --eval '(byte-recompile-directory "~/.emacs.d")'
-		mkdir backup
+		emacs --batch --eval '(byte-recompile-directory ".")'
+		mkdir -p backup
 		chmod 700 backup
 		cd package/magit && make
