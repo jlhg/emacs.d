@@ -24,6 +24,7 @@
                              (setq TeX-command-default "XeLaTeX")
                              (setq TeX-save-query  nil )
                              (setq TeX-show-compilation nil)
+                             (flyspell-mode t)
                              ))
 
 ;; anything and LaCarte for Math Input
