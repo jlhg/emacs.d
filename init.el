@@ -23,7 +23,7 @@
 
 ;; jinja2-mode
 ;; https://github.com/paradoxxxzero/jinja2-mode
-(require 'init-jinja2-mode)
+;; (require 'init-jinja2-mode)
 
 ;; markdown mode
 ;; http://jblevins.org/projects/markdown-mode/
@@ -120,6 +120,10 @@
 (require 'init-inf-mongo)
 
 (require 'init-makefile-mode)
+
+;; web-mode
+;; http://web-mode.org/
+(require 'init-web-mode)
 
 ;; languages
 (require 'init-sh-mode)
