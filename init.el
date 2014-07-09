@@ -138,3 +138,6 @@
 (require 'init-php-mode)
 
 (require 'init-javascript-mode)
+
+;; go-mode
+(require 'init-go-mode)
