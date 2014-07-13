@@ -12,6 +12,6 @@
 (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close)
 (setq web-mode-enable-current-element-highlight t)
 (setq web-mode-enable-auto-pairing nil)
-(set-face-attribute 'web-mode-current-element-highlight-face nil :background "slate gray")
+(set-face-attribute 'web-mode-current-element-highlight-face nil :background "dark slate gray")
 
 (provide 'init-web-mode)
