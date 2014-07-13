@@ -14,4 +14,8 @@
 (setq web-mode-enable-auto-pairing nil)
 (set-face-attribute 'web-mode-current-element-highlight-face nil :background "dark slate gray")
 
+(add-hook 'web-mode-hook
+          '(lambda ()
+             (auto-complete-mode 1)))
+
 (provide 'init-web-mode)
