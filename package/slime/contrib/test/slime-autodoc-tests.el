@@ -1,9 +1,11 @@
 (require 'slime-autodoc)
 (require 'slime-tests)
+(require 'cl-lib)
 
 (defun slime-autodoc-to-string ()
   "Retrieve and return autodoc for form at point."
-  (let ((autodoc (car (slime-eval (second (slime-make-autodoc-rpc-form))))))
+  (let ((autodoc (car (slime-eval
+                       (cl-second (slime-make-autodoc-rpc-form))))))
     (if (eq autodoc :not-available)
         :not-available
         (slime-canonicalize-whitespace autodoc))))
@@ -16,7 +18,7 @@
 
 (defmacro define-autodoc-tests (&rest specs)
   `(progn
-     ,@(loop
+     ,@(cl-loop
         for (buffer-sexpr wished-arglist . options)
         in specs
         for fails-for = (cl-getf options :fails-for)
@@ -24,7 +26,7 @@
         for i from 1
         when (featurep 'ert)
         collect `(define-slime-ert-test ,(intern (format "autodoc-tests-%d" i))
-                     ()
+                   ()
                    ,(format "Check autodoc works ok for %s" buffer-sexpr)
                    ,@(if fails-for
                          `(:expected-result
@@ -100,7 +102,7 @@
   ;; Test &optional
   ("(swank::symbol-status foo *HERE*"
    "(symbol-status symbol &optional\
- ===> (package (symbol-package symbol)) <===)" :fails-for ("allegro"))
+ ===> (package (symbol-package symbol)) <===)" :fails-for ("allegro" "ccl"))
 
   ;; Test context-sensitive autodoc (DEFMETHOD)
   ("(defmethod swank::arglist-dispatch (*HERE*"
@@ -114,40 +116,40 @@
   ("(apply 'swank::eval-for-emacs*HERE*"
    "(apply 'eval-for-emacs &optional form buffer-package id &rest args)")
   ("(apply #'swank::eval-for-emacs*HERE*"
-   "(apply #'eval-for-emacs &optional form buffer-package id &rest args)")
+   "(apply #'eval-for-emacs &optional form buffer-package id &rest args)" :fails-for ("ccl"))
   ("(apply 'swank::eval-for-emacs foo *HERE*"
    "(apply 'eval-for-emacs &optional form\
  ===> buffer-package <=== id &rest args)")
   ("(apply #'swank::eval-for-emacs foo *HERE*"
    "(apply #'eval-for-emacs &optional form\
- ===> buffer-package <=== id &rest args)")
+ ===> buffer-package <=== id &rest args)" :fails-for ("ccl"))
 
   ;; Test context-sensitive autodoc (ERROR, CERROR)
   ("(error 'simple-condition*HERE*"
    "(error 'simple-condition &rest arguments\
- &key format-arguments format-control)")
+ &key format-arguments format-control)" :fails-for ("ccl"))
   ("(cerror \"Foo\" 'simple-condition*HERE*"
    "(cerror \"Foo\" 'simple-condition\
  &rest arguments &key format-arguments format-control)"
-   :fails-for ("allegro"))
+   :fails-for ("allegro" "ccl"))
 
   ;; Test &KEY and nested arglists
   ("(swank::with-retry-restart (:msg *HERE*"
    "(with-retry-restart (&key ===> (msg \"Retry.\") <===) &body body)"
-   :fails-for ("allegro"))
+   :fails-for ("allegro" "ccl"))
   ("(swank::with-retry-restart (:msg *HERE*(foo"
    "(with-retry-restart (&key ===> (msg \"Retry.\") <===) &body body)"
    :skip-trailing-test-p t
-   :fails-for ("allegro"))
+   :fails-for ("allegro" "ccl"))
   ("(swank::start-server \"/tmp/foo\" :dont-close *HERE*"
    "(start-server port-file &key (style swank:*communication-style*)\
  ===> (dont-close swank:*dont-close*) <===)"
-   :fails-for ("allegro"))
+   :fails-for ("allegro" "ccl"))
 
   ;; Test declarations and type specifiers
   ("(declare (string *HERE*"
    "(declare (string &rest ===> variables <===))"
-   :fails-for ("allegro"))
+   :fails-for ("allegro") :fails-for ("ccl"))
   ("(declare ((string *HERE*"
    "(declare ((string &optional ===> size <===) &rest variables))")
   ("(declare (type (string *HERE*"
@@ -159,6 +161,6 @@
   ("(labels ((foo (x y) (+ x y))) (foo *HERE*" "(foo ===> x <=== y)")
   ("(labels ((foo (x y) (+ x y))
                  (bar (y) (foo *HERE*"
-   "(foo ===> x <=== y)" :fails-for ("cmucl" "sbcl" "allegro")))
+   "(foo ===> x <=== y)" :fails-for ("cmucl" "sbcl" "allegro" "ccl")))
 
 (provide 'slime-autodoc-tests)

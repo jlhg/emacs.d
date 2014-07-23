@@ -165,6 +165,22 @@ This is an optimized way for Lisp to deliver output to Emacs."
 
 (defvar *listener-eval-function* 'repl-eval)
 
+(defvar *listener-saved-value* nil)
+
+(defslimefun listener-save-value (slimefun &rest args)
+  "Apply SLIMEFUN to ARGS and save the value.
+The saved value should be visible to all threads and retrieved via
+LISTENER-GET-VALUE."
+  (setq *listener-saved-value* (apply slimefun args))
+  t)
+
+(defslimefun listener-get-value ()
+  "Get the last value saved by LISTENER-SAVE-VALUE.
+The value should be produced as if it were requested through
+LISTENER-EVAL directly, so that spacial variables *, etc are set."
+  (listener-eval (let ((*package* (find-package :keyword)))
+                   (write-to-string '*listener-saved-value*))))
+
 (defslimefun listener-eval (string &key (window-width nil window-width-p))
   (if window-width-p
       (let ((*print-right-margin* window-width))
@@ -172,15 +188,11 @@ This is an optimized way for Lisp to deliver output to Emacs."
       (funcall *listener-eval-function* string)))
 
 (defslimefun clear-repl-variables ()
-  (let ((variables '(*** ** * /// // / +++ ++ +
-                     *last-repl-form*
-                     *last-repl-values*)))
+  (let ((variables '(*** ** * /// // / +++ ++ +)))
     (loop for variable in variables
        do (setf (symbol-value variable) nil))))
 
 (defvar *send-repl-results-function* 'send-repl-results-to-emacs)
-(defvar *last-repl-form* nil)
-(defvar *last-repl-values* nil)
 
 (defun repl-eval (string)
   (clear-user-input)
@@ -188,12 +200,10 @@ This is an optimized way for Lisp to deliver output to Emacs."
     (with-retry-restart (:msg "Retry SLIME REPL evaluation request.")
       (track-package
        (lambda ()
-         (setq *** **  ** *  * (car *last-repl-values*)
-                   /// //  // /  / *last-repl-values*
-                   +++ ++  ++ +  + *last-repl-form*)
          (multiple-value-bind (values last-form) (eval-region string)
-           (setq *last-repl-form* last-form
-                 *last-repl-values* values)
+           (setq *** **  ** *  * (car values)
+                 /// //  // /  / values
+                 +++ ++  ++ +  + last-form)
            (funcall *send-repl-results-function* values))))))
   nil)
 

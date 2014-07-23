@@ -283,6 +283,12 @@
   (car (rassoc-if (lambda (x) (member coding-system x :test #'equal))
                   *external-format-to-coding-system*)))
 
+(defimplementation set-default-directory (directory)
+  (let ((directory (truename (merge-pathnames directory))))
+    (sb-posix:chdir directory)
+    (setf *default-pathname-defaults* directory)
+    (default-directory)))
+
 (defun make-socket-io-stream (socket external-format buffering)
   (let ((args `(,@()
                 :output t
@@ -1492,18 +1498,16 @@ stack."
 	  (t (call-next-method o)))))
 
 (defmethod emacs-inspect ((o sb-kernel:code-component))
-          (append
-           (label-value-line*
-            (:code-size (sb-kernel:%code-code-size o))
-            (:entry-points (sb-kernel:%code-entry-points o))
-            (:debug-info (sb-kernel:%code-debug-info o))
-            (:trace-table-offset (sb-kernel:code-header-ref
-                                  o sb-vm:code-trace-table-offset-slot)))
-           `("Constants:" (:newline))
-           (loop for i from sb-vm:code-constants-offset
-                 below (sb-kernel:get-header-data o)
-                 append (label-value-line i (sb-kernel:code-header-ref o i)))
-           `("Code:" (:newline)
+  (append
+   (label-value-line*
+    (:code-size (sb-kernel:%code-code-size o))
+    (:entry-points (sb-kernel:%code-entry-points o))
+    (:debug-info (sb-kernel:%code-debug-info o)))
+   `("Constants:" (:newline))
+   (loop for i from sb-vm:code-constants-offset
+         below (sb-kernel:get-header-data o)
+         append (label-value-line i (sb-kernel:code-header-ref o i)))
+   `("Code:" (:newline)
              , (with-output-to-string (s)
                  (cond ((sb-kernel:%code-debug-info o)
                         (sb-disassem:disassemble-code-component o :stream s))
@@ -1886,15 +1890,30 @@ stack."
 
 ;;;; wrap interface implementation
 
+(defun sbcl-version>= (&rest subversions)
+  #+#.(swank-backend:with-symbol 'assert-version->= 'sb-ext)
+  (values (ignore-errors (apply #'sb-ext:assert-version->= subversions) t))
+  #-#.(swank-backend:with-symbol 'assert-version->= 'sb-ext)
+  nil)
+
 (defimplementation wrap (spec indicator &key before after replace)
   (when (wrapped-p spec indicator)
     (warn "~a already wrapped with indicator ~a, unwrapping first"
           spec indicator)
     (sb-int:unencapsulate spec indicator))
-   (sb-int:encapsulate spec indicator `(sbcl-wrap ',spec
-                                                  ,before
-                                                  ,after
-                                                  ,replace)))
+  (sb-int:encapsulate spec indicator
+                      #-#.(swank-backend:with-symbol 'arg-list 'sb-int)
+                      (lambda (function &rest args)
+                        (sbcl-wrap spec before after replace function args))
+                      #+#.(swank-backend:with-symbol 'arg-list 'sb-int)
+                      (if (sbcl-version>= 1 1 16)
+                          (lambda ()
+                            (sbcl-wrap spec before after replace
+                                       (symbol-value 'sb-int:basic-definition)
+                                       (symbol-value 'sb-int:arg-list)))
+                          `(sbcl-wrap ',spec ,before ,after ,replace
+                                      (symbol-value 'sb-int:basic-definition)
+                                      (symbol-value 'sb-int:arg-list)))))
 
 (defimplementation unwrap (spec indicator)
   (sb-int:unencapsulate spec indicator))
@@ -1902,20 +1921,16 @@ stack."
 (defimplementation wrapped-p (spec indicator)
   (sb-int:encapsulated-p spec indicator))
 
-(in-package :sb-int)
-
-(defun swank-backend::sbcl-wrap (spec before after replace)
-  (declare (special sb-int:basic-definition sb-int:arg-list))
+(defun sbcl-wrap (spec before after replace function args)
   (let (retlist completed)
     (unwind-protect
          (progn
            (when before
-             (funcall before sb-int:arg-list))
+             (funcall before args))
            (setq retlist (multiple-value-list (if replace
                                                   (funcall replace
-                                                           sb-int:arg-list)
-                                                  (apply sb-int:basic-definition
-                                                         sb-int:arg-list))))
+                                                           args)
+                                                  (apply function args))))
            (setq completed t)
            (values-list retlist))
       (when after
