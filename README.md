@@ -4,11 +4,11 @@
 
 * Python (Elpy)
 * Java (Auto Java Complete)
+* Javascript
 * LaTeX (AUCTeX)
 * Lisp (SLIME)
 * Markdown
 * Org mode
-* Jinja2
 * R (ESS)
 * Git (Magit)
 * Auto complete (Auto Complete and YASnippet)
@@ -25,6 +25,10 @@
 * clisp (SLIME)
 * Python libraries listed in `requirements/python-package.txt` (Python 2)
 and `requirements/python3-package.txt` (Python 3) (Elpy)
+
+## Optional requirements
+
+* Tern (js2-mode)
 
 ## Setting up
 
