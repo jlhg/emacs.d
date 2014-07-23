@@ -4,3 +4,6 @@
 [submodule "yasmate"]
         path = package/yasnippet/yasmate
         url = https://github.com/capitaomorte/yasmate.git
+[submodule "package/jshint-mode"]
+	path = package/jshint-mode
+	url = https://github.com/daleharvey/jshint-mode.git

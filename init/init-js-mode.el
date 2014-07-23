@@ -22,4 +22,10 @@
      (require 'tern-auto-complete)
      (tern-ac-setup)))
 
+;; jshint-mode
+(add-to-list 'load-path "~/.emacs.d/package/jshint-mode")
+(require 'flymake-jshint)
+(add-hook 'js2-mode-hook
+     (lambda () (flymake-mode t)))
+
 (provide 'init-js-mode)

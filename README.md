@@ -32,44 +32,52 @@ and `requirements/python3-package.txt` (Python 3) (Elpy)
 
 ## Setting up
 
-Clone this repository to your `$HOME/.emacs.d` directory:
+1. Clone this repository to your `$HOME/.emacs.d` directory:
 
 ```bash
 $ git clone --recursive https://github.com/jlhg/emacs.d ~/.emacs.d
 ```
 
-After the cloning, create a symbolic link to `~/init.el`:
+2. After the cloning, create a symbolic link to `~/init.el`:
 
 ```bash
 $ ln -s ~/.emacs.d/init.el ~/
 ```
 
-Compilation:
+3. Compilation:
 
 ```bash
 $ cd ~/.emacs.d/
 $ make
 ```
 
-Install the Python libraries required for Elpy:
+4. Install the Python libraries required for python-mode:
 
 ```bash
-## In Python 2.7 environment
+# In Python 2.7 environment
 $ pip install -r ~/.emacs.d/requirements/python-package.txt
 
-## In Python 3 environment
+# In Python 3 environment
 $ pip install -r ~/.emacs.d/requirements/python3-pacakge.txt
 
 $ cp ~/.emacs.d/requirements/flake8-checker.sh /path/to/executable/path
 ```
 
-Create tags for Auto Java Complete in java-mode (optional)
+5. Create Auto Java Complete tags for java-mode:
 
 ```bash
 $ cd ~/.emacs.d/requirements
 $ javac Tags.java
 $ java -cp .:/path/to/your/jars_and_classesfiles/:/path/to/jre/lib/rt.jar Tags
-## It will generate a file ~/.java_base.tag in your home directory
+# This will generate a file .java_base.tag in your home directory
+```
+
+6. Install the npm modules for js2-mode:
+
+```bash
+$ npm install tern jshint
+$ echo 'export PATH=/path/to/node_modules/.bin:$PATH' >>~/.bashrc
+$ . ~/.bashrc
 ```
 
 ## Keymaps
@@ -111,3 +119,13 @@ $ java -cp .:/path/to/your/jars_and_classesfiles/:/path/to/jre/lib/rt.jar Tags
 * `C-c C-r`: elpy-refactor
 
 [more](https://github.com/jorgenschaefer/elpy/wiki/Keybindings)
+
+### Javascript
+
+*js2-mode* *tern-mode*
+
+* `M-.`: Jump to the definition of the thing under the cursor.
+* `M-,`: Brings you back to last place you were when you pressed M-..
+* `C-c C-r`: Rename the variable under the cursor.
+* `C-c C-c`: Find the type of the thing under the cursor.
+* `C-c C-d`: Find docs of the thing under the cursor. Press again to open the associated URL (if any).
