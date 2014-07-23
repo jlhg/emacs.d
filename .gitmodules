@@ -10,3 +10,9 @@
 [submodule "package/slime"]
 	path = package/slime
 	url = https://github.com/slime/slime.git
+[submodule "package/skewer-mode"]
+	path = package/skewer-mode
+	url = https://github.com/skeeto/skewer-mode.git
+[submodule "package/emacs-web-server"]
+	path = package/emacs-web-server
+	url = https://github.com/skeeto/emacs-web-server.git
