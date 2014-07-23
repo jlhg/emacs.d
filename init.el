@@ -137,7 +137,8 @@
 ;; https://github.com/ejmr/php-mode
 (require 'init-php-mode)
 
-(require 'init-javascript-mode)
+;; js-mode js2-mode
+(require 'init-js-mode)
 
 ;; go-mode
 (require 'init-go-mode)
