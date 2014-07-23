@@ -185,7 +185,9 @@
 (if (fboundp 'blink-cursor-mode)
         (blink-cursor-mode 0))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata-g-11"))
+(when (member "Inconsolata" (font-family-list))
+  (set-frame-font "Inconsolata-13"))
+
 ;; Launch emacsclient maximized from the commandline
 ;; 1. $ emacsclient -nc -F "((fullscreen . maximized))"
 ;; 2. $ emacsclient -nc -F "((fullscreen . fullboth))"
