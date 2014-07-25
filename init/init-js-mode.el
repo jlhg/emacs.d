@@ -46,4 +46,7 @@
 (add-hook 'css-mode-hook 'skewer-css-mode)
 (add-hook 'html-mode-hook 'skewer-html-mode)
 
+;; nodejs-repl
+(require 'nodejs-repl)
+
 (provide 'init-js-mode)
