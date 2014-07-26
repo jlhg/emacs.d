@@ -6,7 +6,7 @@
         url = https://github.com/capitaomorte/yasmate.git
 [submodule "package/jshint-mode"]
 	path = package/jshint-mode
-	url = https://github.com/daleharvey/jshint-mode.git
+	url = https://github.com/jlhg/jshint-mode.git
 [submodule "package/slime"]
 	path = package/slime
 	url = https://github.com/slime/slime.git
