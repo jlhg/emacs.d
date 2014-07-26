@@ -4,9 +4,6 @@
 [submodule "yasmate"]
         path = package/yasnippet/yasmate
         url = https://github.com/capitaomorte/yasmate.git
-[submodule "package/jshint-mode"]
-	path = package/jshint-mode
-	url = https://github.com/jlhg/jshint-mode.git
 [submodule "package/slime"]
 	path = package/slime
 	url = https://github.com/slime/slime.git
@@ -16,3 +13,15 @@
 [submodule "package/emacs-web-server"]
 	path = package/emacs-web-server
 	url = https://github.com/skeeto/emacs-web-server.git
+[submodule "package/f.el"]
+	path = package/f.el
+	url = https://github.com/rejeep/f.el.git
+[submodule "package/s.el"]
+	path = package/s.el
+	url = https://github.com/magnars/s.el.git
+[submodule "package/dash.el"]
+	path = package/dash.el
+	url = https://github.com/magnars/dash.el.git
+[submodule "package/flycheck"]
+	path = package/flycheck
+	url = https://github.com/flycheck/flycheck.git

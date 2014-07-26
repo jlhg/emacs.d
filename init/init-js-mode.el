@@ -32,12 +32,6 @@
      (define-key tern-mode-keymap (kbd "C-.") 'my-tern-ac-complete)
      (tern-ac-setup)))
 
-;; jshint-mode
-(add-to-list 'load-path "~/.emacs.d/package/jshint-mode")
-(require 'flymake-jshint)
-(add-hook 'js2-mode-hook
-          (lambda () (flymake-mode t)))
-
 ;; skewer-mode
 (add-to-list 'load-path "~/.emacs.d/package/emacs-web-server")
 (add-to-list 'load-path "~/.emacs.d/package/skewer-mode")

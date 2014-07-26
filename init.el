@@ -49,6 +49,9 @@
 ;; flymake
 (require 'init-flymake)
 
+;; flycheck
+(require 'init-flycheck)
+
 ;; Elpy - the Emacs Lisp Python Environment
 ;; https://github.com/jorgenschaefer/elpy
 (require 'init-elpy)
