@@ -29,7 +29,7 @@
   '(progn
      (require 'tern-auto-complete)
      (setq tern-ac-on-dot nil)
-     (define-key tern-mode-keymap (kbd "TAB") 'my-tern-ac-complete)
+     (define-key tern-mode-keymap (kbd "C-.") 'my-tern-ac-complete)
      (tern-ac-setup)))
 
 ;; jshint-mode
