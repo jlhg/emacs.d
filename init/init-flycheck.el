@@ -4,5 +4,8 @@
 (add-to-list 'load-path "~/.emacs.d/package/f.el")
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(setq-default flycheck-disabled-checkers
+      '(python-flake8 python-pylint emacs-lisp-checkdoc))
+
 
 (provide 'init-flycheck)
