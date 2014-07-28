@@ -28,7 +28,8 @@ and `requirements/python3-package.txt` (Python 3) (Elpy)
 
 ## Optional requirements
 
-* Tern (js2-mode)
+* [Tern](http://ternjs.net/) (js2-mode)
+* [Language checkers required for Flycheck](http://flycheck.readthedocs.org/en/latest/guide/languages.html)
 
 ## Setting up
 
