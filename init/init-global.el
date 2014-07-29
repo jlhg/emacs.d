@@ -22,7 +22,6 @@
 (setq initial-scratch-message "")
 (setq initial-major-mode 'text-mode)
 
-
 ;; query-replace-regexp
 (global-set-key (kbd "M-#") 'query-replace-regexp)
 
@@ -42,6 +41,9 @@
 
 ;; inhibit startup message
 (setq inhibit-startup-screen t)
+
+;; buffer to show after starting Emacs.
+(setq initial-buffer-choice "~")
 
 ;; cursor, please do not blink
 (blink-cursor-mode nil)
@@ -196,6 +198,5 @@
                                '(buffer-file-name
                                  "%f"
                                  (dired-directory dired-directory "%b"))))
-
 
 (provide 'init-global)
