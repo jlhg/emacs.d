@@ -76,7 +76,7 @@ $ java -cp .:/path/to/your/jars_and_classesfiles/:/path/to/jre/lib/rt.jar Tags
 6. Install the npm modules for js2-mode:
 
 ```bash
-$ npm install tern jshint
+$ npm install tern jshint csslint
 $ echo 'export PATH=/path/to/node_modules/.bin:$PATH' >>~/.bashrc
 $ . ~/.bashrc
 ```
