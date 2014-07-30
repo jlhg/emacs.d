@@ -43,7 +43,7 @@
 (setq inhibit-startup-screen t)
 
 ;; buffer to show after starting Emacs.
-(setq initial-buffer-choice "~")
+;; (setq initial-buffer-choice "~")
 
 ;; cursor, please do not blink
 (blink-cursor-mode nil)
