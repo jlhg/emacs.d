@@ -145,3 +145,6 @@
 
 ;; go-mode
 (require 'init-go-mode)
+
+;; swift-mode
+(require 'init-swift-mode)

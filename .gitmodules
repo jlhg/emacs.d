@@ -25,3 +25,6 @@
 [submodule "package/flycheck"]
 	path = package/flycheck
 	url = https://github.com/flycheck/flycheck.git
+[submodule "package/swift-mode"]
+	path = package/swift-mode
+	url = https://github.com/chrisbarrett/swift-mode.git
