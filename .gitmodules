@@ -1,4 +1,4 @@
-[submodule "snippets"]
+[submodule "package/yasnippet/snippets"]
         path = package/yasnippet/snippets
         url = https://github.com/AndreaCrotti/yasnippet-snippets.git
 [submodule "yasmate"]
@@ -28,3 +28,6 @@
 [submodule "package/swift-mode"]
 	path = package/swift-mode
 	url = https://github.com/chrisbarrett/swift-mode.git
+[submodule "snippets"]
+	path = snippets
+	url = https://github.com/jlhg/yasnippet-snippets.git

@@ -2,7 +2,6 @@ auto-save-list/
 server/
 url/
 trash/
-snippets/
 abbrev_defs
 ac-comphist.dat
 .mc-lists.el
@@ -23,3 +22,4 @@ package/magit/magit.info
 backup/
 eshell/
 .emacs.desktop
+tramp
