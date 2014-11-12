@@ -6,6 +6,7 @@
 (add-to-list 'load-path "~/.emacs.d/package")
 
 (require 'init-global)
+(require 'init-ibuffer)
 
 ;; auto complete
 (require 'init-auto-complete)

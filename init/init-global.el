@@ -103,9 +103,6 @@
 (setq-default visual-line-mode t)
 (setq-default global-visual-line-mode t)
 
-;; Better buffer list.
-(global-set-key [(control x) (control b)] 'ibuffer)
-
 ;; Dired-mode
 (setq dired-listing-switches "-alh")
 
@@ -185,9 +182,18 @@
 (if (fboundp 'tool-bar-mode)
          (tool-bar-mode -1))
 (if (fboundp 'blink-cursor-mode)
-        (blink-cursor-mode 0))
+    (blink-cursor-mode 0))
 
-(add-to-list 'default-frame-alist '(font . "Inconsolata-14"))
+;; Font settings
+(cond
+ ((string-equal system-type "darwin")
+  (progn
+    (add-to-list 'default-frame-alist '(font . "Monaco-14"))
+    (set-fontset-font "fontset-default" 'big5' ("Heiti TC" . "unicode-bmp"))))
+ ((string-equal system-type "gnu/linux")
+  (progn
+    (add-to-list 'default-frame-alist '(font . "Inconsolata-14"))))
+ )
 
 ;; Launch emacsclient maximized from the commandline
 ;; 1. $ emacsclient -nc -F "((fullscreen . maximized))"
