@@ -38,8 +38,8 @@
 (add-hook 'ibuffer-hook
           (lambda ()
             ;; uncomment to use VC groups by default instead
-            ;; (ibuffer-vc-set-filter-groups-by-vc-root)
-            (ibuffer-switch-to-saved-filter-groups "default")
+            (ibuffer-vc-set-filter-groups-by-vc-root)
+            ;; (ibuffer-switch-to-saved-filter-groups "default")
             (ibuffer-vc-add-vc-filter-groups)))
 
 ;; Use human readable Size column instead of original one
