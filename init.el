@@ -149,3 +149,8 @@
 
 ;; swift-mode
 (require 'init-swift-mode)
+
+;; yaml-mode
+;; The emacs major mode for editing files in the YAML data serialization format.
+;; https://github.com/yoshiki/yaml-mode
+(require 'init-yaml-mode)
