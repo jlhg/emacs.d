@@ -154,3 +154,8 @@
 ;; The emacs major mode for editing files in the YAML data serialization format.
 ;; https://github.com/yoshiki/yaml-mode
 (require 'init-yaml-mode)
+
+;; indent-guide
+;; Show vertical lines to guide indentation
+;; https://github.com/zk-phi/indent-guide
+(require 'init-indent-guide)
