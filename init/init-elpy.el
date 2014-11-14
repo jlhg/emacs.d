@@ -36,4 +36,7 @@ is not helpful and mostly annoying.
 
 Value set by elpy.")
 
+;; Disable highlight-indentation-mode by default
+(setq elpy-default-minor-modes (delq 'highlight-indentation-mode elpy-default-minor-modes))
+
 (provide 'init-elpy)
