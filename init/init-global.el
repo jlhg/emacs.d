@@ -205,4 +205,6 @@
                                  "%f"
                                  (dired-directory dired-directory "%b"))))
 
+(desktop-save-mode 1)
+
 (provide 'init-global)
