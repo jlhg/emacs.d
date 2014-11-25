@@ -59,7 +59,9 @@
 
 ;; xclip - an interface to the xclip tool
 ;; requirements: xclip
-(cond ((eq system-type 'gnu/linux) (require 'init-xclip)))
+(cond ((eq system-type 'gnu/linux) (require 'init-xclip))
+      ((eq system-type 'darwin) (require 'pbcopy))
+      )
 
 ;; org mode
 (require 'init-org-mode)
