@@ -5,7 +5,7 @@
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
-      '(python-flake8 python-pylint emacs-lisp-checkdoc))
+      '(python-flake8 python-pylint emacs-lisp-checkdoc sh-bash))
 
 
 (provide 'init-flycheck)
