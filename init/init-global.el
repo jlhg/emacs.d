@@ -176,6 +176,9 @@
 ;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
+;; Accept UTF-8 (uppercase) encoding
+(define-coding-system-alias 'UTF-8 'utf-8)
+
 ;; GUI settings
 (if (fboundp 'menu-bar-mode)
         (menu-bar-mode -1))
