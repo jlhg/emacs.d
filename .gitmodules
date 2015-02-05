@@ -31,3 +31,21 @@
 [submodule "snippets"]
 	path = snippets
 	url = https://github.com/jlhg/yasnippet-snippets.git
+[submodule "package/Highlight-Indentation-for-Emacs"]
+	path = package/Highlight-Indentation-for-Emacs
+	url = https://github.com/antonj/Highlight-Indentation-for-Emacs.git
+[submodule "package/company-mode"]
+	path = package/company-mode
+	url = https://github.com/company-mode/company-mode.git
+[submodule "package/elpy"]
+	path = package/elpy
+	url = https://github.com/jorgenschaefer/elpy.git
+[submodule "package/find-file-in-project"]
+	path = package/find-file-in-project
+	url = https://github.com/technomancy/find-file-in-project.git
+[submodule "package/idomenu"]
+	path = package/idomenu
+	url = https://github.com/birkenfeld/idomenu.git
+[submodule "package/pyvenv"]
+	path = package/pyvenv
+	url = https://github.com/jorgenschaefer/pyvenv.git

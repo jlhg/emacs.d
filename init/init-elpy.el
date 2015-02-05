@@ -1,12 +1,10 @@
-(add-to-list 'load-path "~/.emacs.d/package/elpy-1.3.0")
-(add-to-list 'load-path "~/.emacs.d/package/auto-complete-1.4")
-(add-to-list 'load-path "~/.emacs.d/package/fuzzy-0.1")
-(add-to-list 'load-path "~/.emacs.d/package/yasnippet-0.8.0")
-(add-to-list 'load-path "~/.emacs.d/package/virtualenv-1.2")
-(add-to-list 'load-path "~/.emacs.d/package/highlight-indentation-0.5.0")
-(add-to-list 'load-path "~/.emacs.d/package/find-file-in-project-3.2")
-(add-to-list 'load-path "~/.emacs.d/package/idomenu-0.1")
-(add-to-list 'load-path "~/.emacs.d/package/nose-0.1.1")
+(add-to-list 'load-path "~/.emacs.d/package/elpy")
+(add-to-list 'load-path "~/.emacs.d/package/company-mode")
+(add-to-list 'load-path "~/.emacs.d/package/find-file-in-project")
+(add-to-list 'load-path "~/.emacs.d/package/Highlight-Indentation-for-Emacs")
+(add-to-list 'load-path "~/.emacs.d/package/idomenu")
+(add-to-list 'load-path "~/.emacs.d/package/pyvenv")
+(add-to-list 'load-path "~/.emacs.d/package/yasnippet")
 
 (require 'elpy)
 (elpy-enable)
@@ -37,6 +35,6 @@ is not helpful and mostly annoying.
 Value set by elpy.")
 
 ;; Disable highlight-indentation-mode by default
-(setq elpy-default-minor-modes (delq 'highlight-indentation-mode elpy-default-minor-modes))
+(remove-hook 'elpy-modules 'elpy-module-highlight-indentation)
 
 (provide 'init-elpy)
