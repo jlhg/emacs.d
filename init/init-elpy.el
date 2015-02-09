@@ -6,6 +6,7 @@
 (add-to-list 'load-path "~/.emacs.d/package/pyvenv")
 (add-to-list 'load-path "~/.emacs.d/package/yasnippet")
 
+(require 'find-file-in-project)
 (require 'elpy)
 (elpy-enable)
 ;; (elpy-use-ipython)
