@@ -157,6 +157,11 @@
 ;; https://github.com/yoshiki/yaml-mode
 (require 'init-yaml-mode)
 
+;; json-mode
+;; Major mode for editing JSON files with emacs
+;; https://github.com/joshwnj/json-mode
+(require 'init-json-mode)
+
 ;; indent-guide
 ;; Show vertical lines to guide indentation
 ;; https://github.com/zk-phi/indent-guide
