@@ -7,7 +7,8 @@
   '(progn
      (setq js2-missing-semi-one-line-override t)
      (setq js2-strict-missing-semi-warning nil)
-     (setq-default js2-basic-offset 2)))
+     (setq-default js2-basic-offset 2)
+     (setq tab-width 2)))
 
 (defun json-format ()
   (interactive)
