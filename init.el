@@ -166,3 +166,7 @@
 ;; Show vertical lines to guide indentation
 ;; https://github.com/zk-phi/indent-guide
 (require 'init-indent-guide)
+
+;; dockerfile-mode
+;; https://github.com/spotify/dockerfile-mode
+(require 'init-dockerfile-mode)
