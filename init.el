@@ -170,3 +170,7 @@
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode
 (require 'init-dockerfile-mode)
+
+;; csv-mode
+;; http://elpa.gnu.org/packages/csv-mode.html
+(require 'csv-mode)
