@@ -49,3 +49,6 @@
 [submodule "package/pyvenv"]
 	path = package/pyvenv
 	url = https://github.com/jorgenschaefer/pyvenv.git
+[submodule "package/auto-complete"]
+	path = package/auto-complete
+	url = https://github.com/auto-complete/auto-complete.git
