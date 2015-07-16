@@ -1,5 +1,5 @@
-(add-to-list 'load-path "~/.emacs.d/package/git-modes")
-(add-to-list 'load-path "~/.emacs.d/package/magit")
+(add-to-list 'load-path "~/.emacs.d/package/dash.el")
+(add-to-list 'load-path "~/.emacs.d/package/magit/lisp")
 
 (require 'magit)
 
