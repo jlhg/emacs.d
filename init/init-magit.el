@@ -3,5 +3,6 @@
 
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
+(setq magit-restore-window-configuration nil)
 
 (provide 'init-magit)
