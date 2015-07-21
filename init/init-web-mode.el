@@ -67,6 +67,8 @@
             (when (equal web-mode-content-type "jsx")
               ;; enable flycheck
               (flycheck-select-checker 'jsxhint-checker)
-              (flycheck-mode))))
+              (flycheck-mode)
+              ;; set comment start
+              (set (make-local-variable 'comment-start) "//"))))
 
 (provide 'init-web-mode)
