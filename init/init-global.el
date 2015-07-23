@@ -159,7 +159,8 @@
 
 ;; electric pair mode
 (when (fboundp 'electric-pair-mode)
-  (electric-pair-mode))
+  (electric-pair-mode)
+  (setq electric-pair-skip-self nil))
 
 ;; numbered window shortcuts
 ;; use M-1 through M-0 to navigate
