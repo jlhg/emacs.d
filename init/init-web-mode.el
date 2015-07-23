@@ -69,6 +69,6 @@
               (flycheck-select-checker 'jsxhint-checker)
               (flycheck-mode)
               ;; set comment start
-              (set (make-local-variable 'comment-start) "//"))))
+              (set (make-local-variable 'comment-start) "// "))))
 
 (provide 'init-web-mode)

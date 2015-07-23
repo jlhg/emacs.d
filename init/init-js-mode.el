@@ -10,6 +10,9 @@
      (setq-default js2-basic-offset 2)
      (setq tab-width 2)))
 
+(add-hook 'js2-mode-hook (lambda ()
+                           (set (make-local-variable 'comment-start) "// ")))
+
 (defun json-format ()
   (interactive)
   (save-excursion
