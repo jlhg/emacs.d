@@ -180,6 +180,12 @@
 ;; Accept UTF-8 (uppercase) encoding
 (define-coding-system-alias 'UTF-8 'utf-8)
 
+;; Previous buffer
+(global-set-key (kbd "C-c p") 'previous-buffer)
+
+;; Next buffer
+(global-set-key (kbd "C-c n") 'next-buffer)
+
 ;; GUI settings
 (if (fboundp 'menu-bar-mode)
         (menu-bar-mode -1))
