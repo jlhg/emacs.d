@@ -174,3 +174,6 @@
 ;; csv-mode
 ;; http://elpa.gnu.org/packages/csv-mode.html
 (require 'csv-mode)
+
+;; ruby-mode
+(require 'init-ruby-mode)

@@ -55,3 +55,12 @@
 [submodule "package/magit"]
 	path = package/magit
 	url = https://github.com/magit/magit.git
+[submodule "package/yard-mode.el"]
+	path = package/yard-mode.el
+	url = https://github.com/pd/yard-mode.el.git
+[submodule "package/robe"]
+	path = package/robe
+	url = https://github.com/dgutov/robe.git
+[submodule "package/inf-ruby"]
+	path = package/inf-ruby
+	url = https://github.com/nonsequitur/inf-ruby.git
