@@ -13,11 +13,6 @@
 (add-hook 'js2-mode-hook (lambda ()
                            (set (make-local-variable 'comment-start) "// ")))
 
-(defun json-format ()
-  (interactive)
-  (save-excursion
-    (shell-command-on-region (mark) (point) "python -m json.tool" (buffer-name) t)))
-
 ;; tern-mode
 (add-to-list 'load-path "~/.emacs.d/package/tern")
 (autoload 'tern-mode "tern.el" nil t)
