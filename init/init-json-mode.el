@@ -10,6 +10,8 @@
           (lambda ()
             (setq tab-width 2)
             (make-local-variable 'js-indent-level)
-            (setq js-indent-level 2)))
+            (setq js-indent-level 2)
+            (when (require 'auto-complete nil t)
+              (auto-complete-mode t))))
 
 (provide 'init-json-mode)
