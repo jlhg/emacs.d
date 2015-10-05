@@ -177,3 +177,7 @@
 
 ;; ruby-mode
 (require 'init-ruby-mode)
+
+;; coffee-mode
+;; https://github.com/defunkt/coffee-mode
+(require 'init-coffee-mode)
