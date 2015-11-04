@@ -8,6 +8,9 @@
 
 (setq org-agenda-files '("~/.emacs.d/org-notes"))
 
+;; Initial visibility
+(setq org-startup-folded nil)
+
 ;; Add the date to the CLOSED tag
 (setq org-log-done 'time)
 
