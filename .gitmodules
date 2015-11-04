@@ -67,3 +67,6 @@
 [submodule "package/coffee-mode"]
 	path = package/coffee-mode
 	url = https://github.com/defunkt/coffee-mode.git
+[submodule "package/osx-clipboard-mode"]
+	path = package/osx-clipboard-mode
+	url = https://github.com/joddie/osx-clipboard-mode.git
