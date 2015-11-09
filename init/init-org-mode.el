@@ -14,6 +14,9 @@
 ;; Add the date to the CLOSED tag
 (setq org-log-done 'time)
 
+;; Pretty fontification of source code blocks
+(setq org-src-fontify-natively t)
+
 (setq org-todo-keywords
       '((sequence "TODO" "|" "DONE" "CANCELED")))
 
