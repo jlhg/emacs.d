@@ -14,22 +14,22 @@
                            (set (make-local-variable 'comment-start) "// ")))
 
 ;; tern-mode
-(add-to-list 'load-path "~/.emacs.d/package/tern")
-(autoload 'tern-mode "tern.el" nil t)
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(defun my-tern-ac-complete ()
-  "Complete code at point by tern."
-  (interactive)
-  (tern-ac-complete-request
-   (lambda ()
-     (let ((ac-sources (cons 'ac-source-tern-completion ac-sources)))
-       (auto-complete)))))
-(eval-after-load 'tern
-  '(progn
-     (require 'tern-auto-complete)
-     (setq tern-ac-on-dot nil)
-     (define-key tern-mode-keymap (kbd "C-.") 'my-tern-ac-complete)
-     (tern-ac-setup)))
+;; (add-to-list 'load-path "~/.emacs.d/package/tern")
+;; (autoload 'tern-mode "tern.el" nil t)
+;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;; (defun my-tern-ac-complete ()
+;;   "Complete code at point by tern."
+;;   (interactive)
+;;   (tern-ac-complete-request
+;;    (lambda ()
+;;      (let ((ac-sources (cons 'ac-source-tern-completion ac-sources)))
+;;        (auto-complete)))))
+;; (eval-after-load 'tern
+;;   '(progn
+;;      (require 'tern-auto-complete)
+;;      (setq tern-ac-on-dot nil)
+;;      (define-key tern-mode-keymap (kbd "C-.") 'my-tern-ac-complete)
+;;      (tern-ac-setup)))
 
 ;; skewer-mode
 (add-to-list 'load-path "~/.emacs.d/package/emacs-web-server")
