@@ -70,3 +70,6 @@
 [submodule "package/osx-clipboard-mode"]
 	path = package/osx-clipboard-mode
 	url = https://github.com/joddie/osx-clipboard-mode.git
+[submodule "package/js-doc"]
+	path = package/js-doc
+	url = https://github.com/mooz/js-doc.git
