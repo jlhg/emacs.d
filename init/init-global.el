@@ -91,6 +91,30 @@
 (global-linum-mode t)
 (setq linum-format "%3d ")
 
+;; Do not turn on linum-mode in some major modes (and file with over 2000 lines)
+;; due to the performance issue.
+;; https://github.com/kuanyui/.emacs.d/blob/master/rc/rc-basic.el#L203-L233
+(setq inhibit-linum-mode-alist
+      `(eshell-mode
+        shell-mode
+        term-mode
+        erc-mode
+        compilation-mode
+        woman-mode
+        w3m-mode
+        magit-mode
+        magit-status-mode
+        org-mode
+        ,(if (not (window-system)) 'twittering-mode)
+        ))
+
+(defadvice linum-on (around inhibit-for-modes activate)
+  "Stop turing linum-mode if it is in the inhibit-linum-mode-alist."
+  (unless (or (member major-mode inhibit-linum-mode-alist)
+              (and (eq major-mode 'org-mode)
+                   (> (count-lines (point-min) (point-max)) 2000)))
+    ad-do-it))
+
 ;; word wrap
 (setq-default truncate-lines t)
 (global-set-key [(control f11)] 'toggle-truncate-lines)
