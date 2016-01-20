@@ -1,6 +1,7 @@
 elpy==1.3.0
 jedi
 flake8
+flake8-import-order
 nose
 coverage
 mock

@@ -6,3 +6,4 @@ rope==0.10.2
 virtualenv==1.11.6
 elpy==1.6.0
 flake8==2.3.0
+flake8-import-order==0.6.1
