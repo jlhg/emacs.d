@@ -1,6 +1,10 @@
 ;; js-mode
 (setq js-indent-level 2)
 
+;; Bind M-. to find-tag
+(eval-after-load 'js
+  (define-key js-mode-map (kbd "M-.") nil))
+
 ;; tern-mode
 ;; (add-to-list 'load-path "~/.emacs.d/package/tern")
 ;; (autoload 'tern-mode "tern.el" nil t)
