@@ -227,6 +227,10 @@
  ((string-equal system-type "gnu/linux")
   (progn
     (add-to-list 'default-frame-alist '(font . "Inconsolata-14"))))
+ ((string-equal system-type "windows-nt")
+  (progn
+    (add-to-list 'default-frame-alist '(font . "Consolas-14"))
+    (set-fontset-font "fontset-default" 'big5' ("微軟正黑體" . "unicode-bmp"))))
  )
 
 ;; Launch emacsclient maximized from the commandline
