@@ -1,6 +1,11 @@
 (add-to-list 'load-path "~/.emacs.d/package/org/list")
 
 (require 'org-install)
+
+;; Markdown Back-End for Org Export Engine
+(eval-after-load "org"
+  '(require 'ox-md nil t))
+
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
