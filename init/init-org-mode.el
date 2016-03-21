@@ -23,12 +23,13 @@
 (setq org-src-fontify-natively t)
 
 (setq org-todo-keywords
-      '((sequence "TODO" "|" "DONE" "CANCELED")))
+      '((sequence "NOTE" "TODO" "|" "DONE" "CANCELED")))
 
 (setq org-todo-keywords-for-agenda
       '("TODO" "DONE" "CANCELED"))
 
 (setq org-todo-keyword-faces
-      '(("CANCELED" . (:foreground "blue" :weight bold))))
+      '(("CANCELED" . (:foreground "blue" :weight bold))
+        ("NOTE" . (:foreground "yellow" :weight bold))))
 
 (provide 'init-org-mode)
