@@ -181,3 +181,7 @@
 ;; coffee-mode
 ;; https://github.com/defunkt/coffee-mode
 (require 'init-coffee-mode)
+
+;; nginx-mode
+;; https://github.com/ajc/nginx-mode
+(require 'init-nginx-mode)
