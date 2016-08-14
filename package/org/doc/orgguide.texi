@@ -35,28 +35,25 @@
 @end macro
 
 @macro seealso{text}
-@noindent @b{Further reading}@*@noindent \text\
+@noindent 
+@b{Further reading}@*@noindent \text\
 @end macro
 @copying
 
-Copyright @copyright{} 2010-2012 Free Software Foundation
+Copyright @copyright{} 2010--2016 Free Software Foundation
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
 any later version published by the Free Software Foundation; with no
-Invariant Sections, with the Front-Cover texts being ``A GNU Manual,''
+Invariant Sections, with the Front-Cover Texts being ``A GNU Manual,''
 and with the Back-Cover Texts as in (a) below.  A copy of the license
-is included in the section entitled ``GNU Free Documentation License.''
+is included in the section entitled ``GNU Free Documentation License''
+in the full Org manual, which is distributed together with the compact
+guide.
 
 (a) The FSF's Back-Cover Text is: ``You have the freedom to copy and
-modify this GNU manual.  Buying copies from the FSF supports it in
-developing GNU and promoting software freedom.''
-
-This document is part of a collection distributed under the GNU Free
-Documentation License.  If you want to distribute this document
-separately from the collection, you can do so by adding a copy of the
-license to the document, as described in section 6 of the license.
+modify this GNU manual.''
 @end quotation
 @end copying
 
@@ -103,6 +100,8 @@ license to the document, as described in section 6 of the license.
 * Publishing::			Create a web site of linked Org files
 * Working With Source Code::	Source code snippets embedded in Org
 * Miscellaneous::		All the rest which did not fit elsewhere
+
+* GNU Free Documentation License::  This manual license.
 
 @detailmenu
  --- The Detailed Node Listing ---
@@ -151,6 +150,7 @@ Tags
 
 * Tag inheritance::		Tags use the tree structure of the outline
 * Setting tags::		How to assign tags to a headline
+* Tag groups::			Use one tag to search for several tags
 * Tag searches::		Searching for combinations of tags
 
 Dates and Times
@@ -162,8 +162,8 @@ Dates and Times
 
 Capture - Refile - Archive
 
-* Capture::			
-* Refiling notes::		Moving a tree from one place to another
+* Capture::			Capturing new stuff
+* Refile and copy::		Moving a tree from one place to another
 * Archiving::			What to do with finished projects
 
 Capture
@@ -191,7 +191,7 @@ The built-in agenda views
 Markup for rich export
 
 * Structural markup elements::	The basic structure as seen by the exporter
-* Images and tables::		Tables and Images will be included
+* Images and tables::		Images, tables and caption mechanism
 * Literal examples::		Source code examples with special formatting
 * Include files::		Include additional files into a document
 * Embedded @LaTeX{}::		@LaTeX{} can be freely used inside Org documents
@@ -212,8 +212,7 @@ Exporting
 * ASCII/Latin-1/UTF-8 export::	Exporting to flat files with encoding
 * HTML export::			Exporting to HTML
 * @LaTeX{} and PDF export::	Exporting to @LaTeX{}, and processing to PDF
-* DocBook export::		Exporting to DocBook
-* iCalendar export::		
+* iCalendar export::		Exporting to iCalendar
 
 Miscellaneous
 
@@ -239,7 +238,8 @@ Miscellaneous
 
 Org is a mode for keeping notes, maintaining TODO lists, and doing project
 planning with a fast and effective plain-text system.  It is also an
-authoring and publishing system.
+authoring and publishing system, and it supports working with source code for
+literal programming and reproducible research.
 
 @i{This document is a much compressed derivative of the
 @uref{http://orgmode.org/index.html#sec-4_1, comprehensive Org-mode manual}.
@@ -264,38 +264,31 @@ to the Emacs load path.  To do this, add the following line to @file{.emacs}:
 (setq load-path (cons "~/path/to/orgdir/contrib/lisp" load-path))
 @end smallexample
 
-@noindent For speed you should byte-compile the Lisp files with the shell
+@noindent 
+If you have been using git or a tar ball to get Org, you need to
+run the following command to generate autoload information.
 command:
 
 @smallexample
-make
+make autoloads
 @end smallexample
-
-Then add the following line to @file{.emacs}.  It is needed so that
-Emacs can autoload functions that are located in files not immediately loaded
-when Org-mode starts.
-@smalllisp
-(require 'org-install)
-@end smalllisp
 
 @node Activation, Feedback, Installation, Introduction
 @section Activation
 
-Add the following lines to your @file{.emacs} file.  The last three lines
+Add the following lines to your @file{.emacs} file.  The last four lines
 define @emph{global} keys for some commands --- please choose suitable keys
 yourself.
 
 @smalllisp
 ;; The following lines are always needed.  Choose your own keys.
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode)) ; not needed since Emacs 22.2
-(add-hook 'org-mode-hook 'turn-on-font-lock) ; not needed when global-font-lock-mode is on
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 @end smalllisp
 
-With this setup, all files with extension @samp{.org} will be put
-into Org mode. 
+Files with extension @samp{.org} will be put into Org mode automatically.
 
 @node Feedback,  , Activation, Introduction
 @section Feedback
@@ -352,7 +345,11 @@ of @kbd{C-a} and @kbd{C-e} in headlines.}.  For example:
 * Another top level headline
 @end smallexample
 
-@noindent Some people find the many stars too noisy and would prefer an
+@noindent Note that a headline named after @code{org-footnote-section},
+which defaults to @samp{Footnotes}, is considered as special.  A subtree with
+this headline will be silently ignored by exporting functions.
+
+Some people find the many stars too noisy and would prefer an
 outline that has whitespace followed by a single star as headline
 starters.  @ref{Clean view}, describes a setup to realize this.
 
@@ -438,7 +435,7 @@ Promote/demote the current subtree by one level.
 Move subtree up/down (swap with previous/next subtree of same
 level).
 @item C-c C-w
-Refile entry or region to a different location.  @xref{Refiling notes}.
+Refile entry or region to a different location.  @xref{Refile and copy}.
 @item C-x n s/w
 Narrow buffer to current subtree / widen it again
 @end table
@@ -453,10 +450,9 @@ An important feature of Org mode is the ability to construct @emph{sparse
 trees} for selected information in an outline tree, so that the entire
 document is folded as much as possible, but the selected information is made
 visible along with the headline structure above it@footnote{See also the
-variables @code{org-show-hierarchy-above}, @code{org-show-following-heading},
-@code{org-show-siblings}, and @code{org-show-entry-below} for detailed
-control on how much context is shown around each match.}.  Just try it out
-and you will see immediately how it works.
+variable @code{org-show-context-detail} to decide how much context is shown
+around each match.}.  Just try it out and you will see immediately how it
+works.
 
 Org mode contains several commands creating such trees, all these
 commands can be accessed through a dispatcher:
@@ -507,7 +503,7 @@ blank lines.  An example:
       + I really like Miranda Otto.
    Important actors in this film are:
    - @b{Elijah Wood} :: He plays Frodo
-   - @b{Sean Austin} :: He plays Sam, Frodo's friend.
+   - @b{Sean Astin} :: He plays Sam, Frodo's friend.
 @end group
 @end smallexample
 
@@ -552,7 +548,8 @@ The Org homepage[fn:1] now looks a lot better than it used to.
 [fn:1] The link is: http://orgmode.org
 @end smallexample
 
-@noindent The following commands handle footnotes:
+@noindent 
+The following commands handle footnotes:
 
 @table @kbd
 @item C-c C-x f
@@ -613,7 +610,8 @@ create the above table, you would only type
 |-
 @end smallexample
 
-@noindent and then press @key{TAB} to align the table and start filling in
+@noindent 
+and then press @key{TAB} to align the table and start filling in
 fields.  Even faster would be to type @code{|Name|Phone|Age} followed by
 @kbd{C-c @key{RET}}.
 
@@ -740,6 +738,9 @@ Links such as @samp{[[My Target]]} or @samp{[[My Target][Find my target]]}
 lead to a text search in the current file for the corresponding target which
 looks like @samp{<<My Target>>}.
 
+Internal links will be used to reference their destination, through links or
+numbers, when possible.
+
 @node External links, Handling links, Internal links, Hyperlinks
 @section External links
 
@@ -841,17 +842,14 @@ manual}}
 @node TODO Items, Tags, Hyperlinks, Top
 @chapter TODO Items
 
-Org mode does not maintain TODO lists as separate documents@footnote{Of
-course, you can make a document that contains only long lists of TODO items,
-but this is not required.}.  Instead, TODO items are an integral part of the
-notes file, because TODO items usually come up while taking notes!  With Org
-mode, simply mark any entry in a tree as being a TODO item.  In this way,
-information is not duplicated, and the entire context from which the TODO
-item emerged is always present.
+Org mode does not require TODO lists to live in separate documents.  Instead,
+TODO items are part of a notes file, because TODO items usually
+come up while taking notes!  With Org mode, simply mark any entry in a tree
+as being a TODO item.  In this way, information is not duplicated, and TODO
+items remain in the context from which they emerged.
 
-Of course, this technique for managing TODO items scatters them
-throughout your notes file.  Org mode compensates for this by providing
-methods to give you an overview of all the things that you have to do.
+Org mode providing methods to give you an overview of all the things that you
+have to do, collected from many files.
 
 @menu
 * Using TODO states::		Setting and switching states
@@ -880,8 +878,7 @@ The most important commands to work with TODO entries are:
 Rotate the TODO state of the current item among
 
 @smallexample
-,-> (unmarked) -> TODO -> DONE --.
-'--------------------------------'
+(unmarked) -> TODO -> DONE -> (unmarked)
 @end smallexample
 
 The same rotation can also be done ``remotely'' from the timeline and
@@ -908,39 +905,33 @@ option @code{org-todo-state-tags-triggers} for details.
 @node Multi-state workflows, Progress logging, Using TODO states, TODO Items
 @section Multi-state workflows
 
-You can use TODO keywords to indicate different @emph{sequential} states
-in the process of working on an item, for example:
+You can use TODO keywords to indicate @emph{sequential} working progress
+states:
 
 @smalllisp
 (setq org-todo-keywords
   '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "DELEGATED")))
 @end smalllisp
 
-The vertical bar separates the TODO keywords (states that @emph{need
-action}) from the DONE states (which need @emph{no further action}).  If
-you don't provide the separator bar, the last state is used as the DONE
-state.
-With this setup, the command @kbd{C-c C-t} will cycle an entry from TODO
-to FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED.  
-
-Sometimes you may want to use different sets of TODO keywords in
-parallel.  For example, you may want to have the basic
-@code{TODO}/@code{DONE}, but also a workflow for bug fixing, and a
-separate state indicating that an item has been canceled (so it is not
-DONE, but also does not require action).  Your setup would then look
-like this:
+The vertical bar separates the TODO keywords (states that @emph{need action})
+from the DONE states (which need @emph{no further action}).  If you don't
+provide the separator bar, the last state is used as the DONE state.  With
+this setup, the command @kbd{C-c C-t} will cycle an entry from TODO to
+FEEDBACK, then to VERIFY, and finally to DONE and DELEGATED.  Sometimes you
+may want to use different sets of TODO keywords in parallel.  For example,
+you may want to have the basic @code{TODO}/@code{DONE}, but also a workflow
+for bug fixing.  Your setup would then look like this:
 
 @smalllisp
 (setq org-todo-keywords
       '((sequence "TODO(t)" "|" "DONE(d)")
-        (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
-        (sequence "|" "CANCELED(c)")))
+        (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))
 @end smalllisp
 
 The keywords should all be different, this helps Org mode to keep track of
 which subsequence should be used for a given entry.  The example also shows
 how to define keys for fast access of a particular state, by adding a letter
-in parenthesis after each keyword - you will be prompted for the key after
+in parenthesis after each keyword---you will be prompted for the key after
 @kbd{C-c C-t}.
 
 To define TODO keywords that are valid only in a single file, use the
@@ -960,7 +951,7 @@ the line to make the changes known to Org mode.
 
 Org mode can automatically record a timestamp and possibly a note when
 you mark a TODO item as DONE, or even each time you change the state of
-a TODO item.  This system is highly configurable, settings can be on a
+a TODO item.  This system is highly configurable; settings can be on a
 per-keyword basis and can be localized to a file or even a subtree.  For
 information on how to clock working time for a task, see @ref{Clocking
 work time}.
@@ -1038,8 +1029,7 @@ make a difference only in the agenda.
 Set the priority of the current headline.  Press @samp{A}, @samp{B} or
 @samp{C} to select a priority, or @key{SPC} to remove the cookie.
 @c
-@item S-@key{up}
-@itemx S-@key{down}
+@item S-@key{up}/@key{dwn}
 Increase/decrease priority of current headline
 @end table
 
@@ -1067,7 +1057,7 @@ cookie.  For example:
 @section Checkboxes
 
 Every item in a plain list (@pxref{Plain lists}) can be made into a checkbox
-by starting it with the string @samp{[ ]}.  Checkboxes are not included into
+by starting it with the string @samp{[ ]}.  Checkboxes are not included in
 the global TODO list, so they are often great to split a task into a number
 of simple steps.
 Here is an example of a checkbox list.
@@ -1078,7 +1068,6 @@ Here is an example of a checkbox list.
     - [ ] Peter
     - [X] Sarah
   - [X] order food
-  - [ ] think about what music to play
 @end smallexample
 
 Checkboxes work hierarchically, so if a checkbox item has children that
@@ -1086,7 +1075,8 @@ are checkboxes, toggling one of the children checkboxes will make the
 parent checkbox reflect if none, some, or all of the children are
 checked.
 
-@noindent The following commands work with checkboxes:
+@noindent 
+The following commands work with checkboxes:
 
 @table @kbd
 @item C-c C-c
@@ -1120,6 +1110,7 @@ Tags will by default be in bold face with the same color as the headline.
 @menu
 * Tag inheritance::		Tags use the tree structure of the outline
 * Setting tags::		How to assign tags to a headline
+* Tag groups::			Use one tag to search for several tags
 * Tag searches::		Searching for combinations of tags
 @end menu
 
@@ -1149,7 +1140,7 @@ changes in the line.}:
 #+FILETAGS: :Peter:Boss:Secret:
 @end smallexample
 
-@node Setting tags, Tag searches, Tag inheritance, Tags
+@node Setting tags, Tag groups, Tag inheritance, Tags
 @section Setting tags
 
 Tags can simply be typed into the buffer at the end of a headline.
@@ -1193,14 +1184,45 @@ like:
 (setq org-tag-alist '(("@@work" . ?w) ("@@home" . ?h) ("laptop" . ?l)))
 @end smalllisp
 
-@noindent If the tag is only relevant to the file you are working on, then you
+@noindent 
+If the tag is only relevant to the file you are working on, then you
 can instead set the TAGS option line as:
 
 @smallexample
 #+TAGS: @@work(w)  @@home(h)  @@tennisclub(t)  laptop(l)  pc(p)
 @end smallexample
 
-@node Tag searches,  , Setting tags, Tags
+@node Tag groups, Tag searches, Setting tags, Tags
+@section Tag groups
+
+@cindex group tags
+@cindex tags, groups
+In a set of mutually exclusive tags, the first tag can be defined as a
+@emph{group tag}.  When you search for a group tag, it will return matches
+for all members in the group.  In an agenda view, filtering by a group tag
+will display headlines tagged with at least one of the members of the
+group.  This makes tag searches and filters even more flexible.
+
+You can set group tags by inserting a colon between the group tag and other
+tags, like this:
+
+@example
+#+TAGS: @{ @@read : @@read_book  @@read_ebook @}
+@end example
+
+In this example, @samp{@@read} is a @emph{group tag} for a set of three
+tags: @samp{@@read}, @samp{@@read_book} and @samp{@@read_ebook}.
+
+You can also use the @code{:grouptags} keyword directly when setting
+@var{org-tag-alist}, see the documentation of that variable.
+
+@kindex C-c C-x q
+@vindex org-group-tags
+If you want to ignore group tags temporarily, toggle group tags support
+with @command{org-toggle-tags-groups}, bound to @kbd{C-c C-x q}.  If you
+want to disable tag groups completely, set @var{org-group-tags} to nil.
+
+@node Tag searches,  , Tag groups, Tags
 @section Tag searches
 
 Once a system of tags has been set up, it can be used to collect related
@@ -1236,7 +1258,7 @@ Sacha Chua's article about tagging in Org-mode}}
 @node Properties, Dates and Times, Tags, Top
 @chapter Properties
 
-Properties are key-value pairs associates with and entry.  They live in a
+Properties are key-value pairs associated with an entry.  They live in a
 special drawer with the name @code{PROPERTIES}.  Each
 property is specified on a single line, with the key (surrounded by colons)
 first, and the value after it:
@@ -1319,7 +1341,8 @@ timestamp can appear anywhere in the headline or body of an Org tree entry.
 Its presence causes entries to be shown on specific dates in the agenda
 (@pxref{Weekly/daily agenda}).  We distinguish:
 
-@noindent @b{Plain timestamp; Event; Appointment}@*
+@noindent 
+@b{Plain timestamp; Event; Appointment}@*
 A simple timestamp just assigns a date/time to an item.  This is just
 like writing down an appointment or event in a paper agenda.
 
@@ -1330,7 +1353,8 @@ like writing down an appointment or event in a paper agenda.
   <2006-11-02 Thu 20:00-22:00>
 @end smallexample
 
-@noindent @b{Timestamp with repeater interval}@*
+@noindent 
+@b{Timestamp with repeater interval}@*
 A timestamp may contain a @emph{repeater interval}, indicating that it
 applies not only on the given date, but again and again after a certain
 interval of N days (d), weeks (w), months (m), or years (y).  The
@@ -1340,7 +1364,8 @@ following will show up in the agenda every Wednesday:
   <2007-05-16 Wed 12:30 +1w>
 @end smallexample
 
-@noindent @b{Diary-style sexp entries}@*
+@noindent 
+@b{Diary-style sexp entries}@*
 For more complex date specifications, Org mode supports using the
 special sexp diary entries implemented in the Emacs calendar/diary
 package.  For example
@@ -1349,14 +1374,16 @@ package.  For example
   <%%(diary-float t 4 2)>
 @end smallexample
 
-@noindent @b{Time/Date range}@*
+@noindent 
+@b{Time/Date range}@*
 Two timestamps connected by @samp{--} denote a range.
 @smallexample
 ** Meeting in Amsterdam
    <2004-08-23 Mon>--<2004-08-26 Thu>
 @end smallexample
 
-@noindent @b{Inactive timestamp}@*
+@noindent 
+@b{Inactive timestamp}@*
 Just like a plain timestamp, but with square brackets instead of
 angular ones.  These timestamps are inactive in the sense that they do
 @emph{not} trigger an entry to show up in the agenda.
@@ -1408,7 +1435,8 @@ information on how exactly the date/time prompt works.
 
 A timestamp may be preceded by special keywords to facilitate planning:
 
-@noindent @b{DEADLINE}@*
+@noindent 
+@b{DEADLINE}@*
 Meaning: the task (most likely a TODO item, though not necessarily) is supposed
 to be finished on that date.
 @table @kbd
@@ -1430,7 +1458,8 @@ until the entry is marked DONE.  An example:
 @end smallexample
 
 
-@noindent @b{SCHEDULED}@*
+@noindent 
+@b{SCHEDULED}@*
 Meaning: you are @i{planning to start working} on that task on the given
 date@footnote{This is quite different from what is normally understood by
 @i{scheduling a meeting}, which is done in Org-mode by just inserting a time
@@ -1485,7 +1514,7 @@ the resulting time in inserts it after the time range as @samp{=>
 HH:MM}.
 @item C-c C-x C-e
 Update the effort estimate for the current clock task.
-@item C-c C-x C-x
+@item C-c C-x C-q
 Cancel the current clock.  This is useful if a clock was started by
 mistake, or if you ended up working on something else.
 @item C-c C-x C-j
@@ -1523,24 +1552,22 @@ Cave's Date and Time tutorial}@*
 
 An important part of any organization system is the ability to quickly
 capture new ideas and tasks, and to associate reference material with them.
-Org defines a capture process to create tasks.  It stores files related to a
-task (@i{attachments}) in a special directory.  Once in the system, tasks and
+Org defines a capture process to create tasks.  Once in the system, tasks and
 projects need to be moved around.  Moving completed project trees to an
 archive file keeps the system compact and fast.
 
 @menu
-* Capture::			
-* Refiling notes::		Moving a tree from one place to another
+* Capture::			Capturing new stuff
+* Refile and copy::		Moving a tree from one place to another
 * Archiving::			What to do with finished projects
 @end menu
 
-@node Capture, Refiling notes, Capture - Refile - Archive, Capture - Refile - Archive
+@node Capture, Refile and copy, Capture - Refile - Archive, Capture - Refile - Archive
 @section Capture
 
-Org's method for capturing new items is heavily inspired by John Wiegley
-excellent remember package.  It lets you store quick notes with little
-interruption of your work flow.  Org lets you define templates for new
-entries and associate them with different targets for storing notes.
+Org's lets you store quick notes with little interruption of your work flow.
+You can define templates for new entries and associate them with different
+targets for storing notes.
 
 @menu
 * Setting up a capture location::  Where notes will be stored
@@ -1552,10 +1579,9 @@ entries and associate them with different targets for storing notes.
 @unnumberedsubsec Setting up a capture location
 
 The following customization sets a default target@footnote{Using capture
-templates, you can define more fine-grained capture locations, see
+templates, you get finer control over capture locations, see
 @ref{Capture templates}.} file for notes, and defines a global
-key@footnote{Please select your own key, @kbd{C-c c} is only a suggestion.}
-for capturing new stuff.
+key for capturing new stuff.
 
 @example
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -1567,14 +1593,13 @@ for capturing new stuff.
 
 @table @kbd
 @item C-c c
-Start a capture process.  You will be placed into a narrowed indirect buffer
-to edit the item.
+Start a capture process, placing you into a narrowed indirect buffer to edit.
 @item C-c C-c
 Once you are done entering information into the capture buffer, 
 @kbd{C-c C-c} will return you to the window configuration before the capture
 process, so that you can resume your work without further distraction.
 @item C-c C-w
-Finalize by moving the entry to a refile location (@pxref{Refiling notes}).
+Finalize by moving the entry to a refile location (see section 9.2).
 @item C-c C-k
 Abort the capture process and return to the previous state.
 @end table
@@ -1596,7 +1621,8 @@ use:
         "* %?\nEntered on %U\n  %i\n  %a")))
 @end smallexample
 
-@noindent In these entries, the first string is the key to reach the
+@noindent 
+In these entries, the first string is the key to reach the
 template, the second is a short description.  Then follows the type of the
 entry and a definition of the target location for storing the note.  Finally,
 the template itself, a string with %-escapes to fill in information based on
@@ -1616,21 +1642,23 @@ allow dynamic insertion of content.  Here is a small selection of the
 possibilities, consult the manual for more.
 @smallexample
 %a          @r{annotation, normally the link created with @code{org-store-link}}
-%i          @r{initial content, the region when remember is called with C-u.}
-%t          @r{timestamp, date only}
-%T          @r{timestamp with date and time}
-%u, %U      @r{like the above, but inactive timestamps}
+%i          @r{initial content, the region when capture is called with C-u.}
+%t, %T      @r{timestamp, date only, or date and time}
+%u, %U      @r{like above, but inactive timestamps}
 @end smallexample
 
-@node Refiling notes, Archiving, Capture, Capture - Refile - Archive
-@section Refiling notes
+@node Refile and copy, Archiving, Capture, Capture - Refile - Archive
+@section Refile and copy
 
-When reviewing the captured data, you may want to refile some of the entries
-into a different list, for example into a project.  Cutting, finding the
-right location, and then pasting the note is cumbersome.  To simplify this
-process, you can use the following special command:
+When reviewing the captured data, you may want to refile or copy some of the
+entries into a different list, for example into a project.  Cutting, finding
+the right location, and then pasting the note is cumbersome.  To simplify
+this process, use the following commands:
 
 @table @kbd
+@item C-c M-x
+Copy the entry or region at point.  This command behaves like
+@code{org-refile}, except that the original note will not be deleted.
 @item C-c C-w
 Refile the entry or region at point.  This command offers possible locations
 for refiling the entry and lets you select one with completion.  The item (or
@@ -1644,7 +1672,7 @@ Use the refile interface to jump to a heading.
 Jump to the location where @code{org-refile} last moved a tree to.
 @end table
 
-@node Archiving,  , Refiling notes, Capture - Refile - Archive
+@node Archiving,  , Refile and copy, Capture - Refile - Archive
 @section Archiving
 
 When a project represented by a (sub)tree is finished, you may want
@@ -1656,8 +1684,7 @@ the archive file.
 
 @table @kbd
 @item C-c C-x C-a
-Archive the current entry using the command specified in the variable
-@code{org-archive-default-command}.
+Archive the current entry using @code{org-archive-default-command}.
 @item C-c C-x C-s@ @r{or short} @ C-c $
 Archive the subtree starting at the cursor position to the location
 given by @code{org-archive-location}.
@@ -1677,8 +1704,6 @@ setting this variable, for example
 @seealso{
 @uref{http://orgmode.org/manual/Capture-_002d-Refile-_002d-Archive.html#Capture-_002d-Refile-_002d-Archive,
 Chapter 9 of the manual}@*
-@uref{http://members.optusnet.com.au/~charles57/GTD/remember.html, Charles
-Cave's remember tutorial}@*
 @uref{http://orgmode.org/worg/org-tutorials/org-protocol-custom-handler.php,
 Sebastian Rose's tutorial for capturing from a web browser}}@uref{}@*
 
@@ -1907,11 +1932,11 @@ Display the original location of the item in another window.
 With prefix arg, make sure that the entire entry is made visible in the
 outline, not only the heading.
 @c
-@itemx @key{TAB}
+@item @key{TAB}
 Go to the original location of the item in another window.  Under Emacs
 22, @kbd{mouse-1} will also work for this.
 @c
-@itemx @key{RET}
+@item @key{RET}
 Go to the original location of the item and delete other windows.
 @c
 
@@ -1956,7 +1981,7 @@ Narrow the current agenda filter by an additional condition.
 
 @tsubheading{Remote editing (see the manual for many more commands)}
 
-@item 0-9
+@item 0--9
 Digit argument.
 @c
 @item t
@@ -2056,7 +2081,7 @@ summarizes the markup rules used in an Org-mode buffer.
 
 @menu
 * Structural markup elements::	The basic structure as seen by the exporter
-* Images and tables::		Tables and Images will be included
+* Images and tables::		Images, tables and caption mechanism
 * Literal examples::		Source code examples with special formatting
 * Include files::		Include additional files into a document
 * Embedded @LaTeX{}::		@LaTeX{} can be freely used inside Org documents
@@ -2161,10 +2186,14 @@ consisting of only dashes, and at least 5 of them.
 @subheading Comment lines
 
 Lines starting with zero or more whitespace characters followed by @samp{#}
-are treated as comments and will never be exported.  Also entire subtrees
-starting with the word @samp{COMMENT} will never be exported.  Finally,
-regions surrounded by @samp{#+BEGIN_COMMENT} ... @samp{#+END_COMMENT} will
-not be exported.
+and a whitespace are treated as comments and, as such, are not exported.
+
+Likewise, regions surrounded by @samp{#+BEGIN_COMMENT}
+... @samp{#+END_COMMENT} are not exported.
+
+Finally, a @samp{COMMENT} keyword at the beginning of an entry, but after any
+other keyword or priority cookie, comments out the entire subtree.  The
+command below helps changing the comment status of a headline.
 
 @table @kbd
 @item C-c ;
@@ -2177,32 +2206,30 @@ Toggle the COMMENT keyword at the beginning of an entry.
 For Org mode tables, the lines before the first horizontal separator line
 will become table header lines.  You can use the following lines somewhere
 before the table to assign a caption and a label for cross references, and in
-the text you can refer to the object with @code{\ref@{tab:basic-data@}}:
+the text you can refer to the object with @code{[[tab:basic-data]]}:
 
 @smallexample
 #+CAPTION: This is the caption for the next table (or link)
-#+LABEL:   tbl:basic-data
+#+NAME:   tbl:basic-data
    | ... | ...|
    |-----|----|
 @end smallexample
 
-Some backends (HTML, @LaTeX{}, and DocBook) allow you to directly include
-images into the exported document.  Org does this, if a link to an image
-files does not have a description part, for example @code{[[./img/a.jpg]]}.
-If you wish to define a caption for the image and maybe a label for internal
-cross references, you sure that the link is on a line by itself precede it
-with:
+Some backends allow you to directly include images into the exported
+document.  Org does this, if a link to an image files does not have
+a description part, for example @code{[[./img/a.jpg]]}.  If you wish to
+define a caption for the image and maybe a label for internal cross
+references, you sure that the link is on a line by itself precede it with:
 
 @smallexample
 #+CAPTION: This is the caption for the next figure link (or table)
-#+LABEL:   fig:SED-HR4049
+#+NAME:   fig:SED-HR4049
 [[./img/a.jpg]]
 @end smallexample
 
-You may also define additional attributes for the figure.  As this is
-backend-specific, see the sections about the individual backends for more
-information.
-
+The same caption mechanism applies to other structures than images and tables
+(e.g., @LaTeX{} equations, source code blocks), provided the chosen export
+back-end supports them.
 
 @node Literal examples, Include files, Images and tables, Markup
 @section Literal examples
@@ -2251,18 +2278,23 @@ include your @file{.emacs} file, you could use:
 #+INCLUDE: "~/.emacs" src emacs-lisp
 @end smallexample
 @noindent
-The optional second and third parameter are the markup (e.g.@: @samp{quote},
-@samp{example}, or @samp{src}), and, if the markup is @samp{src}, the
-language for formatting the contents.  The markup is optional, if it is not
-given, the text will be assumed to be in Org mode format and will be
-processed normally. @kbd{C-c '} will visit the included file.
+The optional second and third parameter are the markup (i.e., @samp{example}
+or @samp{src}), and, if the markup is @samp{src}, the language for formatting
+the contents.  The markup is optional, if it is not given, the text will be
+assumed to be in Org mode format and will be processed normally.  File-links
+will be interpreted as well:
+@smallexample
+#+INCLUDE: "./otherfile.org::#my_custom_id" :only-contents t
+@end smallexample
+@noindent
+@kbd{C-c '} will visit the included file.
 
 @node Embedded @LaTeX{},  , Include files, Markup
 @section Embedded @LaTeX{}
 
 For scientific notes which need to be able to contain mathematical symbols
 and the occasional formula, Org-mode supports embedding @LaTeX{} code into
-its files.  You can directly use TeX-like macros for special symbols, enter
+its files.  You can directly use TeX-like syntax for special symbols, enter
 formulas and entire @LaTeX{} environments.
 
 @smallexample
@@ -2275,7 +2307,8 @@ $a=+\sqrt@{2@}$ or $a=-\sqrt@{2@}$.
 x=\sqrt@{b@}
 \end@{equation@}
 @end smallexample
-@noindent  With
+@noindent  
+With
 @uref{http://orgmode.org/manual/LaTeX-fragments.html#LaTeX-fragments,special
 setup}, @LaTeX{} snippets will be included as images when exporting to HTML.
 
@@ -2297,47 +2330,37 @@ that planning information can be incorporated into desktop calendars.
 * ASCII/Latin-1/UTF-8 export::	Exporting to flat files with encoding
 * HTML export::			Exporting to HTML
 * @LaTeX{} and PDF export::	Exporting to @LaTeX{}, and processing to PDF
-* DocBook export::		Exporting to DocBook
-* iCalendar export::		
+* iCalendar export::		Exporting to iCalendar
 @end menu
 
 @node Export options, The export dispatcher, Exporting, Exporting
 @section Export options
 
-The exporter recognizes special lines in the buffer which provide
-additional information.  These lines may be put anywhere in the file.
-The whole set of lines can be inserted into the buffer with @kbd{C-c
-C-e t}.
+The exporter recognizes special lines in the buffer which provide additional
+information.  These lines may be put anywhere in the file.  The whole set of
+lines can be inserted into the buffer with @kbd{C-c C-e #}.
 
 @table @kbd
-@item C-c C-e t
+@item C-c C-e #
 Insert template with export options, see example below.
 @end table
 
 @smallexample
-#+TITLE:       the title to be shown (default is the buffer name)
+#+TITLE:       the title to be shown
 #+AUTHOR:      the author (default taken from @code{user-full-name})
-#+DATE:        a date, fixed, of a format string for @code{format-time-string}
+#+DATE:        a date, fixed, or an Org timestamp
 #+EMAIL:       his/her email address (default from @code{user-mail-address})
-#+DESCRIPTION: the page description, e.g.@: for the XHTML meta tag
-#+KEYWORDS:    the page keywords, e.g.@: for the XHTML meta tag
-#+LANGUAGE:    language for HTML, e.g.@: @samp{en} (@code{org-export-default-language})
-#+TEXT:        Some descriptive text to be inserted at the beginning.
-#+TEXT:        Several lines may be given.
-#+OPTIONS:     H:2 num:t toc:t \n:nil @@:t ::t |:t ^:t f:t TeX:t ...
-#+LINK_UP:     the ``up'' link of an exported page
-#+LINK_HOME:   the ``home'' link of an exported page
-#+LATEX_HEADER: extra line(s) for the @LaTeX{} header, like \usepackage@{xyz@}
+#+LANGUAGE:    language, e.g.@: @samp{en} (@code{org-export-default-language})
+#+OPTIONS:     H:2 num:t toc:t \n:nil ::t |:t ^:t f:t tex:t ...
 @end smallexample
 
 @node The export dispatcher, ASCII/Latin-1/UTF-8 export, Export options, Exporting
 @section The export dispatcher
 
-All export commands can be reached using the export dispatcher, which is a
-prefix key that prompts for an additional key specifying the command.
-Normally the entire file is exported, but if there is an active region that
-contains one outline tree, the first heading is used as document title and
-the subtrees are exported.
+All export commands can be reached using the export dispatcher, which is
+a prefix key that prompts for an additional key specifying the command.
+Normally the entire file is exported, but if a region is active, it will be
+exported instead.
 
 @table @kbd
 @item C-c C-e
@@ -2352,11 +2375,11 @@ file, containing only plain ASCII.  Latin-1 and UTF-8 export augment the file
 with special characters and symbols available in these encodings.
 
 @table @kbd
-@item C-c C-e a
-Export as ASCII file.
-@item C-c C-e n @ @ @r{and} @ @ C-c C-e N
+@item C-c C-e t a @ @ @r{and} @ @ C-c C-e t A
+Export as ASCII file or temporary buffer.
+@item C-c C-e t n @ @ @r{and} @ @ C-c C-e t N
 Like the above commands, but use Latin-1 encoding.
-@item C-c C-e u @ @ @r{and} @ @ C-c C-e U
+@item C-c C-e t u @ @ @r{and} @ @ C-c C-e t U
 Like the above commands, but use UTF-8 encoding.
 @end table
 
@@ -2364,9 +2387,9 @@ Like the above commands, but use UTF-8 encoding.
 @section HTML export
 
 @table @kbd
-@item C-c C-e h
+@item C-c C-e h h
 Export as HTML file @file{myfile.html}.
-@item C-c C-e b
+@item C-c C-e h o
 Export as HTML file and immediately open it with a browser.
 @end table
 
@@ -2376,56 +2399,45 @@ the exported file use either
 @smallexample
 #+HTML: Literal HTML code for export
 @end smallexample
-@noindent or
+@noindent 
+or
 @smallexample
 #+BEGIN_HTML
 All lines between these markers are exported literally
 #+END_HTML
 @end smallexample
 
-@node @LaTeX{} and PDF export, DocBook export, HTML export, Exporting
+@node @LaTeX{} and PDF export, iCalendar export, HTML export, Exporting
 @section @LaTeX{} and PDF export
 
 @table @kbd
-@item C-c C-e l
+@item C-c C-e l l
 Export as @LaTeX{} file @file{myfile.tex}.
-@item C-c C-e p
+@item C-c C-e l p
 Export as @LaTeX{} and then process to PDF.
-@item C-c C-e d
+@item C-c C-e l o
 Export as @LaTeX{} and then process to PDF, then open the resulting PDF file.
 @end table
 
 By default, the @LaTeX{} output uses the class @code{article}.  You can
-change this by adding an option like @code{#+LaTeX_CLASS: myclass} in your
-file.  The class must be listed in @code{org-export-latex-classes}.
+change this by adding an option like @code{#+LATEX_CLASS: myclass} in your
+file.  The class must be listed in @code{org-latex-classes}.
 
 Embedded @LaTeX{} as described in @ref{Embedded @LaTeX{}}, will be correctly
 inserted into the @LaTeX{} file.  Similarly to the HTML exporter, you can use
-@code{#+LaTeX:} and @code{#+BEGIN_LaTeX ... #+END_LaTeX} construct to add
+@code{#+LATEX:} and @code{#+BEGIN_LATEX ... #+END_LATEX} construct to add
 verbatim @LaTeX{} code.
 
-@node DocBook export, iCalendar export, @LaTeX{} and PDF export, Exporting
-@section DocBook export
-
-@table @kbd
-@item C-c C-e D
-Export as DocBook file.
-@end table
-
-Similarly to the HTML exporter, you can use @code{#+DOCBOOK:} and
-@code{#+BEGIN_DOCBOOK ... #+END_DOCBOOK} construct to add verbatim @LaTeX{}
-code.
-
-@node iCalendar export,  , DocBook export, Exporting
+@node iCalendar export,  , @LaTeX{} and PDF export, Exporting
 @section iCalendar export
 
 @table @kbd
-@item C-c C-e i
+@item C-c C-e c f
 Create iCalendar entries for the current file in a @file{.ics} file.
-@item C-c C-e c
+@item C-c C-e c c
 Create a single large iCalendar file from all files in
 @code{org-agenda-files} and write it to the file given by
-@code{org-combined-agenda-icalendar-file}.
+@code{org-icalendar-combined-agenda-file}.
 @end table
 
 @seealso{
@@ -2461,13 +2473,13 @@ Here is an example:
 @end smalllisp
 
 @table @kbd
-@item C-c C-e C
+@item C-c C-e P x
 Prompt for a specific project and publish all files that belong to it.
-@item C-c C-e P
+@item C-c C-e P p
 Publish the project containing the current file.
-@item C-c C-e F
+@item C-c C-e P f
 Publish only the current file.
-@item C-c C-e E
+@item C-c C-e P a
 Publish every project.
 @end table
 
@@ -2600,7 +2612,7 @@ Chapter 11.3 of the manual}@*
 @uref{http://orgmode.org/worg/org-contrib/babel/index.php,
 The Babel site on Worg}}
 
-@node Miscellaneous,  , Working With Source Code, Top
+@node Miscellaneous, GNU Free Documentation License, Working With Source Code, Top
 @chapter Miscellaneous
 
 @menu
@@ -2684,6 +2696,12 @@ of the manual}@*
 @uref{http://orgmode.org/manual/MobileOrg.html#MobileOrg, Appendix B of the
 manual}@*
 @uref{http://orgmode.org/orgcard.pdf,Key reference card}}
+
+
+@node GNU Free Documentation License,  , Miscellaneous, Top
+@appendix GNU Free Documentation License
+@include doclicense.texi
+
 
 @bye
 

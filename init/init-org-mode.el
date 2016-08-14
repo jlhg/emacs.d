@@ -1,4 +1,5 @@
-(add-to-list 'load-path "~/.emacs.d/package/org/list")
+(add-to-list 'load-path "~/.emacs.d/package/org/lisp")
+(add-to-list 'load-path "~/.emacs.d/package/org/contrib/lisp" t)
 
 (require 'org-install)
 

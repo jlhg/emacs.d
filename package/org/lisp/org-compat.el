@@ -1,6 +1,6 @@
 ;;; org-compat.el --- Compatibility code for Org-mode
 
-;; Copyright (C) 2004-2012  Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -34,17 +34,10 @@
 
 (require 'org-macs)
 
-(declare-function w32-focus-frame "term/w32-win" (frame))
-
 ;; The following constant is for backward compatibility.  We do not use
 ;; it in org-mode, because the Byte compiler evaluates (featurep 'xemacs)
 ;; at compilation time and can therefore optimize code better.
 (defconst org-xemacs-p (featurep 'xemacs))
-(defconst org-format-transports-properties-p
-  (let ((x "a"))
-    (add-text-properties 0 1 '(test t) x)
-    (get-text-property 0 'test (format "%s" x)))
-  "Does format transport text properties?")
 
 (defun org-compatible-face (inherits specs)
   "Make a compatible face specification.
@@ -113,6 +106,41 @@ any other entries, and any resulting duplicates will be removed entirely."
 
 ;;;; Emacs/XEmacs compatibility
 
+(eval-and-compile
+  (defun org-defvaralias (new-alias base-variable &optional docstring)
+    "Compatibility function for defvaralias.
+Don't do the aliasing when `defvaralias' is not bound."
+    (declare (indent 1))
+    (when (fboundp 'defvaralias)
+      (defvaralias new-alias base-variable docstring)))
+
+  (when (and (not (boundp 'user-emacs-directory))
+	     (boundp 'user-init-directory))
+    (org-defvaralias 'user-emacs-directory 'user-init-directory)))
+
+(when (featurep 'xemacs)
+  (defadvice custom-handle-keyword
+    (around org-custom-handle-keyword
+	    activate preactivate)
+    "Remove custom keywords not recognized to avoid producing an error."
+    (cond
+     ((eq (ad-get-arg 1) :package-version))
+     (t ad-do-it)))
+  (defadvice define-obsolete-variable-alias
+    (around org-define-obsolete-variable-alias
+	    (obsolete-name current-name &optional when docstring)
+	    activate preactivate)
+    "Declare arguments defined in later versions of Emacs."
+    ad-do-it)
+  (defadvice define-obsolete-function-alias
+    (around org-define-obsolete-function-alias
+	    (obsolete-name current-name &optional when docstring)
+	    activate preactivate)
+    "Declare arguments defined in later versions of Emacs."
+    ad-do-it)
+  (defvar customize-package-emacs-version-alist nil)
+  (defvar temporary-file-directory (temp-directory)))
+
 ;; Keys
 (defconst org-xemacs-key-equivalents
   '(([mouse-1] . [button1])
@@ -155,10 +183,12 @@ If DELETE is non-nil, delete all those overlays."
     found))
 
 (defun org-get-x-clipboard (value)
-  "Get the value of the x clipboard, compatible with XEmacs, and GNU Emacs 21."
-  (if (eq window-system 'x)
-      (let ((x (org-get-x-clipboard-compat value)))
-	(if x (org-no-properties x)))))
+  "Get the value of the x or Windows clipboard, compatible with XEmacs, and GNU Emacs 21."
+  (cond ((eq window-system 'x)
+	 (let ((x (org-get-x-clipboard-compat value)))
+	   (if x (org-no-properties x))))
+	((and (eq window-system 'w32) (fboundp 'w32-get-clipboard-data))
+	 (w32-get-clipboard-data))))
 
 (defsubst org-decompose-region (beg end)
   "Decompose from BEG to END."
@@ -195,9 +225,8 @@ passed through to `fit-window-to-buffer'.  If SHRINK-ONLY is set, call
 ignored in this case."
   (cond ((if (fboundp 'window-full-width-p)
 	     (not (window-full-width-p window))
-	   (> (frame-width) (window-width window)))
-	 ;; do nothing if another window would suffer
-	 )
+	   ;; do nothing if another window would suffer
+	   (> (frame-width) (window-width window))))
 	((and (fboundp 'fit-window-to-buffer) (not shrink-only))
 	 (fit-window-to-buffer window max-height min-height))
 	((fboundp 'shrink-window-if-larger-than-buffer)
@@ -205,7 +234,7 @@ ignored in this case."
   (or window (selected-window)))
 
 (defun org-number-sequence (from &optional to inc)
-  "Call `number-sequence or emulate it."
+  "Call `number-sequence' or emulate it."
   (if (fboundp 'number-sequence)
       (number-sequence from to inc)
     (if (or (not to) (= from to))
@@ -224,10 +253,16 @@ ignored in this case."
 		  next (+ from (* n inc)))))
 	(nreverse seq)))))
 
+;; `set-transient-map' is only in Emacs >= 24.4
+(defalias 'org-set-transient-map
+  (if (fboundp 'set-transient-map)
+      'set-transient-map
+    'set-temporary-overlay-map))
+
 ;; Region compatibility
 
 (defvar org-ignore-region nil
-  "To temporarily disable the active region.")
+  "Non-nil means temporarily disable the active region.")
 
 (defun org-region-active-p ()
   "Is `transient-mark-mode' on and the region active?
@@ -245,18 +280,8 @@ Works on both Emacs and XEmacs."
 	     (> (point) (region-beginning)))
     (exchange-point-and-mark)))
 
-;; Emacs 22 misses `activate-mark'
-(if (fboundp 'activate-mark)
-    (defalias 'org-activate-mark 'activate-mark)
-  (defun org-activate-mark ()
-    (when (mark t)
-      (setq mark-active t)
-      (when (and (boundp 'transient-mark-mode)
-		 (not transient-mark-mode))
-	(setq transient-mark-mode 'lambda))
-      (when (boundp 'zmacs-regions)
-	(setq zmacs-regions t)))))
-
+;; Old alias for emacs 22 compatibility, now dropped
+(define-obsolete-function-alias 'org-activate-mark 'activate-mark)
 
 ;; Invisibility compatibility
 
@@ -271,8 +296,7 @@ Works on both Emacs and XEmacs."
 (defun org-in-invisibility-spec-p (arg)
   "Is ARG a member of `buffer-invisibility-spec'?"
   (if (consp buffer-invisibility-spec)
-      (member arg buffer-invisibility-spec)
-    nil))
+      (member arg buffer-invisibility-spec)))
 
 (defmacro org-xemacs-without-invisibility (&rest body)
   "Turn off extents with invisibility while executing BODY."
@@ -303,9 +327,17 @@ Works on both Emacs and XEmacs."
     (indent-line-to column)))
 
 (defun org-move-to-column (column &optional force buffer)
-  (if (featurep 'xemacs)
-      (org-xemacs-without-invisibility (move-to-column column force buffer))
-    (move-to-column column force)))
+  "Move to column COLUMN.
+Pass COLUMN and FORCE to `move-to-column'.
+Pass BUFFER to the XEmacs version of `move-to-column'."
+  (let ((buffer-invisibility-spec
+	 (if (listp buffer-invisibility-spec)
+	     (remove '(org-filtered) buffer-invisibility-spec)
+	   buffer-invisibility-spec)))
+    (if (featurep 'xemacs)
+	(org-xemacs-without-invisibility
+	 (move-to-column column force buffer))
+      (move-to-column column force))))
 
 (defun org-get-x-clipboard-compat (value)
   "Get the clipboard value on XEmacs or Emacs 21."
@@ -327,7 +359,7 @@ Works on both Emacs and XEmacs."
     (apply 'propertize string properties)))
 
 (defmacro org-find-library-dir (library)
-  `(file-name-directory (locate-library ,library)))
+  `(file-name-directory (or (locate-library ,library) "")))
 
 (defun org-count-lines (s)
   "How many lines in string S?"
@@ -360,17 +392,39 @@ Works on both Emacs and XEmacs."
 	 (select-frame frame)
 	 (cond ((memq window-system '(x ns mac))
 		(x-focus-frame frame))
-	       ((eq window-system 'w32)
+	       ((and (eq window-system 'w32)
+		     (fboundp 'w32-focus-frame))
 		(w32-focus-frame frame)))
 	 (when focus-follows-mouse
 	   (set-mouse-position frame (1- (frame-width frame)) 0)))))
 
-(defun org-float-time (&optional time)
-  "Convert time value TIME to a floating point number.
-TIME defaults to the current time."
-  (if (featurep 'xemacs)
-      (time-to-seconds (or time (current-time)))
-    (float-time time)))
+(defalias 'org-float-time
+  (if (featurep 'xemacs) 'time-to-seconds 'float-time))
+
+;; `user-error' is only available from 24.2.50 on
+(unless (fboundp 'user-error)
+  (defalias 'user-error 'error))
+
+;; ‘format-message’ is available only from 25 on
+(unless (fboundp 'format-message)
+  (defalias 'format-message 'format))
+
+;; `font-lock-ensure' is only available from 24.4.50 on
+(defalias 'org-font-lock-ensure
+  (if (fboundp 'font-lock-ensure)
+      #'font-lock-ensure
+    (lambda (&optional _beg _end)
+      (with-no-warnings (font-lock-fontify-buffer)))))
+
+(defmacro org-no-popups (&rest body)
+  "Suppress popup windows.
+Let-bind some variables to nil around BODY to achieve the desired
+effect, which variables to use depends on the Emacs version."
+  (if (org-version-check "24.2.50" "" :predicate)
+      `(let (pop-up-frames display-buffer-alist)
+	 ,@body)
+    `(let (pop-up-frames special-display-buffer-names special-display-regexps special-display-function)
+       ,@body)))
 
 (if (fboundp 'string-match-p)
     (defalias 'org-string-match-p 'string-match-p)
@@ -384,7 +438,7 @@ TIME defaults to the current time."
     (save-match-data
       (apply 'looking-at args))))
 
-					; XEmacs does not have `looking-back'.
+;; XEmacs does not have `looking-back'.
 (if (fboundp 'looking-back)
     (defalias 'org-looking-back 'looking-back)
   (defun org-looking-back (regexp &optional limit greedy)
@@ -433,14 +487,26 @@ With two arguments, return floor and remainder of their quotient."
        'pop-to-buffer-same-window buffer-or-name norecord)
     (funcall 'switch-to-buffer buffer-or-name norecord)))
 
-;; `condition-case-unless-debug' has been introduced in Emacs 24.1
-;; `condition-case-no-debug' has been introduced in Emacs 23.1
-(defalias 'org-condition-case-unless-debug
-  (or (and (fboundp 'condition-case-unless-debug)
-	   'condition-case-unless-debug)
-      (and (fboundp 'condition-case-no-debug)
-	   'condition-case-no-debug)
-      'condition-case))
+;; RECURSIVE has been introduced with Emacs 23.2.
+;; This is copying and adapted from `tramp-compat-delete-directory'
+(defun org-delete-directory (directory &optional recursive)
+  "Compatibility function for `delete-directory'."
+  (if (null recursive)
+      (delete-directory directory)
+    (condition-case nil
+	(funcall 'delete-directory directory recursive)
+      ;; This Emacs version does not support the RECURSIVE flag.  We
+      ;; use the implementation from Emacs 23.2.
+      (wrong-number-of-arguments
+       (setq directory (directory-file-name (expand-file-name directory)))
+       (if (not (file-symlink-p directory))
+	   (mapc (lambda (file)
+		   (if (eq t (car (file-attributes file)))
+		       (org-delete-directory file recursive)
+		     (delete-file file)))
+		 (directory-files
+		  directory 'full "^\\([^.]\\|\\.\\([^.]\\|\\..\\)\\).*")))
+       (delete-directory directory)))))
 
 ;;;###autoload
 (defmacro org-check-version ()
@@ -459,6 +525,41 @@ With two arguments, return floor and remainder of their quotient."
 	'(progn
 	   (defun org-release () "N/A")
 	   (defun org-git-version () "N/A !!check installation!!"))))))
+
+(defun org-file-equal-p (f1 f2)
+  "Return t if files F1 and F2 are the same.
+Implements `file-equal-p' for older emacsen and XEmacs."
+  (if (fboundp 'file-equal-p)
+      (file-equal-p f1 f2)
+    (let (f1-attr f2-attr)
+      (and (setq f1-attr (file-attributes (file-truename f1)))
+	   (setq f2-attr (file-attributes (file-truename f2)))
+	   (equal f1-attr f2-attr)))))
+
+;; `buffer-narrowed-p' is available for Emacs >=24.3
+(defun org-buffer-narrowed-p ()
+  "Compatibility function for `buffer-narrowed-p'."
+  (if (fboundp 'buffer-narrowed-p)
+      (buffer-narrowed-p)
+    (/= (- (point-max) (point-min)) (buffer-size))))
+
+;; As of Emacs 25.1, `outline-mode` functions are under the 'outline-'
+;; prefix.
+(when (< emacs-major-version 25)
+  (defalias 'outline-show-all 'show-all)
+  (defalias 'outline-hide-subtree 'hide-subtree)
+  (defalias 'outline-show-subtree 'show-subtree)
+  (defalias 'outline-show-branches 'show-branches)
+  (defalias 'outline-show-children 'show-children)
+  (defalias 'outline-show-entry 'show-entry)
+  (defalias 'outline-hide-entry 'hide-entry)
+  (defalias 'outline-hide-sublevels 'hide-sublevels))
+
+(defmacro org-with-silent-modifications (&rest body)
+  (if (fboundp 'with-silent-modifications)
+      `(with-silent-modifications ,@body)
+    `(org-unmodified ,@body)))
+(def-edebug-spec org-with-silent-modifications (body))
 
 (provide 'org-compat)
 

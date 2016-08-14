@@ -1,6 +1,6 @@
 ;;; org-mouse.el --- Better mouse support for org-mode
 
-;; Copyright (C) 2006-2012 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2016 Free Software Foundation, Inc.
 
 ;; Author: Piotr Zielinski <piotr dot zielinski at gmail dot com>
 ;; Maintainer: Carsten Dominik <carsten at orgmode dot org>
@@ -191,7 +191,7 @@ Changing this variable requires a restart of Emacs to get activated."
   (interactive)
   (end-of-line)
   (skip-chars-backward "\t ")
-  (when (org-looking-back ":[A-Za-z]+:")
+  (when (org-looking-back ":[A-Za-z]+:" (line-beginning-position))
     (skip-chars-backward ":A-Za-z")
     (skip-chars-backward "\t ")))
 
@@ -215,8 +215,7 @@ this function is called.  Otherwise, the current major mode menu is used."
 	(when (not (org-mouse-mark-active))
 	  (goto-char (posn-point (event-start event)))
 	  (when (not (eolp)) (save-excursion (run-hooks 'post-command-hook)))
-	  (let ((redisplay-dont-pause t))
-	    (sit-for 0)))
+	  (sit-for 0))
 	(if (functionp org-mouse-context-menu-function)
 	    (funcall org-mouse-context-menu-function event)
 	  (if (fboundp 'mouse-menu-major-mode-map)
@@ -378,7 +377,7 @@ nor a function, elements of KEYWORDS are used directly."
 (defvar org-mouse-priority-regexp "\\[#\\([A-Z]\\)\\]"
   "Regular expression matching the priority indicator.
 Differs from `org-priority-regexp' in that it doesn't contain the
-leading '.*?'.")
+leading `.*?'.")
 
 (defun org-mouse-get-priority (&optional default)
   "Return the priority of the current headline.
@@ -498,7 +497,7 @@ SCHEDULED: or DEADLINE: or ANYTHINGLIKETHIS:"
    `("Main Menu"
      ["Show Overview" org-mouse-show-overview t]
      ["Show Headlines" org-mouse-show-headlines t]
-     ["Show All" show-all t]
+     ["Show All" outline-show-all t]
      ["Remove Highlights" org-remove-occur-highlights
       :visible org-occur-highlights]
      "--"
@@ -539,7 +538,7 @@ SCHEDULED: or DEADLINE: or ANYTHINGLIKETHIS:"
 		((stringp (nth 2 entry))
 		 (concat (org-mouse-agenda-type (nth 1 entry))
 			 (nth 2 entry)))
-		(t "Agenda Command '%s'"))
+		(t "Agenda Command `%s'"))
 	       30))))
      "--"
      ["Delete Blank Lines" delete-blank-lines
@@ -566,7 +565,7 @@ SCHEDULED: or DEADLINE: or ANYTHINGLIKETHIS:"
       (save-excursion (org-apply-on-list wrap-fun nil)))))
 
 (defun org-mouse-bolp ()
-  "Return true if there only spaces, tabs, and '*' before point.
+  "Return true if there only spaces, tabs, and `*' before point.
 This means, between the beginning of line and the point."
   (save-excursion
     (skip-chars-backward " \t*") (bolp)))
@@ -587,7 +586,7 @@ This means, between the beginning of line and the point."
     (:end				; insert text here
      (skip-chars-backward " \t")
      (kill-region (point) (point-at-eol))
-     (unless (org-looking-back org-mouse-punctuation)
+     (unless (org-looking-back org-mouse-punctuation (line-beginning-position))
        (insert (concat org-mouse-punctuation " ")))))
   (insert text)
   (beginning-of-line))
@@ -638,14 +637,15 @@ This means, between the beginning of line and the point."
 	    (progn (save-excursion (goto-char (region-beginning)) (insert "[["))
 		   (save-excursion (goto-char (region-end)) (insert "]]")))]
 	   ["Insert Link Here" (org-mouse-yank-link ',event)]))))
-     ((save-excursion (beginning-of-line) (looking-at "#\\+STARTUP: \\(.*\\)"))
+     ((save-excursion (beginning-of-line) (looking-at "[ \t]*#\\+STARTUP: \\(.*\\)"))
       (popup-menu
        `(nil
 	 ,@(org-mouse-list-options-menu (mapcar 'car org-startup-options)
 					'org-mode-restart))))
      ((or (eolp)
 	  (and (looking-at "\\(  \\|\t\\)\\(+:[0-9a-zA-Z_:]+\\)?\\(  \\|\t\\)+$")
-	       (org-looking-back "  \\|\t")))
+	       (org-looking-back "  \\|\t" (- (point) 2)
+				 (line-beginning-position))))
       (org-mouse-popup-global-menu))
      ((funcall get-context :checkbox)
       (popup-menu
@@ -656,11 +656,11 @@ This means, between the beginning of line and the point."
 	 ["All Clear" (org-mouse-for-each-item
 		       (lambda ()
 			 (when (save-excursion (org-at-item-checkbox-p))
-			   (replace-match "[ ]"))))]
+			   (replace-match "[ ] "))))]
 	 ["All Set" (org-mouse-for-each-item
 		     (lambda ()
 		       (when (save-excursion (org-at-item-checkbox-p))
-			 (replace-match "[X]"))))]
+			 (replace-match "[X] "))))]
 	 ["All Toggle" (org-mouse-for-each-item 'org-toggle-checkbox) t]
 	 ["All Remove" (org-mouse-for-each-item
 			(lambda ()
@@ -708,9 +708,9 @@ This means, between the beginning of line and the point."
      ((org-mouse-looking-at ":\\([A-Za-z0-9_]+\\):" "A-Za-z0-9_" -1) ;tags
       (popup-menu
        `(nil
-	 [,(format "Display '%s'" (match-string 1))
+	 [,(format-message "Display `%s'" (match-string 1))
 	  (org-tags-view nil ,(match-string 1))]
-	 [,(format "Sparse Tree '%s'" (match-string 1))
+	 [,(format-message "Sparse Tree `%s'" (match-string 1))
 	  (org-tags-sparse-tree nil ,(match-string 1))]
 	 "--"
 	 ,@(org-mouse-tag-menu))))
@@ -953,20 +953,23 @@ This means, between the beginning of line and the point."
 		       (point)
 		       (save-excursion (goto-char start)
 				       (org-back-to-heading) (point))))
-	    (outline-end-of-subtree)
+	    (progn (org-end-of-subtree nil t)
+		   (unless (eobp) (backward-char)))
 	    (end-of-line)
 	    (if (eobp) (newline) (forward-char)))
 
 	  (when (looking-at org-outline-regexp)
 	    (let ((level (- (match-end 0) (match-beginning 0))))
 	      (when (> end (match-end 0))
-		(outline-end-of-subtree)
+		(progn (org-end-of-subtree nil t)
+		       (unless (eobp) (backward-char)))
 		(end-of-line)
 		(if (eobp) (newline) (forward-char))
 		(setq level (1+ level)))
 	      (org-paste-subtree level)
 	      (save-excursion
-		(outline-end-of-subtree)
+		(progn (org-end-of-subtree nil t)
+		       (unless (eobp) (backward-char)))
 		(when (bolp) (delete-char -1))))))))))
 
 
@@ -1003,9 +1006,9 @@ This means, between the beginning of line and the point."
 	   (org-mouse-main-buffer (current-buffer)))
       (when (eq (with-current-buffer buffer major-mode) 'org-mode)
 	(let ((endmarker (with-current-buffer buffer
-			   (outline-end-of-subtree)
-			   (forward-char 1)
-			   (copy-marker (point)))))
+			   (org-end-of-subtree nil t)
+			   (unless (eobp) (forward-char 1))
+			   (point-marker))))
 	  (org-with-remote-undo buffer
 	    (with-current-buffer buffer
 	      (widen)
@@ -1015,7 +1018,7 @@ This means, between the beginning of line and the point."
 		(and (outline-next-heading)
 		     (org-flag-heading nil)))   ; show the next heading
 	      (org-back-to-heading)
-	      (setq marker (copy-marker (point)))
+	      (setq marker (point-marker))
 	      (goto-char (max (point-at-bol) (- (point-at-eol) anticol)))
 	      (funcall command)
 	      (message "_cmd: %S" org-mouse-cmd)
@@ -1056,7 +1059,7 @@ This means, between the beginning of line and the point."
 	  ["Convert" org-agenda-convert-date
 	   (org-agenda-check-type nil 'agenda 'timeline)]
 	  "--"
-	  ["Create iCalendar file" org-export-icalendar-combine-agenda-files t])
+	  ["Create iCalendar file" org-icalendar-combine-agenda-files t])
 	 "--"
 	 ["Day View" org-agenda-day-view
 	  :active (org-agenda-check-type nil 'agenda)

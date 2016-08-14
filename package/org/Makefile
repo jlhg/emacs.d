@@ -17,7 +17,6 @@ help helpall::
 	$(info )
 	$(info Getting Help)
 	$(info ============)
-	$(info )
 	$(info make help           - show brief help)
 	$(info make targets        - ditto)
 	$(info make helpall        - show extended help)
@@ -28,8 +27,9 @@ help helpall::
 	$(info make all            - ditto)
 	$(info make compile        - build Org ELisp files)
 	$(info make single         - build Org ELisp files, single Emacs per source)
-	$(info make autoloads      - create org-install.el to load Org in-place)
+	$(info make autoloads      - create org-loaddefs.el to load Org in-place)
 	$(info make test           - build Org ELisp files and run test suite)
+	$(info make vanilla        - run Emacs with this Org-mode and no personal config)
 helpall::
 	$(info make test-dirty     - check without building first)
 	$(info make compile-dirty  - build only stale Org ELisp files)
