@@ -76,3 +76,9 @@
 [submodule "package/scss-mode"]
 	path = package/scss-mode
 	url = https://github.com/antonj/scss-mode.git
+[submodule "package/helm"]
+	path = package/helm
+	url = https://github.com/emacs-helm/helm.git
+[submodule "package/emacs-async"]
+	path = package/emacs-async
+	url = https://github.com/jwiegley/emacs-async.git

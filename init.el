@@ -86,8 +86,8 @@
 ;; La Carte
 (require 'init-larcarte)
 
-;; anything
-(require 'init-anything)
+;; helm
+(require 'init-helm)
 
 ;; undo tree
 (require 'init-undo-tree)
