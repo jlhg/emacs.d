@@ -134,7 +134,6 @@
 (require 'init-sh-mode)
 (require 'init-python-mode)
 (require 'init-css-mode)
-(require 'init-scss-mode)
 (require 'init-java-mode)
 (require 'init-c-mode)
 (require 'init-cheetah-mode)
