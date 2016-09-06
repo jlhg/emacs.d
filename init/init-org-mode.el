@@ -24,7 +24,8 @@
 (setq org-src-fontify-natively t)
 
 (setq org-todo-keywords
-      '((sequence "NOTE" "TODO" "|" "DONE" "CANCELED")))
+      '((sequence "NOTE" "TODO" "|" "DONE" "CANCELED")
+        (sequence "|" "OK" "GOOD" "BAD")))
 
 (setq org-todo-keywords-for-agenda
       '("TODO" "DONE" "CANCELED"))
