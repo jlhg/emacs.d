@@ -4,6 +4,7 @@
     (define-key m (kbd "k") 'shrink-window)
     (define-key m (kbd "f") 'enlarge-window-horizontally)
     (define-key m (kbd "d") 'shrink-window-horizontally)
+    (define-key m (kbd "0") 'balance-windows)
     (define-key m (kbd "q") 'iresize-mode)
     m))
 
