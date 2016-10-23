@@ -82,3 +82,6 @@
 [submodule "package/emacs-async"]
 	path = package/emacs-async
 	url = https://github.com/jwiegley/emacs-async.git
+[submodule "package/php-mode"]
+	path = package/php-mode
+	url = https://github.com/ejmr/php-mode.git
