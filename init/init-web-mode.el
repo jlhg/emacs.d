@@ -42,7 +42,8 @@
 
 (add-hook 'web-mode-hook
           '(lambda ()
-             (auto-complete-mode 1)))
+             (auto-complete-mode 1)
+             (visual-line-mode 0)))
 
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
