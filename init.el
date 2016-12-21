@@ -188,3 +188,8 @@
 ;; Interactively resizing windows
 ;; Source: https://www.emacswiki.org/emacs/WindowResize
 (require 'init-iresize)
+
+;; chinese-conv
+;; A front end in emacs to convert between simplified and traditional Chinese with opencc or cconv.
+;; https://github.com/gucong/emacs-chinese-conv
+(require 'init-chinese-conv)
