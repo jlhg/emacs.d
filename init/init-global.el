@@ -247,4 +247,7 @@
 
 (desktop-save-mode 1)
 
+;; Disable the menu bar
+(menu-bar-mode -1)
+
 (provide 'init-global)
