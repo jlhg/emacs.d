@@ -250,4 +250,7 @@
 ;; Disable the menu bar
 (menu-bar-mode -1)
 
+;; Disable backslash character in line wrapping
+(set-display-table-slot standard-display-table 'wrap ?\ )
+
 (provide 'init-global)

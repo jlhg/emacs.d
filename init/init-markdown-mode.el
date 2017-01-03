@@ -6,10 +6,10 @@
 (add-hook  'markdown-mode-hook
            (lambda ()
              (auto-fill-mode t)
-             (setq fill-column 80)
-             (setq markdown-command "markdown")
              (visual-line-mode t)
-             (auto-fill-mode -1)
+             (visual-fill-column-mode t)
+             (setq fill-column 100)
+             (setq markdown-command "markdown")
              (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
                (auto-complete-mode t))))
 

@@ -8,6 +8,10 @@
 (require 'init-global)
 (require 'init-ibuffer)
 
+;; Visual Fill Column
+;; https://github.com/joostkremers/visual-fill-column
+(require 'init-visual-fill-column)
+
 ;; auto complete
 (require 'init-auto-complete)
 
