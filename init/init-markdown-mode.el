@@ -5,7 +5,7 @@
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
 (add-hook  'markdown-mode-hook
            (lambda ()
-             (auto-fill-mode t)
+             (auto-fill-mode -1)
              (visual-line-mode t)
              ;; (visual-fill-column-mode t)
              (setq fill-column 100)
