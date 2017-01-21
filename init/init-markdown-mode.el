@@ -7,7 +7,7 @@
            (lambda ()
              (auto-fill-mode -1)
              (visual-line-mode t)
-             ;; (visual-fill-column-mode t)
+             (visual-fill-column-mode t)
              (setq fill-column 100)
              (setq markdown-command "markdown")
              (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
