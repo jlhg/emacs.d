@@ -37,4 +37,11 @@
 (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
                               "xelatex -interaction nonstopmode %f"))
 
+;; Set to the location of your Org files on your local system
+(setq org-directory "~/.emacs.d/org-notes")
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/.emacs.d/org-notes/mobile.org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
+
 (provide 'init-org-mode)
