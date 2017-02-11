@@ -24,3 +24,5 @@ eshell/
 .emacs.desktop*
 tramp
 org-notes
+.org-id-locations
+image-dired

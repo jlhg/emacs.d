@@ -44,4 +44,15 @@
 ;; Set to <your Dropbox root directory>/MobileOrg.
 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 
+;; Emacs org-mode file/viewer associations
+(add-hook 'org-mode-hook
+          '(lambda ()
+             (setq org-file-apps
+                   (append '(
+                             ("\\.png\\'" . default)
+                             ("\\.jpe?g\\'" . default)
+                             ("\\.gif\\'" . default)
+                             ("\\.svg\\'" . default)
+                             ) org-file-apps ))))
+
 (provide 'init-org-mode)
