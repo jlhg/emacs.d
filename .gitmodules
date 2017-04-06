@@ -85,3 +85,6 @@
 [submodule "package/php-mode"]
 	path = package/php-mode
 	url = https://github.com/ejmr/php-mode.git
+[submodule "package/js2-mode"]
+	path = package/js2-mode
+	url = https://github.com/mooz/js2-mode.git

@@ -24,12 +24,13 @@
 ;;      (tern-ac-setup)))
 
 ;; skewer-mode
-;; (add-to-list 'load-path "~/.emacs.d/package/emacs-web-server")
-;; (add-to-list 'load-path "~/.emacs.d/package/skewer-mode")
-;; (require 'skewer-mode)
-;; (add-hook 'js2-mode-hook 'skewer-mode)
-;; (add-hook 'css-mode-hook 'skewer-css-mode)
-;; (add-hook 'html-mode-hook 'skewer-html-mode)
+(add-to-list 'load-path "~/.emacs.d/package/emacs-web-server")
+(add-to-list 'load-path "~/.emacs.d/package/js2-mode")
+(add-to-list 'load-path "~/.emacs.d/package/skewer-mode")
+(require 'skewer-mode)
+(add-hook 'js2-mode-hook 'skewer-mode)
+(add-hook 'css-mode-hook 'skewer-css-mode)
+(add-hook 'html-mode-hook 'skewer-html-mode)
 
 ;; nodejs-repl
 (require 'nodejs-repl)
