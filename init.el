@@ -202,4 +202,4 @@
 ;; swagger-mode
 ;; Swagger Mode integrates Swagger Codegen into Emacs as a Minor Mode.
 ;; https://github.com/Nooby/swagger-mode
-(require 'init-swagger-mode)
+;; (require 'init-swagger-mode)
