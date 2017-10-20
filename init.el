@@ -7,6 +7,7 @@
 
 (require 'init-global)
 (require 'init-ibuffer)
+(require 'init-auto-minor-mode)
 
 ;; Visual Fill Column
 ;; https://github.com/joostkremers/visual-fill-column
@@ -197,3 +198,8 @@
 ;; A front end in emacs to convert between simplified and traditional Chinese with opencc or cconv.
 ;; https://github.com/gucong/emacs-chinese-conv
 (require 'init-chinese-conv)
+
+;; swagger-mode
+;; Swagger Mode integrates Swagger Codegen into Emacs as a Minor Mode.
+;; https://github.com/Nooby/swagger-mode
+(require 'init-swagger-mode)
