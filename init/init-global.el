@@ -58,10 +58,10 @@
 ;; (global-hl-line-mode 1)
 
 ;; switch windows
-;; (global-set-key [C-left] 'windmove-left)
-;; (global-set-key [C-right] 'windmove-right)
-;; (global-set-key [C-up] 'windmove-up)
-;; (global-set-key [C-down] 'windmove-down)
+(global-set-key (kbd "M-W") 'windmove-up)
+(global-set-key (kbd "M-S") 'windmove-down)
+(global-set-key (kbd "M-D") 'windmove-right)
+(global-set-key (kbd "M-A") 'windmove-left)
 
 ;; leave point at same position in window when scrolling page
 (global-set-key (kbd "M-]") 'scroll-lock-mode)
