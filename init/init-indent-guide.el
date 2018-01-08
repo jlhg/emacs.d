@@ -12,7 +12,7 @@
 
 (define-globalized-minor-mode global-highlight-indentation-mode highlight-indentation-mode
   (lambda ()
-    (highlight-indentation-mode 1)
+    ;; (highlight-indentation-mode 1)
     (highlight-indentation-current-column-mode 1)
     ))
 
