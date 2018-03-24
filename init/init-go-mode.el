@@ -4,4 +4,6 @@
           '(lambda ()
              (setq indent-tabs-mode nil)))
 
+(require 'golint)
+
 (provide 'init-go-mode)
