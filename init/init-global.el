@@ -253,4 +253,7 @@
 ;; Disable backslash character in line wrapping
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
+;; Move cursor by camelCase
+(subword-mode 1)
+
 (provide 'init-global)
