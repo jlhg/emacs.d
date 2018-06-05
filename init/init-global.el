@@ -254,6 +254,6 @@
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
 ;; Move cursor by camelCase
-(subword-mode 1)
+(global-subword-mode 1)
 
 (provide 'init-global)
