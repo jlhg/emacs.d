@@ -117,7 +117,7 @@
     ad-do-it))
 
 ;; word wrap
-;; (setq-default truncate-lines t)
+(setq-default truncate-lines t)
 (global-set-key [(control f11)] 'toggle-truncate-lines)
 
 ;; enabling font lock
