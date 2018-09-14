@@ -30,5 +30,9 @@
 ;; (add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
 ;; (add-hook 'enh-ruby-mode-hook 'robe-mode)
 ;; (add-hook 'enh-ruby-mode-hook 'yard-mode)
+;; (setq enh-ruby-add-encoding-comment-on-save nil)
+
+;; Prevent to add coding information in the first line
+(setq ruby-insert-encoding-magic-comment nil)
 
 (provide 'init-ruby-mode)
