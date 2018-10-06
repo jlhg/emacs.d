@@ -1,5 +1,6 @@
 ;; js-mode
 (setq js-indent-level 2)
+(add-to-list 'auto-mode-alist '("\\.gs$" . js-mode))
 
 ;; Bind M-. to find-tag
 (eval-after-load 'js
