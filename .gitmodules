@@ -91,3 +91,18 @@
 [submodule "package/enhanced-ruby-mode"]
 	path = package/enhanced-ruby-mode
 	url = https://github.com/zenspider/enhanced-ruby-mode.git
+[submodule "package/ghub"]
+	path = package/ghub
+	url = https://github.com/magit/ghub.git
+[submodule "package/graphql.el"]
+	path = package/graphql.el
+	url = https://github.com/vermiculus/graphql.el.git
+[submodule "package/magit-popup"]
+	path = package/magit-popup
+	url = https://github.com/magit/magit-popup.git
+[submodule "package/treepy.el"]
+	path = package/treepy.el
+	url = https://github.com/volrath/treepy.el.git
+[submodule "package/with-editor"]
+	path = package/with-editor
+	url = https://github.com/magit/with-editor.git
