@@ -6,7 +6,7 @@
 (add-hook  'markdown-mode-hook
            (lambda ()
              (auto-fill-mode -1)
-             (visual-line-mode t)
+             ;; (visual-line-mode t)
              ;; (visual-fill-column-mode t)
              (setq fill-column 100)
              (setq markdown-command "markdown")
