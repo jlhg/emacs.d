@@ -208,4 +208,4 @@
 ;; Smartparens
 ;; Minor mode for Emacs that deals with parens pairs and tries to be smart about it.
 ;; https://github.com/Fuco1/smartparens
-(require 'init-smartparens)
+;; (require 'init-smartparens)
