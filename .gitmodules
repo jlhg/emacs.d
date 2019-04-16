@@ -106,3 +106,6 @@
 [submodule "package/with-editor"]
 	path = package/with-editor
 	url = https://github.com/magit/with-editor.git
+[submodule "package/smartparens"]
+	path = package/smartparens
+	url = https://github.com/Fuco1/smartparens

@@ -182,12 +182,6 @@
     (comment-dwim arg)))
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 
-;; electric pair mode
-(when (fboundp 'electric-pair-mode)
-  (electric-pair-mode)
-  (setq electric-pair-skip-self nil)
-  (setq electric-pair-preserve-balance nil))
-
 ;; numbered window shortcuts
 ;; use M-1 through M-0 to navigate
 (require 'window-numbering)
