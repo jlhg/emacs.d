@@ -1,4 +1,5 @@
 (require 'json-reformat)
+(require 'json-snatcher)
 
 (setq json-reformat:indent-width 2)
 (setq json-reformat:pretty-string? t)
