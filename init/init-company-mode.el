@@ -3,7 +3,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; Trigger completion immediately.
-(setq company-idle-delay 0)
+(setq company-idle-delay 0.2)
 
 ;; Number the candidates (use M-1, M-2 etc to select completions).
 (setq company-show-numbers t)
