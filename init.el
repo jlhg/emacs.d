@@ -19,6 +19,11 @@
 ;; yasnippet
 (require 'init-yasnippet)
 
+;; company-mode
+;; Modular in-buffer completion framework for Emacs
+;; http://company-mode.github.io/
+(require 'init-company-mode)
+
 ;; Magit - an emacs mode for interacting with the Git version control system
 ;; http://magit.github.io/magit/index.html
 (require 'init-magit)
@@ -209,3 +214,8 @@
 ;; Minor mode for Emacs that deals with parens pairs and tries to be smart about it.
 ;; https://github.com/Fuco1/smartparens
 ;; (require 'init-smartparens)
+
+;; company-tabnine
+;; A company-mode backend for TabNine, the all-language autocompleter: https://tabnine.com/
+;; https://github.com/TommyX12/company-tabnine
+(require 'init-company-tabnine)

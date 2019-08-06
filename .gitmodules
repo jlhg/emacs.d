@@ -109,3 +109,12 @@
 [submodule "package/smartparens"]
 	path = package/smartparens
 	url = https://github.com/Fuco1/smartparens
+[submodule "package/names"]
+	path = package/names
+	url = https://github.com/Malabarba/names.git
+[submodule "package/company-tabnine"]
+	path = package/company-tabnine
+	url = https://github.com/TommyX12/company-tabnine.git
+[submodule "package/unicode-escape.el"]
+	path = package/unicode-escape.el
+	url = https://github.com/kosh04/unicode-escape.el.git
