@@ -1,16 +1,11 @@
-(require 'go-mode-load)
+(add-to-list 'load-path "~/.emacs.d/package/go-mode.el")
+(autoload 'go-mode "go-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
 
 (add-hook 'go-mode-hook
           '(lambda ()
              (setq indent-tabs-mode nil)))
 
 (require 'golint)
-
-;; gocode
-;; An autocompletion daemon for the Go programming language
-;; https://github.com/nsf/gocode
-(require 'go-autocomplete)
-(require 'auto-complete-config)
-(ac-config-default)
 
 (provide 'init-go-mode)
