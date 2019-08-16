@@ -118,3 +118,6 @@
 [submodule "package/unicode-escape.el"]
 	path = package/unicode-escape.el
 	url = https://github.com/kosh04/unicode-escape.el.git
+[submodule "package/go-mode.el"]
+	path = package/go-mode.el
+	url = https://github.com/dominikh/go-mode.el.git
