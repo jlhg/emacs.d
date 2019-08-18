@@ -11,4 +11,11 @@
         yas/ido-prompt
         yas/no-prompt))
 
+
+;; Set another trigger key
+(define-key yas-minor-mode-map (kbd "M-TAB")  'yas-expand)
+(define-key yas-minor-mode-map [(tab)] nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+
 (provide 'init-yasnippet)
