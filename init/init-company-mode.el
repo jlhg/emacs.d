@@ -6,7 +6,7 @@
 (setq company-global-modes '(not text-mode org-mode markdown-mode json-mode yaml-mode))
 
 ;; Trigger completion immediately.
-(setq company-idle-delay 0.2)
+(setq company-idle-delay 0.3)
 
 ;; Number the candidates (use M-1, M-2 etc to select completions).
 (setq company-show-numbers t)
