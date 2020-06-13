@@ -17,6 +17,9 @@
 ;; https://github.com/bbatsov/zenburn-emacs
 (require 'zenburn-theme)
 (load-theme 'zenburn t)
+(custom-set-faces
+ '(line-number-current-line ((t (:inherit line-number :foreground "#6F6F6F"))))
+)
 
 ;; starting message
 (setq initial-scratch-message "")
