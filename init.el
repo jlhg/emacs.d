@@ -180,10 +180,8 @@
 ;; https://github.com/joshwnj/json-mode
 (require 'init-json-mode)
 
-;; indent-guide
-;; Show vertical lines to guide indentation
-;; https://github.com/zk-phi/indent-guide
-(require 'init-indent-guide)
+;; highlight-indent-guides
+(require 'init-highlight-indent-guides)
 
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode
