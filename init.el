@@ -181,7 +181,7 @@
 (require 'init-json-mode)
 
 ;; highlight-indent-guides
-(require 'init-highlight-indent-guides)
+;; (require 'init-highlight-indent-guides)
 
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode
