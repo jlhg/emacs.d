@@ -89,8 +89,8 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; display line number
-(global-linum-mode t)
-(setq linum-format "%3d ")
+(when (version<= "26.0.50" emacs-version)
+  (global-display-line-numbers-mode))
 
 ;; Do not turn on linum-mode in some major modes (and file with over 2000 lines)
 ;; due to the performance issue.
