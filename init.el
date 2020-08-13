@@ -12,6 +12,9 @@
 (add-to-list 'load-path "~/.emacs.d/init")
 (add-to-list 'load-path "~/.emacs.d/package")
 
+;; For Emacs 28 native-comp
+(require 'init-native-comp)
+
 (require 'init-global)
 (require 'init-ibuffer)
 (require 'init-auto-minor-mode)
@@ -50,11 +53,11 @@
 
 ;; ESS - Emacs Speaks Statistics
 ;; requirements: R
-(require 'init-ess)
+;; (require 'init-ess)
 
 ;; diff-mode-: extension to 'diff-mode.el'
 ;; change highlight colors
-(require 'init-diff-mode-)
+;; (require 'init-diff-mode-)
 
 ;; multiple cursors
 ;; https://github.com/emacsmirror/multiple-cursors
@@ -62,10 +65,10 @@
 
 ;; ace jump mode
 ;; https://github.com/winterTTr/ace-jump-mode
-(require 'init-ace-jump-mode)
+;; (require 'init-ace-jump-mode)
 
 ;; flymake
-(require 'init-flymake)
+;; (require 'init-flymake)
 
 ;; flycheck
 (require 'init-flycheck)
@@ -112,22 +115,22 @@
 
 ;; AUCTex (LaTeX)
 ;; requirements: texlive-full
-(require 'init-auctex)
+;; (require 'init-auctex)
 
 ;; Moz
-(require 'init-moz)
+;; (require 'init-moz)
 
 ;; zotero
 ;; require MozRepl for firefox: https://github.com/bard/mozrepl/wiki
 ;; after installing MozRepl: FireFox -> Tools -> MozRepl -> Start
-(require 'init-zotero-minor-mode)
+;; (require 'init-zotero-minor-mode)
 
 ;; erc
 (require 'init-erc)
 
 ;; ack
 ;; https://github.com/leoliu/ack-el
-(require 'ack)
+;; (require 'ack)
 
 ;; slime
 ;; http://www.common-lisp.net/project/slime/
@@ -136,11 +139,11 @@
 
 ;; python-django
 ;; https://github.com/fgallina/python-django.el
-(require 'init-python-django)
+;; (require 'init-python-django)
 
 ;; inf-mongo
 ;; https://github.com/tobiassvn/inf-mongo
-(require 'init-inf-mongo)
+;; (require 'init-inf-mongo)
 
 (require 'init-makefile-mode)
 
@@ -161,14 +164,14 @@
 (require 'init-php-mode)
 
 ;; js-mode js2-mode
-(require 'init-js-mode)
+;; (require 'init-js-mode)
 
 ;; go-mode
 (require 'init-go-mode)
 (require 'init-go-mod-mode)
 
 ;; swift-mode
-(require 'init-swift-mode)
+;; (require 'init-swift-mode)
 
 ;; yaml-mode
 ;; The emacs major mode for editing files in the YAML data serialization format.
@@ -196,11 +199,11 @@
 
 ;; coffee-mode
 ;; https://github.com/defunkt/coffee-mode
-(require 'init-coffee-mode)
+;; (require 'init-coffee-mode)
 
 ;; nginx-mode
 ;; https://github.com/ajc/nginx-mode
-(require 'init-nginx-mode)
+;; (require 'init-nginx-mode)
 
 ;; Interactively resizing windows
 ;; Source: https://www.emacswiki.org/emacs/WindowResize
