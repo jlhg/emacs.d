@@ -3,6 +3,7 @@ elpa/
 server/
 url/
 trash/
+eln-cache/
 abbrev_defs
 ac-comphist.dat
 .mc-lists.el

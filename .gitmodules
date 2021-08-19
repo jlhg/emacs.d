@@ -124,3 +124,9 @@
 [submodule "package/highlight-indent-guides"]
 	path = package/highlight-indent-guides
 	url = https://github.com/DarthFennec/highlight-indent-guides
+[submodule "package/libegit2"]
+	path = package/libegit2
+	url = https://github.com/magit/libegit2.git
+[submodule "package/transient"]
+	path = package/transient
+	url = https://github.com/magit/transient.git
