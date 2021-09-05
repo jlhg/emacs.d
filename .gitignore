@@ -4,6 +4,7 @@ server/
 url/
 trash/
 eln-cache/
+transient/
 abbrev_defs
 ac-comphist.dat
 .mc-lists.el
