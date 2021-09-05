@@ -11,6 +11,6 @@
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 
-(setq magit-section-visibility-indicator '(" ..." t))
+(setq magit-section-visibility-indicator nil)
 
 (provide 'init-magit)
