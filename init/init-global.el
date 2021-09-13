@@ -266,4 +266,12 @@
 (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
 (global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
 
+;; This is a workaround for the issue of large minified files of
+;; programming code (i.e., code that has been compacted into the
+;; smallest file size possible, which often entails removing newlines
+;; should they not be strictly necessary) bringing Emacs to its knees
+;; on account of the relevant modes not being (remotely) optimised for
+;; that use-case. (Requires Emacs >= 27)
+(global-so-long-mode 1)
+
 (provide 'init-global)
