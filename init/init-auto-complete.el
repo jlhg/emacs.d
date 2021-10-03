@@ -17,10 +17,6 @@
 (define-key ac-completing-map (kbd "<down>") nil)
 (define-key ac-completing-map (kbd "RET") nil)
 (define-key ac-completing-map (kbd "<return>") nil)
-(add-to-list 'ac-stop-words "{")
-(add-to-list 'ac-stop-words "[")
-(add-to-list 'ac-stop-words "(")
-(add-to-list 'ac-stop-words "<")
 
 ;; ac/yas color
 (defface ac-yasnippet-candidate-face
