@@ -11,4 +11,7 @@
 ;; Number the candidates (use M-1, M-2 etc to select completions).
 (setq company-show-numbers t)
 
+;; The minimum prefix length for idle completion.
+(setq company-minimum-prefix-length 1)
+
 (provide 'init-company-mode)

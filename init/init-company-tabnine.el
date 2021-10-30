@@ -6,4 +6,8 @@
 (require 'company-tabnine)
 (add-to-list 'company-backends #'company-tabnine)
 
+;; Whether to overload company's minimum prefix length.
+;; This allows completion to trigger on as much as possible.
+(setq company-tabnine-always-trigger nil)
+
 (provide 'init-company-tabnine)
