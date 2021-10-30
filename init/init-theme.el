@@ -15,16 +15,17 @@
 
 ;; Zenburn-theme
 ;; https://github.com/bbatsov/zenburn-emacs
-;; (require 'zenburn-theme)
-;; (load-theme 'zenburn t)
-;; (custom-set-faces
-;;  '(line-number-current-line ((t (:inherit line-number :foreground "#6F6F6F"))))
-;; )
+(add-to-list 'load-path "~/.emacs.d/package/zenburn-emacs")
+(require 'zenburn-theme)
+(load-theme 'zenburn t)
+(custom-set-faces
+ '(line-number-current-line ((t (:inherit line-number :foreground "#6F6F6F"))))
+)
 
 ;; Nord theme
 ;; https://github.com/arcticicestudio/nord-emacs
-(add-to-list 'load-path "~/.emacs.d/package/nord-emacs")
-(require 'nord-theme)
-(load-theme 'nord t)
+;; (add-to-list 'load-path "~/.emacs.d/package/nord-emacs")
+;; (require 'nord-theme)
+;; (load-theme 'nord t)
 
 (provide 'init-theme)
