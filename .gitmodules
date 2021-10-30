@@ -132,7 +132,7 @@
 	url = https://github.com/magit/transient.git
 [submodule "package/nord-emacs"]
 	path = package/nord-emacs
-	url = https://github.com/arcticicestudio/nord-emacs.git
+	url = https://github.com/jlhg/nord-emacs.git
 [submodule "package/zenburn-emacs"]
 	path = package/zenburn-emacs
 	url = https://github.com/bbatsov/zenburn-emacs.git
