@@ -130,3 +130,6 @@
 [submodule "package/transient"]
 	path = package/transient
 	url = https://github.com/magit/transient.git
+[submodule "package/nord-emacs"]
+	path = package/nord-emacs
+	url = https://github.com/arcticicestudio/nord-emacs.git

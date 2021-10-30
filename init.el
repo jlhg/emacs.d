@@ -15,6 +15,9 @@
 ;; For Emacs 28 native-comp
 (require 'init-native-comp)
 
+;; Theme
+(require 'init-theme)
+
 (require 'init-global)
 (require 'init-ibuffer)
 (require 'init-auto-minor-mode)
