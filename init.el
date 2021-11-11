@@ -232,3 +232,8 @@
 ;; A company-mode backend for TabNine, the all-language autocompleter: https://tabnine.com/
 ;; https://github.com/TommyX12/company-tabnine
 (require 'init-company-tabnine)
+
+;; dumb-jump
+;; an Emacs "jump to definition" package for 50+ languages
+;; https://github.com/jacktasia/dumb-jump
+(require 'init-dumb-jump)

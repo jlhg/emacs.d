@@ -9,10 +9,10 @@
 ;; pry
 ;; pry-doc >= 0.6.0 (on MRI)
 ;; method_source >= 0.8.2 (for compatibility with the latest Rubinius)
-(add-to-list 'load-path "~/.emacs.d/package/robe")
+;; (add-to-list 'load-path "~/.emacs.d/package/robe")
 
-(require 'robe)
-(add-hook 'ruby-mode-hook 'robe-mode)
+;; (require 'robe)
+;; (add-hook 'ruby-mode-hook 'robe-mode)
 
 ;; yard-mode
 ;; https://github.com/pd/yard-mode.el

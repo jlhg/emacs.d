@@ -136,3 +136,6 @@
 [submodule "package/zenburn-emacs"]
 	path = package/zenburn-emacs
 	url = https://github.com/bbatsov/zenburn-emacs.git
+[submodule "package/dumb-jump"]
+	path = package/dumb-jump
+	url = https://github.com/jacktasia/dumb-jump.git
