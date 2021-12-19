@@ -13,4 +13,10 @@
 
 (setq magit-section-visibility-indicator nil)
 
+;; https://www.reddit.com/r/emacs/comments/bdsfb7/comment/el0lowt/?utm_source=share&utm_medium=web2x&context=3
+;; https://emacs.stackexchange.com/a/52040
+;; https://irreal.org/blog/?p=8877
+(setq magit-section-initial-visibility-alist
+        '((unpushed . show)))
+
 (provide 'init-magit)
