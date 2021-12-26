@@ -139,3 +139,6 @@
 [submodule "package/dumb-jump"]
 	path = package/dumb-jump
 	url = https://github.com/jacktasia/dumb-jump.git
+[submodule "package/ruby-end.el"]
+	path = package/ruby-end.el
+	url = https://github.com/rejeep/ruby-end.el.git

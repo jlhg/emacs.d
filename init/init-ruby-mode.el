@@ -35,4 +35,13 @@
 ;; Prevent to add coding information in the first line
 (setq ruby-insert-encoding-magic-comment nil)
 
+;; Ruby end
+;; Ruby end is a minor mode for Emacs that can be used with
+;; ruby-mode to automatically close blocks by inserting end when
+;; typing a "block keyword", followed by a space.
+;; https://github.com/rejeep/ruby-end.el
+(add-to-list 'load-path "~/.emacs.d/package/ruby-end.el")
+(require 'ruby-end)
+
+
 (provide 'init-ruby-mode)
