@@ -65,8 +65,8 @@
 ;; default indentation
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-(setq-default newline-and-indent t)
-(define-key global-map (kbd "RET") 'newline-and-indent)
+;; (setq-default newline-and-indent t)
+;; (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; display line number
 (when (version<= "26.0.50" emacs-version)
