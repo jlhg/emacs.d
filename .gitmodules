@@ -142,3 +142,15 @@
 [submodule "package/ruby-end.el"]
 	path = package/ruby-end.el
 	url = https://github.com/rejeep/ruby-end.el.git
+[submodule "package/yaml.el"]
+	path = package/yaml.el
+	url = https://github.com/zkry/yaml.el.git
+[submodule "package/closql"]
+	path = package/closql
+	url = https://github.com/emacscollective/closql.git
+[submodule "package/emacsql"]
+	path = package/emacsql
+	url = https://github.com/skeeto/emacsql.git
+[submodule "package/forge"]
+	path = package/forge
+	url = https://github.com/magit/forge.git

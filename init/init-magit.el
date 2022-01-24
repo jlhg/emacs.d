@@ -8,6 +8,11 @@
 (add-to-list 'load-path "~/.emacs.d/package/graphql.el")
 (add-to-list 'load-path "~/.emacs.d/package/treepy.el")
 
+(add-to-list 'load-path "~/.emacs.d/package/yaml.el")
+(add-to-list 'load-path "~/.emacs.d/package/emacsql")
+(add-to-list 'load-path "~/.emacs.d/package/closql")
+(add-to-list 'load-path "~/.emacs.d/package/forge/lisp")
+
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 
@@ -18,5 +23,8 @@
 ;; https://irreal.org/blog/?p=8877
 (setq magit-section-initial-visibility-alist
         '((unpushed . show)))
+
+(with-eval-after-load 'magit
+  (require 'forge))
 
 (provide 'init-magit)

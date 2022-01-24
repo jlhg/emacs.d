@@ -31,3 +31,4 @@ org-notes
 image-dired
 ido.last
 smex-items
+*.sqlite
