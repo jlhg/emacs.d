@@ -26,6 +26,12 @@
 ;; https://github.com/arcticicestudio/nord-emacs
 (add-to-list 'load-path "~/.emacs.d/package/nord-emacs")
 (require 'nord-theme)
-(load-theme 'nord t)
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+        (lambda (frame)
+            (select-frame frame)
+            (load-theme 'nord t)))
+    (load-theme 'nord t))
 
 (provide 'init-theme)
