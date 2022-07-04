@@ -11,10 +11,11 @@ graphql_dir = ${pkg_dir}/graphql.el
 treepy_dir = ${pkg_dir}/treepy.el
 async_dir = ${pkg_dir}/emacs-async
 libegit2_dir = ${pkg_dir}/libegit2
+compat_dir = ${pkg_dir}/compat
 
 all:
 	emacs --batch --eval '(byte-recompile-directory ".")'
 	mkdir -p backup erc/log
 	chmod 700 backup
-	cd ${magit_dir} && echo "LOAD_PATH = -L ${magit_dir}/lisp -L ${dash_dir} -L ${magit_popup_dir} -L ${ghub_dir} -L ${transient_dir}/lisp -L ${with_editor_dir} -L ${graphql_dir} -L ${treepy_dir} -L ${libegit2_dir} -L ${pkg_dir}" >config.mk && make clean && make
+	cd ${magit_dir} && echo "LOAD_PATH = -L ${magit_dir}/lisp -L ${dash_dir} -L ${magit_popup_dir} -L ${ghub_dir} -L ${transient_dir}/lisp -L ${with_editor_dir}/lisp -L ${graphql_dir} -L ${treepy_dir} -L ${libegit2_dir} -L ${compat_dir} -L ${pkg_dir}" >config.mk && make clean && make
 	cd ${helm_dir} && make clean && EMACSLOADPATH="${async_dir}:" make

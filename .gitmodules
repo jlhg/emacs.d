@@ -154,3 +154,6 @@
 [submodule "package/forge"]
 	path = package/forge
 	url = https://github.com/magit/forge.git
+[submodule "package/compat"]
+	path = package/compat
+	url = https://git.sr.ht/~pkal/compat

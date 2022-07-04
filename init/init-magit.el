@@ -1,10 +1,11 @@
+(add-to-list 'load-path "~/.emacs.d/package/compat")
+(add-to-list 'load-path "~/.emacs.d/package/with-editor/lisp")
 (add-to-list 'load-path "~/.emacs.d/package/dash.el")
 (add-to-list 'load-path "~/.emacs.d/package/magit/lisp")
 (add-to-list 'load-path "~/.emacs.d/package/magit-popup")
 (add-to-list 'load-path "~/.emacs.d/package/ghub")
 (add-to-list 'load-path "~/.emacs.d/package/transient/lisp")
 (add-to-list 'load-path "~/.emacs.d/package/libegit2")
-(add-to-list 'load-path "~/.emacs.d/package/with-editor")
 (add-to-list 'load-path "~/.emacs.d/package/graphql.el")
 (add-to-list 'load-path "~/.emacs.d/package/treepy.el")
 
