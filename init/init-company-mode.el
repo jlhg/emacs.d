@@ -3,7 +3,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; Always turned on except in text-mode buffer.
-(setq company-global-modes '(not text-mode json-mode yaml-mode))
+(setq company-global-modes '(not text-mode json-mode yaml-mode magit-status-mode))
 
 ;; Trigger completion immediately.
 (setq company-idle-delay 0)
