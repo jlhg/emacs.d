@@ -169,6 +169,7 @@
 ;; (setq electric-pair-inhibit-predicate
 ;;       (lambda (c)
 ;;         (if (char-equal c ?\") t (electric-pair-default-inhibit c))))
+(setq electric-pair-skip-whitespace nil)
 
 ;; numbered window shortcuts
 ;; use M-1 through M-0 to navigate
