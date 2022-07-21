@@ -43,5 +43,6 @@
 (add-to-list 'load-path "~/.emacs.d/package/ruby-end.el")
 (require 'ruby-end)
 
+(setq ruby-end-expand-only-for-last-commands nil)
 
 (provide 'init-ruby-mode)
