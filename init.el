@@ -237,3 +237,8 @@
 ;; an Emacs "jump to definition" package for 50+ languages
 ;; https://github.com/jacktasia/dumb-jump
 (require 'init-dumb-jump)
+
+;; emacs-sql-indent
+;; Syntax based indentation for SQL files for GNU Emacs
+;; https://github.com/alex-hhh/emacs-sql-indent
+(require 'init-sql-indent)
