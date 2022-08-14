@@ -252,4 +252,11 @@
 ;; that use-case. (Requires Emacs >= 27)
 (global-so-long-mode 1)
 
+;; Finding Non Ascii Characters
+;; https://www.emacswiki.org/emacs/FindingNonAsciiCharacters
+(defun occur-non-ascii ()
+  "Find any non-ascii characters in the current buffer."
+  (interactive)
+  (occur "[^[:ascii:]]"))
+
 (provide 'init-global)
