@@ -25,6 +25,8 @@
 (setq magit-section-initial-visibility-alist
         '((unpushed . show)))
 
+(setq transient-default-level 7)
+
 (with-eval-after-load 'magit
   (require 'forge))
 
