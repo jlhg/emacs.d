@@ -160,3 +160,6 @@
 [submodule "package/emacs-sql-indent"]
 	path = package/emacs-sql-indent
 	url = https://github.com/alex-hhh/emacs-sql-indent.git
+[submodule "package/emacs-hcl-mode"]
+	path = package/emacs-hcl-mode
+	url = https://github.com/syohex/emacs-hcl-mode.git

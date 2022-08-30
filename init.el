@@ -242,3 +242,8 @@
 ;; Syntax based indentation for SQL files for GNU Emacs
 ;; https://github.com/alex-hhh/emacs-sql-indent
 (require 'init-sql-indent)
+
+;; emacs-hcl-mode
+;; Major mode for Hashicorp Configuration Language.
+;; https://github.com/purcell/emacs-hcl-mode
+(require 'init-hcl-mode)
