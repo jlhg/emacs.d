@@ -247,3 +247,8 @@
 ;; Major mode for Hashicorp Configuration Language.
 ;; https://github.com/purcell/emacs-hcl-mode
 (require 'init-hcl-mode)
+
+;; highlight-numbers
+;; An Emacs minor mode that highlights numeric literals in source code.
+;; https://github.com/Fanael/highlight-numbers
+(require 'init-highlight-numbers)

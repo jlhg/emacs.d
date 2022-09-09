@@ -163,3 +163,9 @@
 [submodule "package/emacs-hcl-mode"]
 	path = package/emacs-hcl-mode
 	url = https://github.com/syohex/emacs-hcl-mode.git
+[submodule "package/highlight-numbers"]
+	path = package/highlight-numbers
+	url = https://github.com/Fanael/highlight-numbers.git
+[submodule "package/parent-mode"]
+	path = package/parent-mode
+	url = https://github.com/Fanael/parent-mode.git
