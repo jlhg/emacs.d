@@ -78,7 +78,7 @@
 
 ;; Elpy - the Emacs Lisp Python Environment
 ;; https://github.com/jorgenschaefer/elpy
-(require 'init-elpy)
+;; (require 'init-elpy)
 
 ;; xclip - an interface to the xclip tool
 ;; requirements: xclip
