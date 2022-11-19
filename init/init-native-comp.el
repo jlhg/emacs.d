@@ -8,4 +8,7 @@
                    (> (comp-async-runnings) 0))
           (sleep-for 1)))))
 
+(when (boundp 'native-comp-async-report-warnings-errors)
+  (setq native-comp-async-report-warnings-errors 'silent))
+
 (provide 'init-native-comp)
