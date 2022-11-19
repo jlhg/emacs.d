@@ -1,7 +1,7 @@
 ;; inf-ruby
-(add-to-list 'load-path "~/.emacs.d/package/inf-ruby")
-(autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
-(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
+;; (add-to-list 'load-path "~/.emacs.d/package/inf-ruby")
+;; (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
+;; (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
 ;; robe-mode
 ;; https://github.com/dgutov/robe
@@ -44,5 +44,11 @@
 (require 'ruby-end)
 
 (setq ruby-end-expand-only-for-last-commands nil)
+
+;; RuboCop.el
+;; https://github.com/rubocop/rubocop-emacs
+(add-to-list 'load-path "~/.emacs.d/package/rubocop-emacs")
+(require 'rubocop)
+(add-hook 'ruby-mode-hook 'rubocop-mode)
 
 (provide 'init-ruby-mode)

@@ -169,3 +169,6 @@
 [submodule "package/parent-mode"]
 	path = package/parent-mode
 	url = https://github.com/Fanael/parent-mode.git
+[submodule "package/rubocop-emacs"]
+	path = package/rubocop-emacs
+	url = https://github.com/rubocop/rubocop-emacs.git
