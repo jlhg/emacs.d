@@ -252,3 +252,7 @@
 ;; An Emacs minor mode that highlights numeric literals in source code.
 ;; https://github.com/Fanael/highlight-numbers
 (require 'init-highlight-numbers)
+
+;; tree-sitter
+;; https://github.com/emacs-tree-sitter/elisp-tree-sitter
+(require 'init-tree-sitter)
