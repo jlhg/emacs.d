@@ -18,6 +18,4 @@
 (require 'ts-fold-indicators)
 (require 'ts-fold)
 
-(global-set-key (kbd "C-m") 'ts-fold-toggle)
-
 (provide 'init-tree-sitter)
