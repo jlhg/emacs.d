@@ -23,13 +23,13 @@
 
 ;; Enhanced Ruby Mode
 ;; https://github.com/zenspider/Enhanced-Ruby-Mode
-;; (add-to-list 'load-path "~/.emacs.d/package/enhanced-ruby-mode") ; must be added after any path containing old ruby-mode
-;; (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
-;; (add-to-list 'auto-mode-alist
-;;              '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
-;; (add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+(add-to-list 'load-path "~/.emacs.d/package/enhanced-ruby-mode") ; must be added after any path containing old ruby-mode
+(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+(add-to-list 'auto-mode-alist
+             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
 ;; (add-hook 'enh-ruby-mode-hook 'robe-mode)
-;; (add-hook 'enh-ruby-mode-hook 'yard-mode)
+(add-hook 'enh-ruby-mode-hook 'yard-mode)
 ;; (setq enh-ruby-add-encoding-comment-on-save nil)
 
 ;; Prevent to add coding information in the first line
