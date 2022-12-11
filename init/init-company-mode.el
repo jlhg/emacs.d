@@ -12,6 +12,6 @@
 (setq company-show-numbers t)
 
 ;; The minimum prefix length for idle completion.
-(setq company-minimum-prefix-length 1)
+(setq company-minimum-prefix-length 3)
 
 (provide 'init-company-mode)
