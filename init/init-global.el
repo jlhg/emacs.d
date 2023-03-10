@@ -171,6 +171,11 @@
 ;;         (if (char-equal c ?\") t (electric-pair-default-inhibit c))))
 (setq electric-pair-skip-whitespace nil)
 
+(defun inhibit-electric-pair-mode-in-minibuffer (char)
+  (minibufferp))
+
+(setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
+
 ;; numbered window shortcuts
 ;; use M-1 through M-0 to navigate
 (require 'window-numbering)
