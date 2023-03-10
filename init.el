@@ -173,6 +173,9 @@
 (require 'init-go-mode)
 (require 'init-go-mod-mode)
 
+;; rust-mode
+(require 'init-rust-mode)
+
 ;; swift-mode
 ;; (require 'init-swift-mode)
 

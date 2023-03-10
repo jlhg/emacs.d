@@ -184,3 +184,6 @@
 [submodule "package/tree-sitter-langs"]
 	path = package/tree-sitter-langs
 	url = https://github.com/jlhg/tree-sitter-langs.git
+[submodule "package/rust-mode"]
+	path = package/rust-mode
+	url = https://github.com/rust-lang/rust-mode.git
