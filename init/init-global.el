@@ -64,7 +64,7 @@
 
 ;; default indentation
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 ;; (setq-default newline-and-indent t)
 ;; (define-key global-map (kbd "RET") 'newline-and-indent)
 
