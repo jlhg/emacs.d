@@ -1,7 +1,7 @@
 (add-hook 'python-mode-hook
-          '(lambda ()
-             (define-key python-mode-map (kbd "C-c w") 'python-check)
-             (set (make-local-variable 'comment-inline-offset) 2)
-             (setq python-shell-virtualenv-path (expand-file-name "~/pyenv"))))
+    (lambda ()
+        (setq indent-tabs-mode nil)
+        (setq tab-width 4)
+        (setq python-indent-offset 4)))
 
 (provide 'init-python-mode)
