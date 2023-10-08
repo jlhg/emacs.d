@@ -16,7 +16,7 @@
 
 ## Requirements
 
-* emacs >= 27
+* emacs >= 29
 * xclip
 * ack
 * r (ESS)

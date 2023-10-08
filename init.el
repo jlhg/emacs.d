@@ -70,9 +70,6 @@
 ;; https://github.com/winterTTr/ace-jump-mode
 ;; (require 'init-ace-jump-mode)
 
-;; flymake
-;; (require 'init-flymake)
-
 ;; flycheck
 (require 'init-flycheck)
 
@@ -105,7 +102,7 @@
 (require 'init-visible-mark)
 
 ;; predictive mode
-(require 'init-predictive-mode)
+;; (require 'init-predictive-mode)
 
 ;; La Carte
 (require 'init-larcarte)
