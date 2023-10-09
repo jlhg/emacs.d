@@ -10,9 +10,10 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jinja?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js[x]?$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[tj]s[x]?$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mako$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue$" . web-mode))
+
 (add-to-list 'web-mode-engine-file-regexps '("django" . "\\.html"))
 (add-to-list 'web-mode-engine-file-regexps '("django" . "\\.jinja"))
 (setq web-mode-engines-alist
@@ -51,6 +52,7 @@
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
+(setq web-mode-script-padding 0)
 
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
