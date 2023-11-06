@@ -38,6 +38,7 @@
         ("blade"   . "\\.blade\\."))
 )
 
+
 (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close)
 (setq web-mode-enable-current-element-highlight t)
 (setq web-mode-enable-auto-pairing nil)
@@ -52,7 +53,18 @@
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
-(setq web-mode-script-padding 0)
+(setq web-mode-script-padding 2)
+(setq web-mode-attr-indent-offset 2)
+(setq web-mode-enable-css-colorization t)
+(setq web-mode-enable-auto-quoting nil)
+(setq web-mode-enable-current-element-highlight t)
+(add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-quotes" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
+(add-to-list 'web-mode-indentation-params '("case-extra-offset" . nil))
+(add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
 (defadvice web-mode-highlight-part (around tweak-jsx activate)
   (if (equal web-mode-content-type "jsx")
