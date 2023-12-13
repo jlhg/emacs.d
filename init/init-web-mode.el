@@ -13,6 +13,7 @@
 (add-to-list 'auto-mode-alist '("\\.[tj]s[x]?$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mako$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.svelte\\'" . web-mode))
 
 (add-to-list 'web-mode-engine-file-regexps '("django" . "\\.html"))
 (add-to-list 'web-mode-engine-file-regexps '("django" . "\\.jinja"))
@@ -35,9 +36,9 @@
         ("closure" . "\\.soy\\'")
         ("lsp"     . "\\.lsp\\'")
         ("mako"    . "\\.mako\\'")
-        ("blade"   . "\\.blade\\."))
+        ("blade"   . "\\.blade\\.")
+        ("svelte"  . "\\.svelte\\'"))
 )
-
 
 (define-key web-mode-map (kbd "C-c /") 'web-mode-element-close)
 (setq web-mode-enable-current-element-highlight t)
