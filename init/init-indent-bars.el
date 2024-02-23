@@ -7,4 +7,4 @@
 (add-hook 'prog-mode-hook 'indent-bars-mode)
 (add-hook 'yaml-mode-hook 'indent-bars-mode)
 
-(provide 'init-indent)
+(provide 'init-indent-bars)
