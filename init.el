@@ -186,8 +186,8 @@
 ;; https://github.com/joshwnj/json-mode
 (require 'init-json-mode)
 
-;; highlight-indent-guides
-;; (require 'init-highlight-indent-guides)
+;; indent-bars
+(require 'init-indent-bars)
 
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode

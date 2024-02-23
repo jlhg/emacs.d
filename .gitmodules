@@ -121,9 +121,6 @@
 [submodule "package/go-mode.el"]
 	path = package/go-mode.el
 	url = https://github.com/dominikh/go-mode.el.git
-[submodule "package/highlight-indent-guides"]
-	path = package/highlight-indent-guides
-	url = https://github.com/DarthFennec/highlight-indent-guides
 [submodule "package/libegit2"]
 	path = package/libegit2
 	url = https://github.com/magit/libegit2.git
@@ -187,3 +184,6 @@
 [submodule "package/rust-mode"]
 	path = package/rust-mode
 	url = https://github.com/rust-lang/rust-mode.git
+[submodule "package/indent-bars"]
+	path = package/indent-bars
+	url = https://github.com/jdtsmith/indent-bars.git
