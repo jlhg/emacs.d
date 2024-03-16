@@ -187,3 +187,5 @@
 [submodule "package/indent-bars"]
 	path = package/indent-bars
 	url = https://github.com/jdtsmith/indent-bars.git
+[submodule "package/compat/"]
+	url = https://github.com/emacs-compat/compat.git
