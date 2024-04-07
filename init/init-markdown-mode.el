@@ -8,7 +8,7 @@
              (auto-fill-mode -1)
              (visual-line-mode t)
              (visual-fill-column-mode t)
-             (setq fill-column 80)
+             (setq fill-column 120)
              (setq markdown-command "markdown")
              (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
                (auto-complete-mode t))))
