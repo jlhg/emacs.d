@@ -5,8 +5,8 @@
 ;; Author: Andrew J Cosgriff <andrew@cosgriff.name>
 ;; Maintainer: Andrew J Cosgriff <andrew@cosgriff.name>
 ;; Created: 15 Oct 2010
-;; Version: 1.1.3
-;; Keywords: nginx
+;; Version: 1.1.9
+;; Keywords: languages, nginx
 
 ;; available from http://github.com/ajc/nginx-mode
 
@@ -49,18 +49,23 @@
   "*Indentation can insert tabs in nginx mode if this is non-nil."
   :type 'boolean :group 'nginx)
 
+(defvar nginx-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?# "< b" table)
+    (modify-syntax-entry ?\n "> b" table)
+    table)
+  "Syntax table for `nginx-mode'.")
 
 (defvar nginx-font-lock-keywords
-  (list '("#.*" . font-lock-comment-face)
-	'("^\\([ \t]+\\)?\\([A-Za-z09_]+\\)" 2 font-lock-keyword-face t)
+  (list '("^\\([ \t]+\\)?\\([A-Za-z09_]+\\)" 2 font-lock-keyword-face t)
 	;; uncomment the next one if you want your eyes to bleed
 	;; (it'll highlight parentheses and curly braces)
 	;;'("\\(\{\\|\}\\|\(\\|\)\\)" . font-lock-pseudo-keyword-face)
-	'("^\\([ \t]+\\)?rewrite[ \t]+.+[ \t]+\\(permanent\\|redirect\\|break\\|last\\);$" 2 font-lock-operator-face)
+	'("^\\([ \t]+\\)?rewrite[ \t]+.+[ \t]+\\(permanent\\|redirect\\|break\\|last\\);$" 2 font-lock-function-name-face)
 	'("\\(\$[0-9]+\\)[^0-9]" 1 font-lock-constant-face)
 	'("\$[A-Za-z0-9_\-]+" . font-lock-variable-name-face)
 	'("[ \t]+\\(on\\|off\\);$" 1 font-lock-constant-face)
-	'("[A-Za-z0-9_\-]+\\([ \t]+[^ \t\n]+\\)?[ \t]+\\([^ \t\n]+\\)[ \t]+{" 2 font-lock-operator-face)))
+	'("[A-Za-z0-9_\-]+\\([ \t]+[^ \t\n]+\\)?[ \t]+\\([^ \t\n]+\\)[ \t]+{" 2 font-lock-function-name-face)))
 
 
 ;;;;##########################################################################
@@ -157,16 +162,14 @@ of the closing brace of a block."
   "Keymap for editing nginx config files.")
 
 ;;;###autoload
-(defun nginx-mode ()
+(define-derived-mode nginx-mode prog-mode "Nginx"
   "Major mode for highlighting nginx config files.
 
 The variable nginx-indent-level controls the amount of indentation.
 \\{nginx-mode-map}"
-  (interactive)
-  (kill-all-local-variables)
+  :syntax-table nginx-mode-syntax-table
+
   (use-local-map nginx-mode-map)
-  (setq mode-name "Nginx"
-        major-mode 'nginx-mode)
 
   (set (make-local-variable 'comment-start) "# ")
   (set (make-local-variable 'comment-start-skip) "#+ *")
@@ -181,13 +184,17 @@ The variable nginx-indent-level controls the amount of indentation.
   (set (make-local-variable 'paragraph-separate) "\\([ 	\f]*\\|#\\)$")
 
   (set (make-local-variable 'font-lock-defaults)
-       '(nginx-font-lock-keywords nil))
-  (run-hooks 'nginx-mode-hook))
+       '(nginx-font-lock-keywords nil)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("nginx\\.conf\\'"  . nginx-mode))
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("/nginx/.+\\.conf\\'" . nginx-mode))
+;;;###autoload
+(add-to-list
+ 'magic-fallback-mode-alist
+ '("\\(?:.*\n\\)*\\(?:http\\|server\\|location .+\\|upstream .+\\)[ \n\t]+{"
+   . nginx-mode))
 
 (provide 'nginx-mode)
 

@@ -206,7 +206,7 @@
 
 ;; nginx-mode
 ;; https://github.com/ajc/nginx-mode
-;; (require 'init-nginx-mode)
+(require 'init-nginx-mode)
 
 ;; Interactively resizing windows
 ;; Source: https://www.emacswiki.org/emacs/WindowResize
