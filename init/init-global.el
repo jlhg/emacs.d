@@ -242,7 +242,7 @@
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
 ;; Move cursor by camelCase
-(global-subword-mode 1)
+;; (global-subword-mode 1)
 
 ;; Switch focus after buffer split in emacs.
 ;; https://stackoverflow.com/questions/6464738/how-can-i-switch-focus-after-buffer-split-in-emacs
