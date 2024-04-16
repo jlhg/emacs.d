@@ -35,6 +35,14 @@
                 nil)
                (t
                 '(display-buffer-same-window))))))
+
+;; 50/72 formatting for Git commit message
+(add-hook 'git-commit-setup-hook
+          (lambda()
+            (setq git-commit-summary-max-length 50)
+            (auto-fill-mode t)
+            (setq fill-column 72)))
+
 (setq magit-section-visibility-indicator nil)
 
 ;; https://www.reddit.com/r/emacs/comments/bdsfb7/comment/el0lowt/?utm_source=share&utm_medium=web2x&context=3
