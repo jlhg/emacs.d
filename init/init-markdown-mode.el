@@ -5,9 +5,10 @@
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
 (add-hook  'markdown-mode-hook
            (lambda ()
-             (auto-fill-mode -1)
-             (visual-line-mode t)
-             (visual-fill-column-mode t)
+             (setq indent-tabs-mode t)
+             (setq auto-fill-mode -1)
+             (setq visual-line-mode t)
+             (setq visual-fill-column-mode t)
              (setq fill-column 120)
              (setq markdown-command "markdown")
              (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
