@@ -1,59 +1,59 @@
-;; starting message
+;; Starting message
 (setq initial-scratch-message "")
 (setq initial-major-mode 'text-mode)
 
-;; query-replace-regexp
+;; Query-replace-regexp
 (global-set-key (kbd "M-#") 'query-replace-regexp)
 
-;; occur
+;; Occur
 (global-set-key (kbd "C-c o") 'occur)
 
-;; show trailing whitespace
+;; Show trailing whitespace
 (global-set-key (kbd "C-<f12>") 'whitespace-mode)
 
-;; delete trailing whitespace
+;; Delete trailing whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;; use system clipboard instead of kill reagion
+;; Use system clipboard instead of kill reagion
 (global-set-key "\C-w" 'clipboard-kill-region)
 (global-set-key "\M-w" 'clipboard-kill-ring-save)
 (global-set-key "\C-y" 'clipboard-yank)
 
-;; inhibit startup message
+;; Inhibit startup message
 (setq inhibit-startup-screen t)
 
-;; buffer to show after starting Emacs.
+;; Buffer to show after starting Emacs.
 ;; (setq initial-buffer-choice "~")
 
-;; cursor, please do not blink
+;; Cursor, please do not blink
 (blink-cursor-mode nil)
 
-;; show column number in mode line
+;; Show column number in mode line
 (setq column-number-mode t)
 
-;; when point is on paranthesis, highlight the matching one
+;; When point is on paranthesis, highlight the matching one
 (show-paren-mode t)
 
-;; turn on highlighting current line
+;; Turn on highlighting current line
 ;; (global-hl-line-mode 1)
 
-;; switch windows
+;; Switch windows
 (global-set-key (kbd "<up>") 'windmove-up)
 (global-set-key (kbd "<down>") 'windmove-down)
 (global-set-key (kbd "<right>") 'windmove-right)
 (global-set-key (kbd "<left>") 'windmove-left)
 
-;; leave point at same position in window when scrolling page
+;; Leave point at same position in window when scrolling page
 (global-set-key (kbd "M-]") 'scroll-lock-mode)
 
-;; daemon
+;; Daemon
 ;; (setq server-use-tcp t)
 ;; (setq-default server-socket-dir "~/.emacs.d/server")
 
-;; find-file default location
+;; Find-file default location
 (find-file "~/.")
 
-;; backup
+;; Backup
 (setq
  backup-directory-alist
  '(("." . "~/.emacs.d/backup"))
@@ -62,13 +62,13 @@
  kept-new-versions 5
  kept-old-versions 2)
 
-;; default indentation
+;; Default indentation
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 ;; (setq-default newline-and-indent t)
 ;; (define-key global-map (kbd "RET") 'newline-and-indent)
 
-;; display line number
+;; Display line number
 (when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))
 
@@ -96,15 +96,15 @@
                    (> (count-lines (point-min) (point-max)) 2000)))
     ad-do-it))
 
-;; word wrap
+;; Word wrap
 (setq-default truncate-lines t)
 (global-set-key [(control f11)] 'toggle-truncate-lines)
 
-;; enabling font lock
+;; Enabling font lock
 (if (fboundp 'global-font-lock-mode)
     (global-font-lock-mode 1))
 
-;; visual line mode
+;; Visual line mode
 (setq-default visual-line-mode t)
 (setq-default global-visual-line-mode t)
 
@@ -117,7 +117,7 @@
 		   (interactive)
 		   (shell)))
 
-;; transpose lines
+;; Transpose lines
 (defun move-line (n)
   "Move the current line up or down by N lines."
   (interactive "p")
@@ -141,14 +141,14 @@
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
 
-;; insert a new line and jump to it (shift+RET)
+;; Insert a new line and jump to it (shift+RET)
 (defun end-of-line-and-indent-new-line ()
   (interactive)
   (end-of-line)
   (newline-and-indent))
 (global-set-key (kbd "C-j") 'end-of-line-and-indent-new-line)
 
-;; original idea from
+;; Original idea from
 ;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command.
@@ -162,7 +162,7 @@
     (comment-dwim arg)))
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 
-;; electric pair mode
+;; Electric pair mode
 (when (fboundp 'electric-pair-mode)
   (electric-pair-mode))
 ;; Don't pair quotes in electric-pair-mode
@@ -176,7 +176,7 @@
 
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
 
-;; numbered window shortcuts
+;; Numbered window shortcuts
 ;; use M-1 through M-0 to navigate
 (require 'window-numbering)
 (window-numbering-mode t)
