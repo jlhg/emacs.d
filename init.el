@@ -187,7 +187,7 @@
 (require 'init-json-mode)
 
 ;; indent-bars
-(require 'init-indent-bars)
+;; (require 'init-indent-bars)
 
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode
