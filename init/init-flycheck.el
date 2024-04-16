@@ -8,4 +8,7 @@
 (setq-default flycheck-disabled-checkers
               '(emacs-lisp-checkdoc sh-bash sh-zsh))
 
+;; https://github.com/flycheck/flycheck/issues/1559#issuecomment-478569550
+(setq flycheck-emacs-lisp-load-path 'inherit)
+
 (provide 'init-flycheck)
