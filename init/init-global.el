@@ -10,7 +10,7 @@
 
 ;; Show trailing whitespace
 (global-set-key (kbd "C-<f12>") 'whitespace-mode)
-(global-whitespace-mode)
+(add-hook 'prog-mode-hook 'whitespace-mode)
 
 ;; Delete trailing whitespace
 (add-hook 'before-save-hook

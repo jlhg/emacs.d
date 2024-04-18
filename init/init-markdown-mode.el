@@ -7,6 +7,7 @@
 
 (add-hook  'markdown-mode-hook
            (lambda ()
+             (whitespace-mode)
              (auto-fill-mode -1)
              (visual-line-mode nil)
              (visual-line-fill-column-mode t)
