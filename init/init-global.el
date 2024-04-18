@@ -69,6 +69,9 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 
+;; Use tab key for inserting literal tabs.
+(global-set-key (kbd "TAB") 'self-insert-command)
+
 ;; Insert a new line and jump to it (shift+RET)
 (defun end-of-line-and-indent-new-line ()
   (interactive)
