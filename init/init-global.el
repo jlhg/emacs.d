@@ -10,6 +10,7 @@
 
 ;; Show trailing whitespace
 (global-set-key (kbd "C-<f12>") 'whitespace-mode)
+(global-whitespace-mode)
 
 ;; Delete trailing whitespace
 (add-hook 'before-save-hook
@@ -68,9 +69,6 @@
 ;; Default indentation
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-
-;; Use tab key for inserting literal tabs.
-(global-set-key (kbd "TAB") 'self-insert-command)
 
 ;; Insert a new line and jump to it (shift+RET)
 (defun end-of-line-and-indent-new-line ()
