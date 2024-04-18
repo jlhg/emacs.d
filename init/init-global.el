@@ -12,7 +12,10 @@
 (global-set-key (kbd "C-<f12>") 'whitespace-mode)
 
 ;; Delete trailing whitespace
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook
+          (lambda()
+            (unless (eq major-mode 'csv-mode)
+              (delete-trailing-whitespace))))
 
 ;; Use system clipboard instead of kill reagion
 (global-set-key "\C-w" 'clipboard-kill-region)
@@ -65,8 +68,20 @@
 ;; Default indentation
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-;; (setq-default newline-and-indent t)
-;; (define-key global-map (kbd "RET") 'newline-and-indent)
+
+;; Insert a new line and jump to it (shift+RET)
+(defun end-of-line-and-indent-new-line ()
+  (interactive)
+  (end-of-line)
+  (electric-indent-just-newline t)
+  (indent-according-to-mode))
+(global-set-key (kbd "C-j") 'end-of-line-and-indent-new-line)
+
+(defun indent-new-line ()
+  (interactive)
+  (electric-indent-just-newline t)
+  (indent-according-to-mode))
+(global-set-key (kbd "RET") 'indent-new-line)
 
 ;; Display line number
 (when (version<= "26.0.50" emacs-version)
@@ -140,13 +155,6 @@
   (move-line (if (null n) 1 n)))
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
-
-;; Insert a new line and jump to it (shift+RET)
-(defun end-of-line-and-indent-new-line ()
-  (interactive)
-  (end-of-line)
-  (newline-and-indent))
-(global-set-key (kbd "C-j") 'end-of-line-and-indent-new-line)
 
 ;; Original idea from
 ;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
