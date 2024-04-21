@@ -92,6 +92,7 @@
           (lambda ()
             (setq web-mode-comment-formats '(("java" . "//")
                                              ("javascript" . "//")
+                                             ("jsx" . "//")
                                              ("typescript" . "//")
                                              ("php" . "//")
                                              ("css" . "/*")))))
