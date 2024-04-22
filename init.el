@@ -22,6 +22,9 @@
 (require 'init-ibuffer)
 (require 'init-auto-minor-mode)
 
+;; flycheck
+(require 'init-flycheck)
+
 ;; Visual Fill Column
 ;; https://github.com/joostkremers/visual-fill-column
 (require 'init-visual-fill-column)
@@ -69,9 +72,6 @@
 ;; ace jump mode
 ;; https://github.com/winterTTr/ace-jump-mode
 ;; (require 'init-ace-jump-mode)
-
-;; flycheck
-(require 'init-flycheck)
 
 ;; Elpy - the Emacs Lisp Python Environment
 ;; https://github.com/jorgenschaefer/elpy
