@@ -1,7 +1,6 @@
-;; indentation: 2 spaces
-(add-hook 'sh-mode-hook
-          (lambda ()
-            (setq sh-basic-offset 2)
-            (setq sh-indentation 2)))
+(setq-default sh-basic-offset 2)
+(setq-default sh-indentation 2)
+(add-to-list 'auto-mode-alist
+             '("\\.?\\(bashrc\\|bash_profile\\|profile\\)\\'"  . sh-mode))
 
 (provide 'init-sh-mode)
