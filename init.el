@@ -241,7 +241,10 @@
 ;; emacs-sql-indent
 ;; Syntax based indentation for SQL files for GNU Emacs
 ;; https://github.com/alex-hhh/emacs-sql-indent
-(require 'init-sql-indent)
+;; (require 'init-sql-indent)
+
+;; sql-mode
+(require 'init-sql-mode)
 
 ;; emacs-hcl-mode
 ;; Major mode for Hashicorp Configuration Language.

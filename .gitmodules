@@ -187,3 +187,9 @@
 [submodule "package/indent-bars"]
 	path = package/indent-bars
 	url = https://github.com/jdtsmith/indent-bars.git
+[submodule "package/emacs-reformatter"]
+	path = package/emacs-reformatter
+	url = https://github.com/purcell/emacs-reformatter.git
+[submodule "package/sqlformat"]
+	path = package/sqlformat
+	url = https://github.com/purcell/sqlformat.git
