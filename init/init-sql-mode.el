@@ -5,7 +5,9 @@
 (require 'sqlformat)
 
 (setq sqlformat-command 'sql-formatter)
-(setq sqlformat-args '("--config" "{ \"language\": \"postgresql\", \"logicalOperatorNewline\": \"after\", \"keywordCase\": \"upper\", \"dataTypeCase\": \"upper\" }"))
+(setq sqlformat-args '("--config" "{ \"language\": \"postgresql\", \
+\"logicalOperatorNewline\": \"after\", \"keywordCase\": \"upper\", \
+\"dataTypeCase\": \"upper\", \"functionCase\": \"lower\" }"))
 
 (add-hook 'sql-mode-hook
           (lambda ()
