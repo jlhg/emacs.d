@@ -78,11 +78,14 @@
   (indent-according-to-mode))
 (global-set-key (kbd "C-j") 'end-of-line-and-indent-new-line)
 
-(defun indent-new-line ()
-  (interactive)
-  (electric-indent-just-newline t)
-  (indent-according-to-mode))
-(global-set-key (kbd "RET") 'indent-new-line)
+;; NOTE: In CSV mode, if you want to do indentation without
+;; removing the trailing whitespaces, use C-j.
+;;
+;; (defun indent-new-line ()
+;;   (interactive)
+;;   (electric-indent-just-newline t)
+;;   (indent-according-to-mode))
+;; (global-set-key (kbd "RET") 'indent-new-line)
 
 ;; Display line number
 (when (version<= "26.0.50" emacs-version)
