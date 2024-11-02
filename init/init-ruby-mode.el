@@ -1,3 +1,18 @@
+(defadvice ruby-indent-line (after unindent-closing-paren activate)
+  (let ((column (current-column))
+        indent offset)
+    (save-excursion
+      (back-to-indentation)
+      (let ((state (syntax-ppss)))
+        (setq offset (- column (current-column)))
+        (when (and (eq (char-after) ?\))
+                   (not (zerop (car state))))
+          (goto-char (cadr state))
+          (setq indent (current-indentation)))))
+    (when indent
+      (indent-line-to indent)
+      (when (> offset 0) (forward-char offset)))))
+
 ;; inf-ruby
 ;; (add-to-list 'load-path "~/.emacs.d/package/inf-ruby")
 ;; (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
