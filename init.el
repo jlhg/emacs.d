@@ -259,7 +259,7 @@
 ;; topsy
 ;; https://github.com/alphapapa/topsy.el
 ;; This library shows a sticky header at the top of the window.
-(require 'init-topsy)
+;; (require 'init-topsy)
 
 ;; tree-sitter
 ;; https://github.com/emacs-tree-sitter/elisp-tree-sitter

@@ -37,6 +37,8 @@
 
 ;; When point is on paranthesis, highlight the matching one
 (show-paren-mode t)
+(setq show-paren-style 'parenthesis
+      show-paren-context-when-offscreen 'overlay)
 
 ;; Turn on highlighting current line
 ;; (global-hl-line-mode 1)
