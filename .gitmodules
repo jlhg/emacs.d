@@ -193,3 +193,6 @@
 [submodule "package/sqlformat"]
 	path = package/sqlformat
 	url = https://github.com/purcell/sqlformat.git
+[submodule "package/topsy.el"]
+	path = package/topsy.el
+	url = https://github.com/alphapapa/topsy.el.git

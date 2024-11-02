@@ -256,6 +256,11 @@
 ;; https://github.com/Fanael/highlight-numbers
 (require 'init-highlight-numbers)
 
+;; topsy
+;; https://github.com/alphapapa/topsy.el
+;; This library shows a sticky header at the top of the window.
+(require 'init-topsy)
+
 ;; tree-sitter
 ;; https://github.com/emacs-tree-sitter/elisp-tree-sitter
 (require 'init-tree-sitter)
