@@ -8,6 +8,6 @@
 
 ;; Whether to overload company's minimum prefix length.
 ;; This allows completion to trigger on as much as possible.
-(setq company-tabnine-always-trigger nil)
+(setq company-tabnine-always-trigger t)
 
 (provide 'init-company-tabnine)
