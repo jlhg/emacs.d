@@ -279,4 +279,7 @@
   (interactive)
   (occur "[^[:ascii:]]"))
 
+;; Keeping buffers automatically up-to-date.
+(global-auto-revert-mode 1)
+
 (provide 'init-global)
