@@ -1,4 +1,5 @@
 (add-to-list 'load-path "~/.emacs.d/package/compat")
+(add-to-list 'load-path "~/.emacs.d/package/llama")
 (add-to-list 'load-path "~/.emacs.d/package/with-editor/lisp")
 (add-to-list 'load-path "~/.emacs.d/package/dash.el")
 (add-to-list 'load-path "~/.emacs.d/package/magit/lisp")

@@ -13,7 +13,7 @@
 (add-to-list 'load-path "~/.emacs.d/package")
 
 ;; For Emacs 28 native-comp
-(require 'init-native-comp)
+;; (require 'init-native-comp)
 
 ;; Theme
 (require 'init-theme)
@@ -84,7 +84,7 @@
 (cond ((eq system-type 'darwin) (require 'init-osx-clipboard-mode)))
 
 ;; org mode
-(require 'init-org-mode)
+;; (require 'init-org-mode)
 
 ;; hightlight symbol
 (require 'init-highlight-symbol)

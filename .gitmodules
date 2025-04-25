@@ -196,3 +196,6 @@
 [submodule "package/topsy.el"]
 	path = package/topsy.el
 	url = https://github.com/alphapapa/topsy.el.git
+[submodule "package/llama"]
+	path = package/llama
+	url = https://github.com/tarsius/llama.git
