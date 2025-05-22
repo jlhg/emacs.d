@@ -228,10 +228,9 @@
 ;; https://github.com/Fuco1/smartparens
 ;; (require 'init-smartparens)
 
-;; company-tabnine
-;; A company-mode backend for TabNine, the all-language autocompleter: https://tabnine.com/
-;; https://github.com/TommyX12/company-tabnine
-(require 'init-company-tabnine)
+;; tabnine
+;; https://github.com/shuxiao9058/tabnine
+(require 'init-tabnine)
 
 ;; dumb-jump
 ;; an Emacs "jump to definition" package for 50+ languages
