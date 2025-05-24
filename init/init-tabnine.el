@@ -5,9 +5,9 @@
 (add-to-list 'load-path "~/.emacs.d/package/tabnine")
 (require 'tabnine)
 
-(with-eval-after-load 'company
-  ;; disable inline previews
-  (delq 'company-preview-if-just-one-frontend company-frontends))
+;; (with-eval-after-load 'company
+;;   ;; disable inline previews
+;;   (delq 'company-preview-if-just-one-frontend company-frontends))
 
 (with-eval-after-load 'tabnine
   ;; (kbd "TAB") is literal ctrl-I, (kbd "<tab>) is the actual tab key
