@@ -4,11 +4,15 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
+
+;; Disable ac-source-abbrev to fix: Error running timer ‘ac-update-greedy’: (wrong-type-argument sequencep #<obarray n=1>)
+;; https://github.com/auto-complete/auto-complete/issues/533
 (setq-default ac-sources
               '(ac-source-filename
-                ac-source-abbrev
+                ;; ac-source-abbrev
                 ac-source-dictionary
                 ac-source-words-in-same-mode-buffers))
+
 (setq ac-auto-start nil)
 (setq ac-ignore-case nil)
 (ac-set-trigger-key "TAB")
