@@ -30,10 +30,10 @@
 (require 'init-visual-fill-column)
 
 ;; auto complete
-(require 'init-auto-complete)
+;; (require 'init-auto-complete)
 
 ;; yasnippet
-(require 'init-yasnippet)
+;; (require 'init-yasnippet)
 
 ;; company-mode
 ;; Modular in-buffer completion framework for Emacs

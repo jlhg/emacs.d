@@ -15,4 +15,7 @@
 ;; The minimum prefix length for idle completion.
 (setq company-minimum-prefix-length 1)
 
+;; Disable icons
+(setq company-format-margin-function nil)
+
 (provide 'init-company-mode)
