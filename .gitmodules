@@ -202,3 +202,6 @@
 [submodule "package/emacs-language-id"]
 	path = package/emacs-language-id
 	url = https://github.com/lassik/emacs-language-id.git
+[submodule "package/popup-el"]
+	path = package/popup-el
+	url = https://github.com/auto-complete/popup-el.git
