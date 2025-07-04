@@ -33,3 +33,4 @@ ido.last
 smex-items
 *.sqlite
 /tree-sitter/
+/history

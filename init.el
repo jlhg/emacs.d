@@ -22,6 +22,9 @@
 (require 'init-ibuffer)
 (require 'init-auto-minor-mode)
 
+;; GCMH - the Garbage Collector Magic Hack
+(require 'init-gcmh)
+
 ;; flycheck
 (require 'init-flycheck)
 
@@ -95,7 +98,9 @@
 ;; ido mode
 ;; version: 1.31.2.70
 ;; http://cvs.savannah.gnu.org/viewvc/*checkout*/emacs/emacs/lisp/ido.el?revision=1.31.2.70
-(require 'init-ido-mode)
+;; (require 'init-ido-mode)
+
+(require 'init-vertico)
 
 ;; visible mark
 ;; http://retroj.net/visible-mark

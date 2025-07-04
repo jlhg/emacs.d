@@ -93,30 +93,6 @@
 (when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))
 
-;; Do not turn on linum-mode in some major modes (and file with over 2000 lines)
-;; due to the performance issue.
-;; https://github.com/kuanyui/.emacs.d/blob/master/rc/rc-basic.el#L203-L233
-(setq inhibit-linum-mode-alist
-      `(eshell-mode
-        shell-mode
-        term-mode
-        erc-mode
-        compilation-mode
-        woman-mode
-        w3m-mode
-        magit-mode
-        magit-status-mode
-        org-mode
-        ,(if (not (window-system)) 'twittering-mode)
-        ))
-
-(defadvice linum-on (around inhibit-for-modes activate)
-  "Stop turing linum-mode if it is in the inhibit-linum-mode-alist."
-  (unless (or (member major-mode inhibit-linum-mode-alist)
-              (and (eq major-mode 'org-mode)
-                   (> (count-lines (point-min) (point-max)) 2000)))
-    ad-do-it))
-
 ;; Word wrap
 (setq-default truncate-lines t)
 (global-set-key [(control f11)] 'toggle-truncate-lines)
@@ -198,12 +174,15 @@
 ;; Smex is a M-x enhancement for Emacs. Built on top of Ido,
 ;; it provides a convenient interface to your recently and most
 ;; frequently used commands. And to all the other commands, too.
-(require 'smex)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;; (require 'smex)
+;; (smex-initialize)
+;; (global-set-key (kbd "M-x") 'smex)
+;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; ;; This is your old M-x.
+;; (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;; Save minibuffer history
+(savehist-mode t)
 
 ;; Accept UTF-8 (uppercase) encoding
 (define-coding-system-alias 'UTF-8 'utf-8)

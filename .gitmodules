@@ -205,3 +205,12 @@
 [submodule "package/popup-el"]
 	path = package/popup-el
 	url = https://github.com/auto-complete/popup-el.git
+[submodule "package/gcmh"]
+	path = package/gcmh
+	url = https://github.com/emacsmirror/gcmh.git
+[submodule "package/vertico"]
+	path = package/vertico
+	url = https://github.com/minad/vertico.git
+[submodule "package/orderless"]
+	path = package/orderless
+	url = https://github.com/oantolin/orderless.git
