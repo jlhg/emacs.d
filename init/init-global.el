@@ -169,7 +169,8 @@
 ;; Numbered window shortcuts
 ;; use M-1 through M-0 to navigate
 (require 'window-numbering)
-(window-numbering-mode t)
+(with-eval-after-load 'window-numbering
+  (window-numbering-mode 1))
 
 ;; Smex is a M-x enhancement for Emacs. Built on top of Ido,
 ;; it provides a convenient interface to your recently and most
