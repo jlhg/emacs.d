@@ -101,4 +101,6 @@
 ;;     ;; (define-key map (kbd "C-j")     #'reindent-then-newline-and-indent)
 ;;     map))
 
+(add-to-list 'auto-mode-alist '("\\.pryrc\\'" . ruby-mode))
+
 (provide 'init-ruby-mode)
