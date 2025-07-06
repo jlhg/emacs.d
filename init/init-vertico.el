@@ -1,9 +1,14 @@
 (add-to-list 'load-path "~/.emacs.d/package/compat")
 (add-to-list 'load-path "~/.emacs.d/package/orderless")
 (add-to-list 'load-path "~/.emacs.d/package/vertico")
+(add-to-list 'load-path "~/.emacs.d/package/vertico/extensions")
 
 (require 'vertico)
-(vertico-mode t)
+(vertico-mode 1)
+
+;; Enable vertico-grid for multi-column display
+(require 'vertico-grid)
+(vertico-grid-mode 1)
 
 (require 'orderless)
 (setq completion-styles '(orderless basic)
