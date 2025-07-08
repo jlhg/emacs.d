@@ -6,6 +6,9 @@
 (require 'vertico)
 (vertico-mode 1)
 
+(require 'vertico-multiform)
+(vertico-multiform-mode)
+
 ;; Enable vertico-grid for multi-column display
 (require 'vertico-grid)
 (vertico-grid-mode 1)
@@ -16,6 +19,10 @@
   (keymap-set vertico-map "RET" #'vertico-directory-enter)
   (keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
   (keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word))
+
+(require 'vertico-sort)
+(setq vertico-multiform-categories
+      '((file (vertico-sort-function . vertico-sort-history-length-alpha))))
 
 (require 'orderless)
 (setq completion-styles '(orderless basic)
