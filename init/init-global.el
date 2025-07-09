@@ -41,7 +41,7 @@
       show-paren-context-when-offscreen 'overlay)
 
 ;; Turn on highlighting current line
-;; (global-hl-line-mode 1)
+(global-hl-line-mode 1)
 
 ;; Switch windows
 (global-set-key (kbd "<up>") 'windmove-up)
