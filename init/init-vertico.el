@@ -22,7 +22,7 @@
 
 (require 'vertico-sort)
 (setq vertico-multiform-categories
-      '((file (vertico-sort-function . vertico-sort-history-length-alpha))))
+      '((file (vertico-sort-function . vertico-sort-history-alpha))))
 
 (require 'orderless)
 (setq completion-styles '(orderless basic)
