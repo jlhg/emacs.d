@@ -40,9 +40,10 @@
 ;; 50/72 formatting for Git commit message
 (add-hook 'git-commit-setup-hook
           (lambda()
-            (setq git-commit-summary-max-length 50)
+            (setq git-commit-summary-max-length 72)
             (auto-fill-mode t)
-            (setq fill-column 72)))
+            (setq fill-column 72)
+            (adaptive-fill-mode 1)))
 
 (setq magit-section-visibility-indicator nil)
 
