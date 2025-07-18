@@ -50,7 +50,8 @@
 ;; https://emacs.stackexchange.com/a/52040
 ;; https://irreal.org/blog/?p=8877
 (setq magit-section-initial-visibility-alist
-        '((unpushed . show)))
+      '((unpushed . show)
+        (untracked .show)))
 
 (setq transient-default-level 7)
 
