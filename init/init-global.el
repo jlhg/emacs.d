@@ -166,6 +166,10 @@
 
 (setq electric-pair-inhibit-predicate #'inhibit-electric-pair-mode-in-minibuffer)
 
+;; Joins the current line and the previous line, by deleting a newline
+;; and all surrounding spaces, usually leaving a single space.
+(global-set-key (kbd "M-i") 'delete-indentation)
+
 ;; Numbered window shortcuts
 ;; use M-1 through M-0 to navigate
 (require 'window-numbering)
