@@ -42,8 +42,7 @@
           (lambda()
             (setq git-commit-summary-max-length 72)
             (auto-fill-mode t)
-            (setq fill-column 72)
-            (adaptive-fill-mode 1)))
+            (setq fill-column 72)))
 
 (setq magit-section-visibility-indicator nil)
 
