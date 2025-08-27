@@ -5,6 +5,17 @@
 (add-to-list 'load-path "~/.emacs.d/package/tabnine")
 (require 'tabnine)
 
+;; Run this after the 'tabnine-core' feature is loaded so that
+;; both symbols are defined and any advice has already been installed.
+(with-eval-after-load 'tabnine-core
+  ;; Proceed only if both the advising function and the target exist.
+  (when (and (fboundp 'tabnine--posn-advice)
+             (fboundp 'posn-at-point))
+    ;; Detach TabNine's advice from the built-in `posn-at-point`.
+    ;; This restores the original function behavior and avoids
+    ;; type/compat issues observed on newer Emacs versions.
+    (advice-remove 'posn-at-point #'tabnine--posn-advice)))
+
 ;; (with-eval-after-load 'company
 ;;   ;; disable inline previews
 ;;   (delq 'company-preview-if-just-one-frontend company-frontends))
