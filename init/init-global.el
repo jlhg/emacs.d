@@ -59,14 +59,94 @@
 ;; Find-file default location
 (find-file "~/.")
 
-;; Backup
+;; Backup configuration
+(defvar my-backup-directory "~/.emacs.d/backup"
+  "Directory to store backup files.")
+
+(defvar my-max-backup-files 200
+  "Maximum number of backup files to keep.")
+
+(defvar my-max-backup-file-size 204800
+  "Maximum file size (in bytes) to backup. Files larger than this will not be backed up. Default is 200KB.")
+
+;; Create backup directory if it doesn't exist
+(let ((backup-dir (expand-file-name my-backup-directory)))
+  (unless (file-directory-p backup-dir)
+    (make-directory backup-dir t)
+    (set-file-modes backup-dir #o700)))
+
+;; Sensitive file patterns to exclude from backup
+(defvar my-sensitive-file-patterns
+  '(;; Environment files
+    "/\\.env" "\\.env\\." "\\.env$"
+    ;; Certificate and key files
+    "\\.key$" "\\.pem$" "\\.crt$" "\\.p12$" "\\.pfx$" "\\.cer$"
+    "\\.keystore$" "\\.jks$" "\\.pkcs12$"
+    ;; SSH and GPG files
+    "/\\.ssh/" "/\\.gnupg/"
+    ;; Cloud provider credentials
+    "/\\.aws/" "/\\.azure/" "/\\.gcloud/"
+    ;; Database files
+    "\\.db$" "\\.sqlite$" "\\.sqlite3$" "database\\.yml$"
+    ;; Security-related files
+    "/secrets/" "/vault/" "password" "passwd" "credentials"
+    "auth\\.json$" "token" "apikey" "api_key"
+    ;; Configuration files that may contain secrets
+    "/\\.kube/" "kubeconfig"
+    ;; Docker secrets
+    "docker-compose\\.override\\.yml$" "/\\.docker/"
+    ;; Production data directories
+    "/\\.srv/"
+    ;; Application-specific sensitive files
+    "\\.npmrc$" "\\.pypirc$" "\\.netrc$" "\\.dockercfg$"
+    ;; Backup and temporary files that might contain secrets
+    "\\.bak$" "\\.tmp$" "\\.temp$" "core$")
+  "List of regex patterns for sensitive files that should not be backed up.")
+
+;; Method 1: Filename pattern exclusion using backup-enable-predicate
+(setq backup-enable-predicate
+      (lambda (name)
+        (and (normal-backup-enable-predicate name)
+             ;; Exclude files larger than the specified size
+             (let ((size (nth 7 (file-attributes name))))
+               (or (not size) (< size my-max-backup-file-size)))
+             ;; Exclude sensitive file patterns
+             (not (cl-some (lambda (pattern)
+                            (string-match-p pattern name))
+                          my-sensitive-file-patterns)))))
+
+;; Method 2: Directory exclusion using backup-directory-alist
+(setq backup-directory-alist
+      `(;; Exclude sensitive patterns by setting backup location to nil
+        ,@(mapcar (lambda (pattern) `(,pattern . nil))
+                  my-sensitive-file-patterns)
+        ;; Default backup location for other files
+        ("." . ,my-backup-directory)))
+
 (setq
- backup-directory-alist
- '(("." . "~/.emacs.d/backup"))
- delete-old-versions t
+ delete-old-versions t    ; Auto-delete old versions per file
  version-control t
- kept-new-versions 5
- kept-old-versions 2)
+ kept-new-versions 3      ; Keep 3 newest versions
+ kept-old-versions 2)     ; Keep 2 oldest versions (total 5 per file)
+
+;; Limit total number of backup files
+(defun cleanup-old-backup-files ()
+  "Keep only the N most recent backup files in backup directory."
+  (let ((backup-dir (expand-file-name my-backup-directory))
+        (max-backup-files my-max-backup-files))
+    (when (file-directory-p backup-dir)
+      (let* ((backup-files (directory-files backup-dir t "^[^.]"))
+             (sorted-files (sort backup-files
+                                 (lambda (a b)
+                                   (time-less-p (nth 5 (file-attributes b))
+                                                (nth 5 (file-attributes a))))))
+             (files-to-delete (nthcdr max-backup-files sorted-files)))
+        (dolist (file files-to-delete)
+          (when (file-regular-p file)
+            (delete-file file)))))))
+
+;; Run cleanup after saving files
+(add-hook 'after-save-hook 'cleanup-old-backup-files)
 
 ;; Default indentation
 (setq-default indent-tabs-mode nil)
