@@ -44,7 +44,7 @@
 (setq web-mode-enable-current-element-highlight t)
 (setq web-mode-enable-auto-pairing nil)
 (set-face-attribute 'web-mode-current-element-highlight-face nil :background "dark slate gray")
-(set-face-attribute 'web-mode-error-face nil :underline "red" :background nil)
+(set-face-attribute 'web-mode-error-face nil :underline "red" :background 'unspecified)
 
 (add-hook 'web-mode-hook
           '(lambda ()

@@ -43,8 +43,8 @@
         ace-jump-line-mode) )           ;; the third one always map to ：C-u C-u C-c SPC
 
 ;; move keys
-(require 'cl)
+(require 'cl-lib)
 (setq ace-jump-mode-move-keys
-      (loop for i from ?a to ?z collect i))
+      (cl-loop for i from ?a to ?z collect i))
 
 (provide 'init-ace-jump-mode)

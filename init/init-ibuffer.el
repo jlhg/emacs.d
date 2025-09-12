@@ -9,9 +9,9 @@
      "Toggle current view to buffers with file or directory name matching QUALIFIER."
      (:description "filename"
                    :reader (read-from-minibuffer "Filter by file/directory name (regexp): "))
-     (ibuffer-awhen (or (buffer-local-value 'buffer-file-name buf)
-                        (buffer-local-value 'dired-directory buf))
-                    (string-match qualifier it))))
+     (when-let ((filename (or (buffer-local-value 'buffer-file-name buf)
+                              (buffer-local-value 'dired-directory buf))))
+       (string-match qualifier filename))))
 
 ;; Default grouping of ibuffer
 (setq ibuffer-saved-filter-groups
