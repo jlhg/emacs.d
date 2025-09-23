@@ -90,7 +90,8 @@
     "\\.db$" "\\.sqlite$" "\\.sqlite3$" "database\\.yml$"
     ;; Security-related files
     "/secrets/" "/vault/" "password" "passwd" "credentials"
-    "auth\\.json$" "token" "apikey" "api_key"
+    "auth\\.json$" "token" ".*_token" "apikey" "api_key"
+    "secret" ".*_secret$" "github_pat"
     ;; Configuration files that may contain secrets
     "/\\.kube/" "kubeconfig"
     ;; Docker secrets
