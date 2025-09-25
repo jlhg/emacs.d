@@ -12,8 +12,6 @@
              (visual-line-mode nil)
              ;; (visual-line-fill-column-mode t)
              ;; (setq fill-column 120)
-             ;; (setq indent-tabs-mode t)
-             (setq tab-width 2)
              ))
 
 (provide 'init-markdown-mode)
