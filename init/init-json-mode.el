@@ -9,6 +9,7 @@
 
 (add-hook 'json-mode-hook
           (lambda ()
+            (setq indent-tabs-mode nil)
             (setq tab-width 2)
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 2)
