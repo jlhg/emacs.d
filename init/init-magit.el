@@ -14,6 +14,7 @@
 (add-to-list 'load-path "~/.emacs.d/package/emacsql")
 (add-to-list 'load-path "~/.emacs.d/package/closql")
 (add-to-list 'load-path "~/.emacs.d/package/forge/lisp")
+(add-to-list 'load-path "~/.emacs.d/package/cond-let")
 
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)

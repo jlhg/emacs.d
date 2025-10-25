@@ -214,3 +214,6 @@
 [submodule "package/orderless"]
 	path = package/orderless
 	url = https://github.com/oantolin/orderless.git
+[submodule "package/cond-let"]
+	path = package/cond-let
+	url = https://github.com/tarsius/cond-let.git
