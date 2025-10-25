@@ -18,5 +18,20 @@ cond_let_dir = ${pkg_dir}/cond-let
 all:
 	emacs --batch --eval '(byte-recompile-directory ".")'
 	mkdir -p erc/log
-	cd ${magit_dir} && echo "LOAD_PATH = -L ${magit_dir}/lisp -L ${dash_dir} -L ${magit_popup_dir} -L ${ghub_dir} -L ${transient_dir}/lisp -L ${with_editor_dir}/lisp -L ${graphql_dir} -L ${treepy_dir} -L ${libegit2_dir} -L ${compat_dir} -L ${llama_dir} -L ${cond_let_dir} -L ${pkg_dir}" >config.mk && make clean && make
+	cd ${magit_dir} && \
+		echo "LOAD_PATH = -L ${magit_dir}/lisp \
+		-L ${dash_dir} \
+		-L ${magit_popup_dir} \
+		-L ${ghub_dir} \
+		-L ${transient_dir}/lisp \
+		-L ${with_editor_dir}/lisp \
+		-L ${graphql_dir} \
+		-L ${treepy_dir} \
+		-L ${libegit2_dir} \
+		-L ${compat_dir} \
+		-L ${llama_dir} \
+		-L ${cond_let_dir} \
+		-L ${pkg_dir}" >config.mk && \
+		make clean && \
+		make
 	cd ${helm_dir} && make clean && EMACSLOADPATH="${async_dir}:" make
