@@ -273,6 +273,9 @@
 ;; Accept UTF-8 (uppercase) encoding
 (define-coding-system-alias 'UTF-8 'utf-8)
 
+;; Add keybinding to manually redraw display when mode-line gets garbled
+(global-set-key (kbd "C-c r") 'redraw-display)
+
 ;; Previous buffer
 (global-set-key (kbd "C-c p") 'previous-buffer)
 
