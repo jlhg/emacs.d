@@ -116,7 +116,7 @@ If prefix ARG is given, delete the window instead of selecting it."
       (let ((window (aref windows i)))
         (unless window
           (push (% (1+ i) 10) left)))
-      (decf i))
+      (cl-decf i))
     left))
 
 (defvar window-numbering-windows nil
@@ -171,12 +171,15 @@ windows to numbers."
       (window-numbering-assign window))))
 
 (defun window-numbering-get-number-string (&optional window)
-  (let ((s (int-to-string (window-numbering-get-number window))))
-    (propertize s 'face 'window-numbering-face)))
+  (let ((num (window-numbering-get-number window)))
+    (when num
+      (propertize (int-to-string num) 'face 'window-numbering-face))))
 
 (defun window-numbering-get-number (&optional window)
-  (gethash (or window (selected-window))
-           (cdr (gethash (selected-frame) window-numbering-table))))
+  (let ((table (gethash (selected-frame) window-numbering-table)))
+    (when table
+      (gethash (or window (selected-window))
+               (cdr table)))))
 
 (defvar window-numbering-keymap
   (let ((map (make-sparse-keymap)))
@@ -196,7 +199,8 @@ windows to numbers."
 ;;;###autoload
 (define-minor-mode window-numbering-mode
   "A minor mode that assigns a number to each window."
-  nil nil window-numbering-keymap :global t
+  :global t
+  :keymap window-numbering-keymap
   (if window-numbering-mode
       (unless window-numbering-table
         (save-excursion
