@@ -59,4 +59,26 @@
 (with-eval-after-load 'magit
   (require 'forge))
 
+;; Fix for visiting renamed files without content changes
+;; https://github.com/magit/magit/issues/2446
+;; When a file is renamed without content changes, magit-diff-visit-file
+;; fails because there's no hunk section to determine position.
+(defun magit-diff-visit-file--handle-no-hunk (orig-fun &rest args)
+  "Advice for magit-diff-visit-file--noselect to handle files without hunks.
+This fixes the 'Wrong type argument: number-or-marker-p, nil' error when
+visiting renamed files that have no content changes."
+  (condition-case err
+      (apply orig-fun args)
+    (wrong-type-argument
+     ;; If we get a wrong-type-argument error, it's likely because
+     ;; there's no hunk (e.g., renamed file with no content change).
+     ;; Fall back to visiting the worktree file at the beginning.
+     (let* ((file-section (magit-diff--file-section))
+            (file (oref file-section value))
+            (full-path (expand-file-name file (magit-toplevel))))
+       (list (find-file-noselect full-path) nil)))))
+
+(advice-add 'magit-diff-visit-file--noselect
+            :around #'magit-diff-visit-file--handle-no-hunk)
+
 (provide 'init-magit)
