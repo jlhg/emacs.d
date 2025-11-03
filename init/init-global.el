@@ -350,4 +350,8 @@
 ;; Keeping buffers automatically up-to-date.
 (global-auto-revert-mode 1)
 
+;; Disable VC backend to prevent it from running git commands
+;; This avoids conflicts with Magit and auto-revert-mode
+(setq vc-handled-backends nil)
+
 (provide 'init-global)
