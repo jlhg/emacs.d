@@ -35,13 +35,6 @@
   (dolist (group (ibuffer-vc-generate-filter-groups-by-vc-root))
     (add-to-list 'ibuffer-filter-groups group t)))
 
-(add-hook 'ibuffer-hook
-          (lambda ()
-            ;; uncomment to use VC groups by default instead
-            (ibuffer-vc-set-filter-groups-by-vc-root)
-            ;; (ibuffer-switch-to-saved-filter-groups "default")
-            (ibuffer-vc-add-vc-filter-groups)))
-
 ;; Use human readable Size column instead of original one
 (eval-after-load 'ibuffer
   '(progn
