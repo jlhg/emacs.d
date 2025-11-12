@@ -38,6 +38,84 @@
                (t
                 '(display-buffer-same-window))))))
 
+(defun my/git-commit-fill-paragraph (&optional justify)
+  "Fill paragraph in git commit buffer with proper list item handling.
+Treats list items like markdown-mode: first line and indented continuations separately."
+  (interactive)
+  (save-excursion
+    (let ((orig-point (point))
+          start end)
+      (beginning-of-line)
+      (cond
+       ;; Case 1: We're on a list marker line (-, *, or +)
+       ((looking-at "^[ \t]*[-*+][ \t]+")
+        (let ((marker-indent (current-indentation))
+              (marker-length (length (match-string 0))))
+          (setq start (point))
+          ;; Find the end of the first paragraph (before indented continuation or next list item)
+          (forward-line 1)
+          (while (and (not (eobp))
+                      (not (looking-at "^[ \t]*[-*+][ \t]+"))  ; Not another list item
+                      (not (looking-at "^[ \t]+[^ \t\n]"))     ; Not an indented line
+                      (not (looking-at "^[ \t]*$")))            ; Not a blank line
+            (forward-line 1))
+          (setq end (point))
+          ;; Fill with proper indentation for continuation lines
+          (let ((fill-prefix (make-string (+ marker-indent marker-length) ?\s)))
+            (fill-region start end justify nil))))
+
+       ;; Case 2: We're on an indented continuation line within a list item
+       ((and (looking-at "^[ \t]+[^ \t\n]")
+             (save-excursion
+               ;; Check if there's a list marker above
+               (let ((found-marker nil))
+                 (while (and (not (bobp))
+                             (not found-marker))
+                   (forward-line -1)
+                   (when (looking-at "^[ \t]*[-*+][ \t]+")
+                     (setq found-marker t)))
+                 found-marker)))
+        ;; Find the extent of indented continuation lines
+        (let ((base-indent (current-indentation)))
+          ;; Start from current line (don't search backwards)
+          (setq start (point))
+
+          ;; Find end of indented block with same or greater indentation
+          (while (and (not (eobp))
+                      (looking-at "^[ \t]+[^ \t\n]")
+                      (>= (current-indentation) base-indent))
+            (forward-line 1))
+          (setq end (point))
+
+          ;; Fill the indented region with proper hanging indent
+          (let ((fill-prefix (make-string base-indent ?\s)))
+            (fill-region start end justify nil))))
+
+       ;; Case 3: Not in a list, use default fill
+       (t
+        (fill-paragraph justify t))))))
+
+;; Advice log-edit-fill-entry to use our custom fill logic for list items
+(defun my/git-commit-fill-entry-advice (orig-fun &rest args)
+  "Advice for log-edit-fill-entry to handle list items properly."
+  (if (save-excursion
+        (beginning-of-line)
+        (or (looking-at "^[ \t]*[-*+][ \t]+")    ; On a list marker line
+            (and (looking-at "^[ \t]+[^ \t\n]")  ; On an indented line
+                 (let ((found-marker nil))
+                   (save-excursion
+                     (while (and (not (bobp)) (not found-marker))
+                       (forward-line -1)
+                       (when (looking-at "^[ \t]*[-*+][ \t]+")
+                         (setq found-marker t))))
+                   found-marker))))
+      ;; We're in a list item, use our custom fill function
+      (my/git-commit-fill-paragraph)
+    ;; Not in a list item, use the original function
+    (apply orig-fun args)))
+
+(advice-add 'log-edit-fill-entry :around #'my/git-commit-fill-entry-advice)
+
 ;; 50/72 formatting for Git commit message
 (add-hook 'git-commit-setup-hook
           (lambda()
