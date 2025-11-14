@@ -350,4 +350,8 @@
 ;; Keeping buffers automatically up-to-date.
 (global-auto-revert-mode 1)
 
+;; Disable VC backend to prevent Git index.lock conflicts with auto-revert-mode
+;; This prevents Emacs from freezing when using emacsclient with Git operations
+(setq vc-handled-backends nil)
+
 (provide 'init-global)
