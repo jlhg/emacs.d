@@ -17,7 +17,23 @@
 (add-to-list 'load-path "~/.emacs.d/package/cond-let")
 
 (require 'magit)
-(global-set-key (kbd "C-x g") 'magit-status)
+
+;; Custom function to follow symlinks when calling magit-status
+(defun my/magit-status-follow-symlink ()
+  "Call magit-status, following symlinks to their real path.
+When visiting a file through a symlink, this ensures magit-status
+opens the repository of the real file location instead of the
+symlink location."
+  (interactive)
+  (let* ((file-name (buffer-file-name))
+         (real-file (when file-name (file-truename file-name)))
+         (default-directory
+           (if real-file
+               (file-name-directory real-file)
+             default-directory)))
+    (call-interactively #'magit-status)))
+
+(global-set-key (kbd "C-x g") 'my/magit-status-follow-symlink)
 
 ;; Make magit-status always open in current window.
 ;; https://github.com/magit/magit/issues/2541#issuecomment-195420321
