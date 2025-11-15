@@ -18,6 +18,11 @@
 
 (require 'magit)
 
+;; Suppress "same file" warnings when opening files through symlinks
+;; This prevents the message "X and Y are the same file" when visiting
+;; files in magit that are accessed through symlinks.
+(setq find-file-suppress-same-file-warnings t)
+
 ;; Custom function to follow symlinks when calling magit-status
 (defun my/magit-status-follow-symlink ()
   "Call magit-status, following symlinks to their real path.
@@ -157,17 +162,20 @@ Treats list items like markdown-mode: first line and indented continuations sepa
 ;; https://github.com/magit/magit/issues/2446
 ;; When a file is renamed without content changes, magit-diff-visit-file
 ;; fails because there's no hunk section to determine position.
+;; Also fixes "Not inside Git repository" error when visiting files from
+;; symlinked paths.
 (defun magit-diff-visit-file--handle-no-hunk (orig-fun &rest args)
   "Advice for magit-diff-visit-file--noselect to handle files without hunks.
 This fixes the 'Wrong type argument: number-or-marker-p, nil' error when
-visiting renamed files that have no content changes."
+visiting renamed files that have no content changes, and also handles
+'Not inside Git repository' error when working with symlinked paths."
   (let ((toplevel (magit-toplevel)))  ; Capture toplevel in correct context
     (condition-case err
         (apply orig-fun args)
-      (wrong-type-argument
-       ;; If we get a wrong-type-argument error, it's likely because
-       ;; there's no hunk (e.g., renamed file with no content change).
-       ;; Fall back to visiting the worktree file at the beginning.
+      ((wrong-type-argument magit-outside-git-repo)
+       ;; If we get wrong-type-argument error (no hunk) or
+       ;; magit-outside-git-repo error (symlink path issue),
+       ;; fall back to visiting the worktree file at the beginning.
        (let* ((file-section (magit-diff--file-section))
               (file (oref file-section value))
               (full-path (expand-file-name file toplevel)))  ; Use captured toplevel
@@ -175,5 +183,18 @@ visiting renamed files that have no content changes."
 
 (advice-add 'magit-diff-visit-file--noselect
             :around #'magit-diff-visit-file--handle-no-hunk)
+
+;; Fix for "Not inside Git repository" error when visiting files
+;; This ensures magit-status buffer always has correct default-directory
+(defun magit-status--ensure-correct-default-directory (&rest _args)
+  "Ensure magit-status buffer has correct default-directory.
+This fixes issues where magit-status is called from a buffer whose
+default-directory is not inside a git repository, causing subsequent
+operations like visiting files to fail with 'Not inside Git repository' error."
+  (when-let ((toplevel (magit-toplevel)))
+    (setq-local default-directory toplevel)))
+
+(advice-add 'magit-status-setup-buffer :after
+            #'magit-status--ensure-correct-default-directory)
 
 (provide 'init-magit)
