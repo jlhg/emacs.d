@@ -329,8 +329,20 @@
 
 ;; Switch focus after buffer split in emacs.
 ;; https://stackoverflow.com/questions/6464738/how-can-i-switch-focus-after-buffer-split-in-emacs
-(global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
-(global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
+(defun split-window-vertically-and-focus ()
+  "Split the window vertically and switch to the new window."
+  (interactive)
+  (split-window-vertically)
+  (other-window 1))
+
+(defun split-window-horizontally-and-focus ()
+  "Split the window horizontally and switch to the new window."
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1))
+
+(global-set-key "\C-x2" 'split-window-vertically-and-focus)
+(global-set-key "\C-x3" 'split-window-horizontally-and-focus)
 
 ;; This is a workaround for the issue of large minified files of
 ;; programming code (i.e., code that has been compacted into the

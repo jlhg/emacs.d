@@ -34,3 +34,4 @@ smex-items
 *.sqlite
 /tree-sitter/
 /history
+/.serena/
