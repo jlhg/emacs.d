@@ -191,6 +191,9 @@
 ;; https://github.com/joshwnj/json-mode
 (require 'init-json-mode)
 
+;; toml-mode
+(require 'init-toml)
+
 ;; indent-bars
 ;; (require 'init-indent-bars)
 
