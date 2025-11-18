@@ -5,6 +5,10 @@
 (add-to-list 'auto-mode-alist
              '("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode))
 
+;; Bind S-Tab to decrease indentation (promote) in list items
+(with-eval-after-load 'markdown-mode
+  (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote))
+
 (defun my/markdown-fill-paragraph-single-item (&optional justify)
   "Fill only the current sub-paragraph within a list item.
 In list items, treats the first line separately from indented continuations.
