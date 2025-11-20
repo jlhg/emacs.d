@@ -237,6 +237,30 @@ Returns the language string if inside a fenced code block, nil otherwise."
                      (not (string-empty-p open-fence-lang)))
             open-fence-lang))))))
 
+(defun my/gfm-toggle-comment-line (comment-str)
+  "Toggle comment on current line using COMMENT-STR as the comment marker."
+  (save-excursion
+    (beginning-of-line)
+    (let* ((line-start (point))
+           (line-end (line-end-position))
+           (line-content (buffer-substring-no-properties line-start line-end))
+           (comment-regexp (concat "^\\([ \t]*\\)" (regexp-quote comment-str) " ?"))
+           (indent ""))
+      (if (string-match comment-regexp line-content)
+          ;; Line is commented - uncomment it
+          (let ((indent (match-string 1 line-content))
+                (rest (substring line-content (match-end 0))))
+            (delete-region line-start line-end)
+            (insert indent rest))
+        ;; Line is not commented - comment it
+        (if (string-match "^\\([ \t]*\\)\\(.*\\)$" line-content)
+            (let ((indent (match-string 1 line-content))
+                  (code (match-string 2 line-content)))
+              (delete-region line-start line-end)
+              (insert indent comment-str " " code))
+          ;; Fallback: just prepend comment
+          (insert comment-str " "))))))
+
 (defun my/gfm-comment-dwim ()
   "Comment command that respects code block language in gfm-mode.
 When point is inside a fenced code block, use the comment syntax
@@ -247,12 +271,21 @@ appropriate for the specified language instead of HTML comments."
                           (cdr (assoc (string-trim (downcase lang)) my/code-block-comment-alist)))))
     (if comment-syntax
         ;; Inside code block with known language
-        (let ((comment-start (concat (car comment-syntax) " "))
-              (comment-end (if (string= (cdr comment-syntax) "")
-                              ""
-                            (concat " " (cdr comment-syntax))))
-              (comment-padding ""))
-          (comment-dwim-line))
+        (let ((comment-str (car comment-syntax)))
+          (if (region-active-p)
+              ;; Handle region
+              (save-excursion
+                (let ((start (region-beginning))
+                      (end (region-end)))
+                  (goto-char start)
+                  (beginning-of-line)
+                  (while (< (point) end)
+                    (my/gfm-toggle-comment-line comment-str)
+                    (forward-line 1)
+                    ;; Adjust end position if lines changed length
+                    (setq end (+ end (- (line-end-position) (line-end-position)))))))
+            ;; Handle single line
+            (my/gfm-toggle-comment-line comment-str)))
       ;; Outside code block or unknown language
       (comment-dwim-line))))
 
