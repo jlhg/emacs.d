@@ -63,7 +63,7 @@
                                               (heex-mode . heex)
                                               (hlsl-mode . hlsl)
                                               (html-mode . html)
-                                              (markdown-mode . markdown)
+                                              (gfm-mode . markdown)
                                               (mhtml-mode . html)
                                               (nix-mode . nix)
                                               (jai-mode . jai)

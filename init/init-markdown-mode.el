@@ -1,23 +1,11 @@
 (require 'visual-fill-column)
 
-(autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist
-             '("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode))
-
-;; Disable expensive font-lock matchers that cause high CPU usage.
-;; These functions are the main bottleneck
-;; Tree-sitter-hl-mode will handle italic/bold highlighting instead.
-(defun my/markdown-match-italic-disabled (last)
-  "Disabled version of markdown-match-italic to avoid performance issues."
-  nil)
+             '("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode))
 
 ;; Bind S-Tab to decrease indentation (promote) in list items
 (with-eval-after-load 'markdown-mode
-  (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote)
-
-  (advice-add 'markdown-match-italic :override #'my/markdown-match-italic-disabled)
-  (advice-add 'markdown-match-bold :override #'my/markdown-match-italic-disabled))
+  (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote))
 
 (defun my/markdown-fill-paragraph-single-item (&optional justify)
   "Fill only the current sub-paragraph within a list item.
