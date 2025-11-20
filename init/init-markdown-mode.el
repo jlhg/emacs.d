@@ -5,7 +5,81 @@
 
 ;; Bind S-Tab to decrease indentation (promote) in list items
 (with-eval-after-load 'markdown-mode
-  (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote))
+  (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote)
+  (define-key markdown-mode-map (kbd "RET") #'my/markdown-insert-list-item-on-enter))
+
+(defun my/markdown-insert-list-item-on-enter ()
+  "Insert a new list item with appropriate marker when pressing RET in a list.
+Supports unordered lists (-, *, +), ordered lists (1., 2., etc.), and
+GitHub-style task lists (- [ ], * [ ], etc.).
+When the current list item is empty, removes the marker but keeps indentation.
+Text after cursor is moved to the new line."
+  (interactive)
+  (let ((line-content (buffer-substring-no-properties
+                       (line-beginning-position)
+                       (line-end-position)))
+        (text-after-cursor (buffer-substring-no-properties
+                            (point)
+                            (line-end-position))))
+    (cond
+     ;; Match task list: indentation + marker + [ ] or [x] + optional content
+     ((string-match "^\\([ \t]*\\)\\([-*+]\\)\\s-+\\(\\[[ xX]\\]\\)\\s-*\\(.*\\)$" line-content)
+      (let* ((indent (match-string 1 line-content))
+             (marker (match-string 2 line-content))
+             (content (match-string 4 line-content)))
+        (if (string-empty-p content)
+            ;; Empty task list item: remove marker, keep indent
+            (progn
+              (delete-region (line-beginning-position) (line-end-position))
+              (insert indent)
+              (newline-and-indent))
+          ;; Non-empty: insert new task list item, move text after cursor
+          (delete-region (point) (line-end-position))
+          (newline)
+          (insert indent marker " [ ] ")
+          (save-excursion
+            (insert (string-trim-left text-after-cursor))))))
+
+     ;; Match ordered list: indentation + number + . or ) + optional content
+     ((string-match "^\\([ \t]*\\)\\([0-9]+\\)\\([.)]\\)\\s-*\\(.*\\)$" line-content)
+      (let* ((indent (match-string 1 line-content))
+             (num (string-to-number (match-string 2 line-content)))
+             (delim (match-string 3 line-content))
+             (content (match-string 4 line-content)))
+        (if (string-empty-p content)
+            ;; Empty ordered list item: remove marker, keep indent
+            (progn
+              (delete-region (line-beginning-position) (line-end-position))
+              (insert indent)
+              (newline-and-indent))
+          ;; Non-empty: insert new ordered list item, move text after cursor
+          (delete-region (point) (line-end-position))
+          (newline)
+          (insert indent (number-to-string (1+ num)) delim " ")
+          (save-excursion
+            (insert (string-trim-left text-after-cursor))))))
+
+     ;; Match unordered list: indentation + marker (-, *, +) + optional content
+     ((string-match "^\\([ \t]*\\)\\([-*+]\\)\\s-*\\(.*\\)$" line-content)
+      (let* ((indent (match-string 1 line-content))
+             (marker (match-string 2 line-content))
+             (content (match-string 3 line-content)))
+        (if (string-empty-p content)
+            ;; Empty unordered list item: remove marker, keep indent
+            (progn
+              (delete-region (line-beginning-position) (line-end-position))
+              (insert indent)
+              (newline-and-indent))
+          ;; Non-empty: insert new unordered list item, move text after cursor
+          (delete-region (point) (line-end-position))
+          (newline)
+          (insert indent marker " ")
+          (save-excursion
+            (insert (string-trim-left text-after-cursor))))))
+
+     ;; Not a list item: just do normal newline
+     (t
+      (newline-and-indent)))))
 
 (defun my/markdown-fill-paragraph-single-item (&optional justify)
   "Fill only the current sub-paragraph within a list item.
