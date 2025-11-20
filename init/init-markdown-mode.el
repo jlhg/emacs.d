@@ -141,6 +141,124 @@ indented continuations, preserving proper indentation."
        (t
         (markdown-fill-paragraph justify))))))
 
+;; Language-specific comment syntax for code blocks
+(defvar my/code-block-comment-alist
+  '(;; Shell variants
+    ("shell" . ("#" . ""))
+    ("bash" . ("#" . ""))
+    ("sh" . ("#" . ""))
+    ("zsh" . ("#" . ""))
+    ("fish" . ("#" . ""))
+    ("ksh" . ("#" . ""))
+    ("csh" . ("#" . ""))
+    ("tcsh" . ("#" . ""))
+    ;; Python variants
+    ("python" . ("#" . ""))
+    ("py" . ("#" . ""))
+    ("python3" . ("#" . ""))
+    ("python2" . ("#" . ""))
+    ;; Ruby variants
+    ("ruby" . ("#" . ""))
+    ("rb" . ("#" . ""))
+    ;; Go variants
+    ("go" . ("//" . ""))
+    ("golang" . ("//" . ""))
+    ;; Rust variants
+    ("rust" . ("//" . ""))
+    ("rs" . ("//" . ""))
+    ;; Markdown variants (uses HTML comments)
+    ("markdown" . ("<!--" . "-->"))
+    ("md" . ("<!--" . "-->"))
+    ("mkd" . ("<!--" . "-->"))
+    ("mdown" . ("<!--" . "-->"))
+    ;; Other # comment languages
+    ("perl" . ("#" . ""))
+    ("r" . ("#" . ""))
+    ("yaml" . ("#" . ""))
+    ("yml" . ("#" . ""))
+    ("toml" . ("#" . ""))
+    ("dockerfile" . ("#" . ""))
+    ("makefile" . ("#" . ""))
+    ("make" . ("#" . ""))
+    ;; Lisp family
+    ("elisp" . (";" . ""))
+    ("emacs-lisp" . (";" . ""))
+    ("lisp" . (";" . ""))
+    ("scheme" . (";" . ""))
+    ("clojure" . (";" . ""))
+    ("clj" . (";" . ""))
+    ;; C-style // comments
+    ("javascript" . ("//" . ""))
+    ("js" . ("//" . ""))
+    ("typescript" . ("//" . ""))
+    ("ts" . ("//" . ""))
+    ("c" . ("//" . ""))
+    ("cpp" . ("//" . ""))
+    ("c++" . ("//" . ""))
+    ("java" . ("//" . ""))
+    ("swift" . ("//" . ""))
+    ("kotlin" . ("//" . ""))
+    ("kt" . ("//" . ""))
+    ("scala" . ("//" . ""))
+    ("php" . ("//" . ""))
+    ("groovy" . ("//" . ""))
+    ("dart" . ("//" . ""))
+    ;; -- comment languages
+    ("sql" . ("--" . ""))
+    ("lua" . ("--" . ""))
+    ("haskell" . ("--" . ""))
+    ("hs" . ("--" . ""))
+    ;; Block comment languages
+    ("css" . ("/*" . "*/"))
+    ("html" . ("<!--" . "-->"))
+    ("xml" . ("<!--" . "-->")))
+  "Mapping of code block languages to comment syntax (start . end).")
+
+(defun my/gfm-get-code-block-lang ()
+  "Get the language of the code block at point by parsing buffer text.
+Returns the language string if inside a fenced code block, nil otherwise."
+  (save-excursion
+    (let ((current-pos (point))
+          (fence-regexp "^[ \t]*\\(```\\|~~~\\)\\s-*\\([^`\n]*\\)$")
+          open-fence-pos open-fence-lang close-fence-pos)
+      ;; Search backward for opening fence
+      (when (re-search-backward fence-regexp nil t)
+        (setq open-fence-pos (point))
+        (setq open-fence-lang (string-trim (match-string 2)))
+        ;; Check if this is an opening fence (has language or is first of pair)
+        ;; by looking for a closing fence after it
+        (goto-char (match-end 0))
+        (forward-line 1)
+        (when (re-search-forward "^[ \t]*\\(```\\|~~~\\)[ \t]*$" nil t)
+          (setq close-fence-pos (match-beginning 0))
+          ;; We're inside if current-pos is between open and close
+          (when (and (> current-pos open-fence-pos)
+                     (< current-pos close-fence-pos)
+                     (not (string-empty-p open-fence-lang)))
+            open-fence-lang))))))
+
+(defun my/gfm-comment-dwim ()
+  "Comment command that respects code block language in gfm-mode.
+When point is inside a fenced code block, use the comment syntax
+appropriate for the specified language instead of HTML comments."
+  (interactive)
+  (let* ((lang (my/gfm-get-code-block-lang))
+         (comment-syntax (when lang
+                          (cdr (assoc (string-trim (downcase lang)) my/code-block-comment-alist)))))
+    (if comment-syntax
+        ;; Inside code block with known language
+        (let ((comment-start (concat (car comment-syntax) " "))
+              (comment-end (if (string= (cdr comment-syntax) "")
+                              ""
+                            (concat " " (cdr comment-syntax))))
+              (comment-padding ""))
+          (comment-dwim-line))
+      ;; Outside code block or unknown language
+      (comment-dwim-line))))
+
+(with-eval-after-load 'markdown-mode
+  (define-key gfm-mode-map (kbd "M-;") #'my/gfm-comment-dwim))
+
 (add-hook  'markdown-mode-hook
            (lambda ()
              ;; (whitespace-mode)
