@@ -8,6 +8,9 @@
 (require 'tree-sitter-debug)
 (require 'tree-sitter-query)
 
+;; Disable italic for tree-sitter property face (affects YAML keys, JSON keys, CSS properties, etc.)
+(set-face-attribute 'tree-sitter-hl-face:property nil :slant 'normal)
+
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 (setq tree-sitter-major-mode-language-alist '((actionscript-mode . actionscript)
