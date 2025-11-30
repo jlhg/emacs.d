@@ -5,6 +5,8 @@
 
 ;; Bind S-Tab to decrease indentation (promote) in list items
 (with-eval-after-load 'markdown-mode
+  ;; Disable electric backquote prompt when typing ```
+  (setq markdown-gfm-use-electric-backquote nil)
   (define-key markdown-mode-map (kbd "<backtab>") 'markdown-promote)
   (define-key markdown-mode-map (kbd "RET") #'my/markdown-insert-list-item-on-enter))
 
