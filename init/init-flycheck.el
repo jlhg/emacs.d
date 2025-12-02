@@ -11,4 +11,15 @@
 ;; https://github.com/flycheck/flycheck/issues/1559#issuecomment-478569550
 (setq flycheck-emacs-lisp-load-path 'inherit)
 
+;; Configure Flycheck to use bundler for RuboCop in Ruby projects
+(defun my-flycheck-ruby-setup ()
+  "Setup Flycheck to use bundler for RuboCop when Gemfile exists."
+  (when (and (buffer-file-name)
+             (locate-dominating-file (buffer-file-name) "Gemfile"))
+    (setq-local flycheck-command-wrapper-function
+                (lambda (command)
+                  (append '("bundle" "exec") command)))))
+
+(add-hook 'ruby-mode-hook 'my-flycheck-ruby-setup)
+
 (provide 'init-flycheck)
