@@ -19,6 +19,7 @@
 (require 'init-theme)
 
 (require 'init-global)
+(require 'init-mise)
 (require 'init-ibuffer)
 (require 'init-auto-minor-mode)
 

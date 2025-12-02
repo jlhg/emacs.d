@@ -13,13 +13,29 @@
 
 ;; Configure Flycheck to use bundler for RuboCop in Ruby projects
 (defun my-flycheck-ruby-setup ()
-  "Setup Flycheck to use bundler for RuboCop when Gemfile exists."
+  "Setup Flycheck to use bundler for RuboCop when Gemfile exists.
+Also ensures the correct Ruby version is used via mise."
   (when (and (buffer-file-name)
              (locate-dominating-file (buffer-file-name) "Gemfile"))
     (setq-local flycheck-command-wrapper-function
                 (lambda (command)
-                  (append '("bundle" "exec") command)))))
+                  ;; Use mise x to execute bundle exec in the correct Ruby environment
+                  (if (executable-find "mise")
+                      (append '("mise" "x" "--" "bundle" "exec") command)
+                    (append '("bundle" "exec") command))))))
 
 (add-hook 'ruby-mode-hook 'my-flycheck-ruby-setup)
+
+;; Custom error handler for bundler failures
+(defun my-flycheck-handle-bundler-error (err)
+  "Handle bundler errors more gracefully."
+  (when (and (flycheck-error-p err)
+             (string-match-p "bundler.*failed" (flycheck-error-message err)))
+    (message "Bundler failed - check Ruby version and Gemfile compatibility")))
+
+(add-hook 'flycheck-after-syntax-check-hook
+          (lambda ()
+            (dolist (err flycheck-current-errors)
+              (my-flycheck-handle-bundler-error err))))
 
 (provide 'init-flycheck)
