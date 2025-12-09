@@ -273,6 +273,18 @@
 ;; Accept UTF-8 (uppercase) encoding
 (define-coding-system-alias 'UTF-8 'utf-8)
 
+;; Fix emoji display corruption in terminal mode
+;; Problem: Emacs tries to compose emoji sequences (char + VS-16) but the
+;; composed glyph width doesn't match what the terminal actually renders,
+;; causing cursor position mismatch and display corruption.
+;; See: https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-09/msg02648.html
+(when (not (display-graphic-p))
+  ;; Disable composition for Variation Selectors (U+FE00-U+FE0F) in terminal mode.
+  ;; VS-16 (U+FE0F) tells the terminal to render the preceding character as a
+  ;; colored emoji, but Emacs' composition system doesn't handle the width change
+  ;; correctly, leading to display artifacts.
+  (set-char-table-range composition-function-table '(#xFE00 . #xFE0F) nil))
+
 ;; Add keybinding to manually redraw display when mode-line gets garbled
 (global-set-key (kbd "C-c r") 'redraw-display)
 
