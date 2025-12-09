@@ -283,7 +283,11 @@
   ;; VS-16 (U+FE0F) tells the terminal to render the preceding character as a
   ;; colored emoji, but Emacs' composition system doesn't handle the width change
   ;; correctly, leading to display artifacts.
-  (set-char-table-range composition-function-table '(#xFE00 . #xFE0F) nil))
+  (set-char-table-range composition-function-table '(#xFE00 . #xFE0F) nil)
+
+  ;; Make Variation Selectors completely invisible (zero-width) instead of
+  ;; displaying as thin-space, which can cause rendering issues in split windows.
+  (set-char-table-range glyphless-char-display '(#xFE00 . #xFE0F) 'zero-width))
 
 ;; Add keybinding to manually redraw display when mode-line gets garbled
 (global-set-key (kbd "C-c r") 'redraw-display)
