@@ -34,4 +34,18 @@
             (load-theme 'nord t)))
     (load-theme 'nord t))
 
+(declare-function nord-display-truecolor-or-graphic-p "nord-theme")
+
+;; `load-theme' disables the theme and clears its settings before it asks
+;; whether the file is safe, so declining the prompt leaves nord enabled with
+;; no faces.  nord also picks its colors from the selected frame and applies
+;; them to every frame, so a reload from a 256-color tty frame would push the
+;; fallback colors onto truecolor and graphic frames too.
+(defun my/reload-theme ()
+  "Reload the nord theme from disk without the safety prompt."
+  (interactive)
+  (unless (nord-display-truecolor-or-graphic-p)
+    (user-error "Reload from a truecolor or graphic frame"))
+  (load-theme 'nord t))
+
 (provide 'init-theme)
